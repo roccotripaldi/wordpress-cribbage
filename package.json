@@ -1,0 +1,22 @@
+{
+  "name": "Cribbage",
+  "version": "1.0.0",
+  "description": "Cribbage",
+  "main": "index.js",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "lodash": "^4.17.4"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test test/runner.js",
+    "cribbage": "babel-node index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "chai": "^4.0.1",
+    "commander": "^2.9.0",
+    "glob": "^7.1.2",
+    "mocha": "^3.4.2"
+  }
+}
