@@ -9,5 +9,5 @@ export default function( props ) {
             imageDir + card.name + '-' + card.suit + '.gif';
 
 
-    return <image src={ src } />;
+    return <img src={ src } />;
 };

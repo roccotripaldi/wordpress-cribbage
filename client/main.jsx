@@ -2,14 +2,16 @@ import React from 'react';
 import Card from 'components/card';
 import { buildCard } from 'lib/deck/index';
 
-export default function( props ) {
-    const card1 = buildCard( '3', 'Hearts' );
-    const card2 = buildCard( '5', 'Diamonds' );
-    const card3 = buildCard( 'Ace', 'Spades' );
+export default function() {
+    const card = buildCard( 'Ace', 'Spades' ),
+        card2 = buildCard( 'Queen', 'Hearts' ),
+        card3 = buildCard( 'King', 'Clubs' );
     return(
         <div>
             <p className="hello-world">Hello World!</p>
-            <Card card={ card1 } />
+            <Card card={ card } />
+            <Card card={ card2 } />
+            <Card card={ card3 } faceDown />
         </div>
     );
 }
