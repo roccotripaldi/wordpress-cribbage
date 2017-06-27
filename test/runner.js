@@ -29,7 +29,7 @@ if ( program.args.length ) {
         mocha.addFile( file );
     } );
 } else {
-    glob.sync( 'lib/**/test/**.js' ).forEach( file => {
+    glob.sync( 'client/lib/**/test/**.js' ).forEach( file => {
         mocha.addFile( file );
     });
 }
