@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<title>wp-react-plugin</title>
+	<title>WordPress Cribbage</title>
 	<?php wp_print_styles( 'wp_cribbage' ); ?>
 </head>
 
