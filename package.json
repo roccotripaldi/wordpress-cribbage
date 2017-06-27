@@ -32,7 +32,10 @@
     "webpack": "1.12.9"
   },
   "scripts": {
+    "build": "npm install && npm run build-client",
+    "build-client": "gulp",
     "distclean": "rm -rf node_modules",
-    "test": "NODE_ENV=test test/runner.js"
+    "test": "NODE_ENV=test test/runner.js",
+    "watch": "gulp watch"
   }
 }
