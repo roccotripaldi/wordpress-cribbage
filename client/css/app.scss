@@ -49,16 +49,13 @@ body {
     width: 700px;
     position: absolute;
     top: 0;
-    left: 0;
-    .peg {
-      position: absolute;
-    }
+    left: 300px;
   }
   .deck {
     width: 80px;
     position: absolute;
     height: 106px;
-    left: 810px;
+    left: 200px;
     top: 21px;
   }
 }
@@ -68,8 +65,8 @@ body {
   background-color: green;
   width: 185px;
   height: 100px;
-  top: 40px;
-  left: 790px;
+  top: 220px;
+  left: 0;
   text-align: center;
 }
 
