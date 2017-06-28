@@ -6,6 +6,8 @@ import cribbageState from 'state/reducers';
 
 let store = createStore(cribbageState);
 
+console.log( store.getState() );
+
 import Main from './main';
 
 ReactDOM.render(

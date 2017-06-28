@@ -1,8 +1,21 @@
+/**
+ * External Dependencies
+ */
 import { combineReducers } from 'redux';
-import player from './player';
+/**
+ * Internal Dependencies
+ */
+import board from './board';
+import controller from './controller';
+import game from './game';
+import players from './players';
 
-const cribbageState = combineReducers({
-    player
-});
+
+const cribbageState = combineReducers( {
+    board,
+    controller,
+    game,
+    players
+} );
 
 export default cribbageState;
