@@ -26,7 +26,7 @@ body {
   }
 }
 
-.player {
+.hand {
   width: 480px;
   position: absolute;
   height: 156px;
@@ -50,6 +50,9 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    .peg {
+      position: absolute;
+    }
   }
   .deck {
     width: 80px;
@@ -57,5 +60,27 @@ body {
     height: 106px;
     left: 810px;
     top: 21px;
+  }
+}
+
+.peg {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  -webkit-transition: top 1s, left 1s;
+  -moz-transition: top 1s, left 1s;
+  transition: top 1s, left 1s;
+  &.pos-0 {
+    left: 34px;
+    top: 25px;
+    &.opponent {
+      top: 4px;
+    }
+    &.second {
+      left: 50px;
+      &.opponent {
+        top: 4px;
+      }
+    }
   }
 }

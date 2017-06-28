@@ -10,16 +10,16 @@ import classNames from 'classnames';
 import { buildCard } from 'lib/deck';
 import Card from 'components/game/card';
 
-class Player extends Component {
+class Hand extends Component {
     render() {
-        const classes = classNames( { opponent: this.props.isOpponent, player: true } ),
+        const classes = classNames( [ this.props.type, 'hand' ] ),
             card1 = buildCard( 'Ace', 'Spades' ),
             card2 = buildCard( 'King', 'Spades' ),
             card3 = buildCard( 'Queen', 'Spades' ),
             card4 = buildCard( 'Jack', 'Spades' ),
             card5 = buildCard( '10', 'Spades' ),
             card6 = buildCard( '9', 'Spades' ),
-            label = ( this.props.isOpponent ) ? "Opponent's Hand" : "Player's Hand";
+            label = ( this.props.type === 'opponent' ) ? "Opponent's Hand" : "Player's Hand";
 
         return (
             <div className={ classes }>
@@ -35,8 +35,8 @@ class Player extends Component {
     }
 }
 
-Player.propTypes = {
-    isOpponent: PropTypes.bool
+Hand.propTypes = {
+    type: PropTypes.string
 };
 
-export default connect()( Player );
+export default connect()( Hand );

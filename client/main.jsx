@@ -2,7 +2,7 @@ import React from 'react';
 /*
  * Internal Dependencies
  */
-import Player from 'components/player';
+import Hand from 'components/hand';
 import Game from 'components/game';
 import Menu from 'components/menu/';
 
@@ -10,9 +10,9 @@ let Main = () => {
     return(
         <div className="cribbage">
             <Menu />
-            <Player isOpponent />
+            <Hand type="opponent" />
             <Game />
-            <Player />
+            <Hand type="player" />
         </div>
     );
 };
