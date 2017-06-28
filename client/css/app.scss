@@ -63,6 +63,16 @@ body {
   }
 }
 
+.controller {
+  position: absolute;
+  background-color: green;
+  width: 185px;
+  height: 100px;
+  top: 40px;
+  left: 790px;
+  text-align: center;
+}
+
 .peg {
   position: absolute;
   width: 7px;
