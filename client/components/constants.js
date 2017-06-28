@@ -1,0 +1,1 @@
+export const imageDir = 'http://gamesfortheroad.com/wp-content/plugins/wp-cribbage/images/';

@@ -1,13 +1,28 @@
-import React from 'react';
+/**
+ * External Dependencies
+ */
+import React, { Component, PropTypes } from 'react';
 
-const imageDir = 'http://gamesfortheroad.com/wp-content/plugins/wp-cribbage/images/';
+/**
+ * Internal Dependencies
+ */
+import { imageDir } from '../constants';
 
-export default function( props ) {
-    const { faceDown, card } = props,
-        src = ( faceDown ) ?
-            imageDir + 'card-back.gif' :
-            imageDir + card.name + '-' + card.suit + '.gif';
+class Card extends Component {
+    render() {
+        const { faceDown, card } = this.props,
+            src = ( faceDown ) ?
+                imageDir + 'card-back.gif' :
+                imageDir + card.name + '-' + card.suit + '.gif';
 
 
-    return <img src={ src } />;
+        return <img src={ src } />;
+    }
+}
+
+Card.propTypes = {
+    faceDown: PropTypes.bool,
+    card: PropTypes.object
 };
+
+export default Card;

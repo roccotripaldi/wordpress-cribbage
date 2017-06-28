@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 
 class Menu extends Component {
     render() {
-        return <p>Menu</p>;
+        return (
+            <div className="menu">
+                <a className="menu__debug">View Debug</a>
+            </div>
+        );
     }
 }
 

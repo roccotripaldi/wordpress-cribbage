@@ -3,3 +3,59 @@ body {
   font-size: 14px;
   color: white;
 }
+
+.cribbage {
+  position: relative;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 50px;
+  .menu__debug {
+    color: orange;
+    cursor: pointer;
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.player {
+  width: 480px;
+  position: absolute;
+  height: 156px;
+  left: 260px;
+  top: 364px;
+  &.opponent {
+    top: 20px;
+  }
+  p {
+    text-align: center;
+  }
+}
+
+.game {
+  position: absolute;
+  width: 1000px;
+  top: 196px;
+  left: 0;
+  .board {
+    width: 700px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .deck {
+    width: 80px;
+    position: absolute;
+    height: 106px;
+    left: 810px;
+    top: 21px;
+  }
+}
