@@ -19,17 +19,18 @@ class Hand extends Component {
             card4 = buildCard( 'Jack', 'Spades' ),
             card5 = buildCard( '10', 'Spades' ),
             card6 = buildCard( '9', 'Spades' ),
-            label = ( this.props.type === 'opponent' ) ? "Opponent's Hand" : "Player's Hand";
+            label = ( this.props.type === 'opponent' ) ? "Opponent's Hand" : "Player's Hand",
+            faceDown = ( this.props.type === 'opponent'  );
 
         return (
             <div className={ classes }>
                 <p>{ label }</p>
-                <Card card={card1} faceDown={ this.props.isOpponent } />
-                <Card card={card2} faceDown={ this.props.isOpponent } />
-                <Card card={card3} faceDown={ this.props.isOpponent } />
-                <Card card={card4} faceDown={ this.props.isOpponent } />
-                <Card card={card5} faceDown={ this.props.isOpponent } />
-                <Card card={card6} faceDown={ this.props.isOpponent } />
+                <Card card={card1} faceDown={ faceDown } />
+                <Card card={card2} faceDown={ faceDown } />
+                <Card card={card3} faceDown={ faceDown } />
+                <Card card={card4} faceDown={ faceDown } />
+                <Card card={card5} faceDown={ faceDown } />
+                <Card card={card6} faceDown={ faceDown } />
             </div>
         );
     }
