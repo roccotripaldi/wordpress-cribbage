@@ -6,6 +6,7 @@ class Menu extends Component {
         return (
             <div className="menu">
                 <a className="menu__debug">View Debug</a>
+                <a className="menu__reset">Reset Game</a>
             </div>
         );
     }

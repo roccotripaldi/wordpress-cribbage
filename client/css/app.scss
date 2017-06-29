@@ -17,7 +17,8 @@ body {
   left: 0;
   width: 100px;
   height: 50px;
-  .menu__debug {
+  a {
+    display: block;
     color: orange;
     cursor: pointer;
     &:hover {

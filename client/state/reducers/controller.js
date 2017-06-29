@@ -1,5 +1,5 @@
 const defaultState = {
-    log: []
+    nextAppointment: 'buildDeck',
 };
 
 const controller = (state = defaultState, action) => {
