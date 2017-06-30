@@ -8,7 +8,7 @@ import shuffle from 'lodash/shuffle';
  * Internal Dependencies
  */
 import { appointments } from './appointments';
-import { getNextAppointment } from 'state/selectors/controller';
+import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { controllerBuildsDeck } from 'state/actions/controller';
 import { buildDeck } from 'lib/deck';
 
@@ -16,13 +16,22 @@ let appointmentTimer;
 
 class Controller extends Component {
     componentDidMount() {
-        console.log( 'Setting timer on mount' );
-        appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        if ( ! this.props.paused ) {
+            console.log( 'Setting timer on mount' );
+            appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        } else {
+            clearInterval( appointmentTimer );
+            console.log( 'timer is paused on mount' );
+        }
     }
-    componentWillReceiveProps() {
-        console.log( 'Resetting timer on props receive' );
+    componentWillReceiveProps( nextProps ) {
         clearInterval( appointmentTimer );
-        appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        if ( ! nextProps.paused ) {
+            console.log( 'resetting timer on received props' );
+            appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        } else {
+            console.log( 'timer is paused on received props' );
+        }
     }
 
     checkAppointments = () => {
@@ -53,7 +62,8 @@ class Controller extends Component {
 export default connect(
     state => {
         return {
-            nextAppointment: getNextAppointment( state )
+            nextAppointment: getNextAppointment( state ),
+            paused: isPaused( state )
         }
     },
     {

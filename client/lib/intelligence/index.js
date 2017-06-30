@@ -1,4 +1,8 @@
-import { groupBy, isEmpty, keys, pickBy, sortBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
+import isEmpty from 'lodash/isEmpty';
+import keys from 'lodash/keys';
+import pickBy from 'lodash/pickBy';
+import sortBy from 'lodash/sortBy';
 
 const scoringCombinations = {
     fifteens: [
