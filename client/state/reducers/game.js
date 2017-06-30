@@ -1,3 +1,8 @@
+/**
+ * Internal Dependencies
+ */
+import { CONTROLLER_BUILDS_DECK } from '../action-types';
+
 export const defaultState = {
     deck: [],
     dealer: null,
@@ -11,6 +16,8 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case CONTROLLER_BUILDS_DECK:
+            return Object.assign( {}, state, { deck: action.deck } );
         default:
             return state
     }

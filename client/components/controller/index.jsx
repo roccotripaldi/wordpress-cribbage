@@ -3,27 +3,37 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import shuffle from 'lodash/shuffle';
 /**
  * Internal Dependencies
  */
 import { appointments } from './appointments';
 import { getNextAppointment } from 'state/selectors/controller';
+import { controllerBuildsDeck } from 'state/actions/controller';
+import { buildDeck } from 'lib/deck';
 
 let appointmentTimer;
 
 class Controller extends Component {
     componentDidMount() {
         console.log( 'Setting timer on mount' );
-        appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        appointmentTimer = setInterval( this.checkAppointments, 2000, this.props );
     }
     componentWillReceiveProps() {
         console.log( 'Resetting timer on props receive' );
         clearInterval( appointmentTimer );
-        appointmentTimer = setInterval( this.checkAppointments, 2000 );
+        appointmentTimer = setInterval( this.checkAppointments, 2000, this.props );
     }
 
-    checkAppointments() {
-        console.log( 'checking appointments' );
+    checkAppointments( props ) {
+        console.log( 'checking next appointment' );
+
+        switch ( props.nextAppointment ) {
+            case 'buildDeck':
+                const deck = shuffle( buildDeck() );
+                props.controllerBuildsDeck( deck );
+                break;
+        }
     }
 
     renderMessage() {
@@ -45,5 +55,8 @@ export default connect(
         return {
             nextAppointment: getNextAppointment( state )
         }
+    },
+    {
+        controllerBuildsDeck
     }
 )( Controller );
