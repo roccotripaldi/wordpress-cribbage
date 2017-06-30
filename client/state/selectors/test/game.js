@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { defaultState as state, initializedState } from './fixtures';
+import { defaultState as state } from './fixtures';
 import { getDeck, isInitialized } from '../game';
 
 describe( 'Game Selector', () => {
@@ -16,7 +16,7 @@ describe( 'Game Selector', () => {
             expect( initialized ).to.be.false;
         } );
         it( 'should be initialized if there is a deck', () => {
-            const initialized = isInitialized( initializedState );
+            const initialized = isInitialized( { game: { deck: [1,2,3] } } );
             expect( initialized ).to.be.true;
         } );
     } );

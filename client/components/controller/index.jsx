@@ -46,7 +46,10 @@ class Controller extends Component {
     };
 
     renderMessage() {
-        const message = appointments[ this.props.nextAppointment ].message;
+        let message = appointments[ this.props.nextAppointment ].message;
+        if ( this.props.paused ) {
+            message = 'Game is paused.';
+        }
         return <p>{ message }</p>;
     }
 

@@ -5,7 +5,8 @@ import controller from '../controller';
 import {
     CONTROLLER_BUILDS_DECK,
     CONTROLLER_RESET_GAME,
-    CONTROLLER_TOGGLE_TIMER
+    CONTROLLER_TOGGLE_TIMER,
+    PLAYER_INITIAL_DRAW
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -33,5 +34,11 @@ describe( 'Controller Reducer', () => {
         const state = controller( initialState, { type: CONTROLLER_TOGGLE_TIMER } );
         expect( state.isPaused ).to.be.false;
         expect( state.nextAppointment ).to.equal( defaultState.nextAppointment );
+    } );
+    it( 'should await for opponent to draw after player draws', () => {
+        const initialState = { nextAppointment: 'awaitDraw', isPaused: false },
+            state = controller( initialState, { type: PLAYER_INITIAL_DRAW, card: {} } );
+        expect( state.nextAppointment ).to.equal( 'opponentDraw' );
+        expect( state.isPaused ).to.be.false;
     } );
 } );
