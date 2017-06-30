@@ -1,8 +1,6 @@
-const defaultState = {
-    opponentPeg1Pos: 0,
-    opponentPeg2Pos: 0,
-    playerPeg1Pos: 0,
-    playerPeg2Pos: 0
+export const defaultState = {
+    opponent: [ -1, 0],
+    player: [ -1, 0 ]
 };
 
 const board = (state = defaultState, action) => {

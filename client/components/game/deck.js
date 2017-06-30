@@ -11,7 +11,6 @@ import { getDeck } from 'state/selectors/game';
 
 class Deck extends Component {
     render() {
-        console.log( this.props );
         return (
             <div className="deck">
                 {
