@@ -10,7 +10,9 @@ import shuffle from 'lodash/shuffle';
 import { getStatusMessage } from './status-messages';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { controllerBuildsDeck } from 'state/actions/controller';
+import { opponentDraws } from 'state/actions/player';
 import { buildDeck } from 'lib/deck';
+import { getDeck } from 'state/selectors/game';
 
 let appointmentTimer;
 
@@ -42,6 +44,10 @@ class Controller extends Component {
                 const deck = shuffle( buildDeck() );
                 this.props.controllerBuildsDeck( deck );
                 break;
+            case 'opponentDraw':
+                const card = this.props.deck[0];
+                this.props.opponentDraws( card );
+                break;
         }
     };
 
@@ -61,10 +67,12 @@ export default connect(
         return {
             nextAppointment,
             paused,
-            statusMessage: getStatusMessage( state, nextAppointment, paused )
+            statusMessage: getStatusMessage( state, nextAppointment, paused ),
+            deck: getDeck( state )
         }
     },
     {
-        controllerBuildsDeck
+        controllerBuildsDeck,
+        opponentDraws
     }
 )( Controller );

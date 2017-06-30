@@ -6,7 +6,8 @@ import { buildDeck } from '../../../lib/deck/';
 import {
     CONTROLLER_BUILDS_DECK,
     CONTROLLER_RESET_GAME,
-    PLAYER_INITIAL_DRAW
+    PLAYER_INITIAL_DRAW,
+    OPPONENT_INITIAL_DRAW
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -26,6 +27,11 @@ describe( 'Game Reducer', () => {
     it( 'should remove the top card from the deck after players draw', () => {
         const initialState = { deck: buildDeck() },
             state = game( initialState, { type: PLAYER_INITIAL_DRAW, card: {} } );
+        expect( state.deck.length ).to.equal( 51 );
+    } );
+    it( 'should remove the top card from the deck after opponents draw', () => {
+        const initialState = { deck: buildDeck() },
+            state = game( initialState, { type: OPPONENT_INITIAL_DRAW, card: {} } );
         expect( state.deck.length ).to.equal( 51 );
     } );
 } );

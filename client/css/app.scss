@@ -33,10 +33,13 @@ body {
   height: 156px;
   left: 260px;
   top: 364px;
-  &.opponent {
+  &.Opponent {
     top: 20px;
   }
   p {
+    text-align: center;
+  }
+  .cards {
     text-align: center;
   }
 }

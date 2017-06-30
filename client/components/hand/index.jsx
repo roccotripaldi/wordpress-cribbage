@@ -38,7 +38,7 @@ class Hand extends Component {
             faceDown = false;
         }
         return (
-            <div>
+            <div className="cards">
                 { cards.map( card => (
                     <Card key={ card.name + card.suit } card={ card } faceDown={ faceDown } />
                 ) ) }
