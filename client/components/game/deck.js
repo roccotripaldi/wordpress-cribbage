@@ -2,21 +2,32 @@
  * External Dependencies
  */
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 /**
  * Internal Dependencies
- */
-import { buildCard } from 'lib/deck';
+*/
 import Card from './card';
+import { getDeck } from 'state/selectors/game';
 
 class Deck extends Component {
     render() {
-        const card = buildCard( 'King', 'Diamonds' );
+        console.log( this.props );
         return (
             <div className="deck">
-                <Card card={ card } faceDown={ true } />
+                {
+                    this.props.deck.map( card => (
+                        <Card key={ card.name + card.suit } card={ card } faceDown={ true } />
+                    ) )
+                }
             </div>
         );
     }
 }
 
-export default Deck;
+export default connect(
+    state => {
+        return {
+            deck: getDeck( state )
+        }
+    }
+)( Deck );

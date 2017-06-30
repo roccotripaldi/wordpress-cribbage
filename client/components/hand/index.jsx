@@ -9,7 +9,6 @@ import isEmpty from 'lodash/isEmpty';
 /**
  * Internal Dependecies
  */
-import { buildCard } from 'lib/deck';
 import Card from 'components/game/card';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 
@@ -20,7 +19,7 @@ class Hand extends Component {
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
-        label = this.props.type + "'s hand:";
+        label = isEmpty( hand ) ? 'Initial Draw' : this.props.type + "'s hand:";
         return <p>{ label }</p>;
     }
 

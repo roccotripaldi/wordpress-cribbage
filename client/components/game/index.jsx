@@ -2,7 +2,6 @@
  * External Dependencies
  */
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
@@ -20,4 +19,4 @@ class Game extends Component {
     }
 }
 
-export default connect()( Game );
+export default Game;

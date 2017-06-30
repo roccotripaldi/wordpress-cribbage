@@ -14,7 +14,7 @@ export const defaultState = {
 };
 
 const players = ( state = defaultState, action ) => {
-    switch (action.type) {
+    switch ( action.type ) {
         default:
             return state
     }
