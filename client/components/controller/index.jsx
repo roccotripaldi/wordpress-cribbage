@@ -7,7 +7,7 @@ import shuffle from 'lodash/shuffle';
 /**
  * Internal Dependencies
  */
-import { appointments } from './appointments';
+import { getStatusMessage } from './status-messages';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { controllerBuildsDeck } from 'state/actions/controller';
 import { buildDeck } from 'lib/deck';
@@ -45,18 +45,10 @@ class Controller extends Component {
         }
     };
 
-    renderMessage() {
-        let message = appointments[ this.props.nextAppointment ].message;
-        if ( this.props.paused ) {
-            message = 'Game is paused.';
-        }
-        return <p>{ message }</p>;
-    }
-
     render() {
         return (
             <div className="controller">
-                { this.renderMessage() }
+                <p>{ this.props.statusMessage }</p>
             </div>
         );
     }
@@ -64,9 +56,12 @@ class Controller extends Component {
 
 export default connect(
     state => {
+        const nextAppointment = getNextAppointment( state ),
+            paused = isPaused( state );
         return {
-            nextAppointment: getNextAppointment( state ),
-            paused: isPaused( state )
+            nextAppointment,
+            paused,
+            statusMessage: getStatusMessage( state, nextAppointment, paused )
         }
     },
     {

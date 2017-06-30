@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getPlayer, getOpponent } from '../players';
+import { getPlayer, getOpponent, getPlayerInitialDraw, getOpponentInitialDraw } from '../players';
+import { buildCard } from '../../../lib/deck';
 
 describe( 'Players Selector', () => {
     describe( 'getPlayer()', () => {
@@ -22,6 +23,22 @@ describe( 'Players Selector', () => {
             expect( opponent ).to.have.property( 'crib' );
             expect( opponent ).to.have.property( 'score' );
             expect( opponent ).to.have.property( 'initialDraw' );
+        } );
+    } );
+    describe( 'getPlayerInitialDraw()', () => {
+        it( 'should return the players initial draw', () => {
+            const card = buildCard( 'Ace', 'Spades' ),
+                state = { player: { initialDraw: [ card ] } },
+                initialDraw = getPlayerInitialDraw( state );
+            expect( initialDraw ).to.deep.equal( card );
+        } );
+    } );
+    describe( 'getOpponentInitialDraw()', () => {
+        it( 'should return the players initial draw', () => {
+            const card = buildCard( 'Ace', 'Spades' ),
+                state = { opponent: { initialDraw: [ card ] } },
+                initialDraw = getOpponentInitialDraw( state );
+            expect( initialDraw ).to.deep.equal( card );
         } );
     } );
 } );
