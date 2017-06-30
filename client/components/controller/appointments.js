@@ -1,5 +1,6 @@
 export const appointments = {
     buildDeck: {
-        message: 'Building Deck'
+        message: 'Building Deck!',
+        requiresPlayerInput: false
     }
 };

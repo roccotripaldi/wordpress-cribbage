@@ -2,10 +2,12 @@
  * External Dependencies
  */
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
-import appointments from './appointments';
+import { appointments } from './appointments';
+import { getNextAppointment } from 'state/selectors/controller';
 
 let appointmentTimer;
 
@@ -24,13 +26,24 @@ class Controller extends Component {
         console.log( 'checking appointments' );
     }
 
+    renderMessage() {
+        const message = appointments[ this.props.nextAppointment ].message;
+        return <p>{ message }</p>;
+    }
+
     render() {
         return (
             <div className="controller">
-                <p>Lowest card deals first.<br />Draw a card to start the game!</p>
+                { this.renderMessage() }
             </div>
         );
     }
 }
 
-export default Controller;
+export default connect(
+    state => {
+        return {
+            nextAppointment: getNextAppointment( state )
+        }
+    }
+)( Controller );
