@@ -17,24 +17,24 @@ let appointmentTimer;
 class Controller extends Component {
     componentDidMount() {
         console.log( 'Setting timer on mount' );
-        appointmentTimer = setInterval( this.checkAppointments, 2000, this.props );
+        appointmentTimer = setInterval( this.checkAppointments, 2000 );
     }
     componentWillReceiveProps() {
         console.log( 'Resetting timer on props receive' );
         clearInterval( appointmentTimer );
-        appointmentTimer = setInterval( this.checkAppointments, 2000, this.props );
+        appointmentTimer = setInterval( this.checkAppointments, 2000 );
     }
 
-    checkAppointments( props ) {
-        console.log( 'checking next appointment' );
+    checkAppointments = () => {
+        console.log( 'checking next appointment', this.props.nextAppointment );
 
-        switch ( props.nextAppointment ) {
+        switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 const deck = shuffle( buildDeck() );
-                props.controllerBuildsDeck( deck );
+                this.props.controllerBuildsDeck( deck );
                 break;
         }
-    }
+    };
 
     renderMessage() {
         const message = appointments[ this.props.nextAppointment ].message;

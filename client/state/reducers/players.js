@@ -1,3 +1,8 @@
+/**
+ * Internal Dependencies
+ */
+import { CONTROLLER_RESET_GAME } from '../action-types';
+
 export const defaultState = {
     player: {
         hand: [],
@@ -15,6 +20,8 @@ export const defaultState = {
 
 const players = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case CONTROLLER_RESET_GAME:
+            return defaultState;
         default:
             return state
     }
