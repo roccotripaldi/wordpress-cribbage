@@ -5,33 +5,55 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import classNames from 'classnames';
+import isEmpty from 'lodash/isEmpty';
 /**
  * Internal Dependecies
  */
 import { buildCard } from 'lib/deck';
 import Card from 'components/game/card';
+import { getPlayer, getOpponent } from 'state/selectors/players';
 
 class Hand extends Component {
+    renderLabel() {
+        const { hand, initialDraw } = this.props.player;
+        let label;
+        if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
+            return null;
+        }
+        label = this.props.type + "'s hand:";
+        return <p>{ label }</p>;
+    }
+
+    renderCards() {
+        const { hand, initialDraw } = this.props.player;
+        let cards, faceDown;
+        if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
+            return null;
+        }
+        cards = isEmpty( hand ) ? initialDraw : hand;
+        if ( isEmpty( hand ) ) {
+            faceDown = false;
+        } else if ( 'Opponent' === this.props.type ) {
+            faceDown = true;
+        } else {
+            faceDown = false;
+        }
+        return (
+            <div>
+                { cards.map( card => (
+                    <Card key={ card.name + card.suit } card={ card } faceDown={ faceDown } />
+                ) ) }
+            </div>
+        );
+    }
+
     render() {
-        const classes = classNames( [ this.props.type, 'hand' ] ),
-            card1 = buildCard( 'Ace', 'Spades' ),
-            card2 = buildCard( 'King', 'Spades' ),
-            card3 = buildCard( 'Queen', 'Spades' ),
-            card4 = buildCard( 'Jack', 'Spades' ),
-            card5 = buildCard( '10', 'Spades' ),
-            card6 = buildCard( '9', 'Spades' ),
-            label = ( this.props.type === 'opponent' ) ? "Opponent's Hand" : "Player's Hand",
-            faceDown = ( this.props.type === 'opponent'  );
+        const classes = classNames( [ this.props.type, 'hand' ] );
 
         return (
             <div className={ classes }>
-                <p>{ label }</p>
-                <Card card={card1} faceDown={ faceDown } />
-                <Card card={card2} faceDown={ faceDown } />
-                <Card card={card3} faceDown={ faceDown } />
-                <Card card={card4} faceDown={ faceDown } />
-                <Card card={card5} faceDown={ faceDown } />
-                <Card card={card6} faceDown={ faceDown } />
+                { this.renderLabel() }
+                { this.renderCards() }
             </div>
         );
     }
@@ -41,4 +63,10 @@ Hand.propTypes = {
     type: PropTypes.string
 };
 
-export default connect()( Hand );
+export default connect(
+    ( state, ownProps ) => {
+        return {
+            player: ( ownProps.type === "Opponent" ) ? getOpponent( state ) : getPlayer( state )
+        }
+    }
+)( Hand );

@@ -12,9 +12,9 @@ let Main = () => {
         <div className="cribbage">
             <Menu />
             <Controller />
-            <Hand type="opponent" />
+            <Hand type="Opponent" />
             <Game />
-            <Hand type="player" />
+            <Hand type="Player" />
         </div>
     );
 };

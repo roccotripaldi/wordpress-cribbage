@@ -1,19 +1,19 @@
-const defaultState = {
+export const defaultState = {
     player: {
-        hand: null,
-        crib: null,
+        hand: [],
+        crib: [],
         score: 0,
-        initialDraw: null
+        initialDraw: []
     },
     opponent: {
-        hand: null,
-        crib: null,
+        hand: [],
+        crib: [],
         score: 0,
-        initialDraw: null
+        initialDraw: []
     },
 };
 
-const players = (state = defaultState, action) => {
+const players = ( state = defaultState, action ) => {
     switch (action.type) {
         default:
             return state

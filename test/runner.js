@@ -32,6 +32,9 @@ if ( program.args.length ) {
     glob.sync( 'client/lib/**/test/**.js' ).forEach( file => {
         mocha.addFile( file );
     });
+    glob.sync( 'client/state/**/test/**.js' ).forEach( file => {
+        mocha.addFile( file );
+    } );
 }
 
 mocha.run( function( failures ) {
