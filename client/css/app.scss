@@ -43,23 +43,55 @@ body {
     -webkit-transition: top 0.5s, left 0.5s;
     -moz-transition: top 0.5s, left 0.5s;
     transition: top 0.5s, left 0.5s;
-    &.card1 {
-      left: 80px;
+  }
+  .cards {
+    img {
+      &.card1 {
+        left: 80px;
+      }
+      &.card2 {
+        left: 160px;
+      }
+      &.card3 {
+        left: 240px;
+      }
+      &.card4 {
+        left: 320px;
+      }
+      &.card5 {
+        left: 400px;
+      }
+      &.selected {
+        top: 76px;
+      }
     }
-    &.card2 {
-      left: 160px;
+  }
+  .crib {
+    position: absolute;
+    top: 0;
+    left: 520px;
+    padding: 0 5px 5px 5px;
+    border: 1px solid;
+    width: 200px;
+    height: 150px;
+    img {
+      top: 40px;
+      left: 10px;
+      &.card1 {
+        left: 40px;
+      }
+      &.card2 {
+        left: 70px;
+      }
+      &.card3 {
+        left: 100px;
+      }
+      &.card4 {
+        left: 130px;
+      }
     }
-    &.card3 {
-      left: 240px;
-    }
-    &.card4 {
-      left: 320px;
-    }
-    &.card5 {
-      left: 400px;
-    }
-    &.selected {
-      top: 76px;
+    p {
+      text-align: center;
     }
   }
   .discard-button {

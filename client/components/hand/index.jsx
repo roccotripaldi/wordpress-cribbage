@@ -51,6 +51,30 @@ class Hand extends Component {
         }
     };
 
+    renderCrib() {
+        const { crib } = this.props.player;
+
+        if ( this.props.dealer !== this.props.type ) {
+            return null;
+        }
+
+        return (
+            <div className="crib">
+                <p>Crib</p>
+                { crib.map( ( card, index ) => {
+                    return (
+                        <Card
+                            key={ card.name + card.suit }
+                            card={ card }
+                            faceDown={ true }
+                            index={ index }
+                        />
+                    )
+                } ) }
+            </div>
+        );
+    }
+
     renderLabel() {
         const { hand, initialDraw } = this.props.player;
         let label;
@@ -115,6 +139,7 @@ class Hand extends Component {
             <div className={ classes }>
                 { this.renderLabel() }
                 { this.renderCards() }
+                { this.renderCrib() }
                 { this.renderDiscardButton() }
             </div>
         );
