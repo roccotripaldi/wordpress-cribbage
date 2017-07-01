@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import classNames from 'classnames';
 
 
 /**
@@ -15,16 +16,25 @@ class Card extends Component {
         const { faceDown, card } = this.props,
             src = ( faceDown ) ?
                 imageDir + 'card-back.gif' :
-                imageDir + card.name + '-' + card.suit + '.gif';
+                imageDir + card.name + '-' + card.suit + '.gif',
+            classes = classNames( { selected: this.props.selected, [ 'card' + this.props.index ]: true } );
 
 
-        return <img src={ src } />;
+        return <img
+            src={ src }
+            onClick={ this.props.onClick }
+            data-index={ this.props.index }
+            className={ classes }
+        />;
     }
 }
 
 Card.propTypes = {
     faceDown: PropTypes.bool,
-    card: PropTypes.object
+    card: PropTypes.object,
+    onClick: PropTypes.func,
+    index: PropTypes.number,
+    selected: PropTypes.bool
 };
 
 export default Card;

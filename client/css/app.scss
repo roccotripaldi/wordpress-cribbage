@@ -36,11 +36,38 @@ body {
   &.Opponent {
     top: 20px;
   }
-  p {
-    text-align: center;
+  img {
+    position: absolute;
+    top: 46px;
+    left: 0;
+    &.card1 {
+      left: 80px;
+    }
+    &.card2 {
+      left: 160px;
+    }
+    &.card3 {
+      left: 240px;
+    }
+    &.card4 {
+      left: 320px;
+    }
+    &.card5 {
+      left: 400px;
+    }
+    &.selected {
+      top: 76px;
+    }
   }
-  .cards {
+  .discard-button {
+    position: absolute;
+    top: 100px;
+    left: -150px;
+    background-color: orange;
+    color: white;
+    padding: 5px;
     text-align: center;
+    cursor: pointer;
   }
 }
 
