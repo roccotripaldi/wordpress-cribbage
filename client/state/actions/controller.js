@@ -1,17 +1,31 @@
 /**
+ * External Dependencies
+ */
+import shuffle from 'lodash/shuffle';
+/**
  * Internal Dependencies
  */
 import {
     CONTROLLER_BUILDS_DECK,
     CONTROLLER_RESET_GAME,
     CONTROLLER_TOGGLE_TIMER ,
-    CONTROLLER_ASSIGNS_FIRST_DEALER
+    CONTROLLER_ASSIGNS_FIRST_DEALER,
+    CONNTROLLER_RESET_DECK
 } from '../action-types';
+import { buildDeck } from '../../lib/deck';
 
-export const controllerBuildsDeck = deck => {
+export const controllerBuildsDeck = () => {
     return {
         type: CONTROLLER_BUILDS_DECK,
-        deck
+        deck: shuffle( buildDeck() )
+    }
+};
+
+export const resetDeck = ( dealer ) => {
+    return {
+        type: CONNTROLLER_RESET_DECK,
+        deck: shuffle( buildDeck() ),
+        dealer
     }
 };
 

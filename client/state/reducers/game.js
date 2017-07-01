@@ -6,7 +6,8 @@ import {
     CONTROLLER_RESET_GAME,
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
-    CONTROLLER_ASSIGNS_FIRST_DEALER
+    CONTROLLER_ASSIGNS_FIRST_DEALER,
+    CONNTROLLER_RESET_DECK
 } from '../action-types';
 
 export const defaultState = {
@@ -29,6 +30,7 @@ const game = ( state = defaultState, action ) => {
             return Object.assign( {}, state, { deck: state.deck.slice( 1 ) } );
         case CONTROLLER_RESET_GAME:
             return defaultState;
+        case CONNTROLLER_RESET_DECK:
         case CONTROLLER_BUILDS_DECK:
             return Object.assign( {}, state, { deck: action.deck } );
         default:

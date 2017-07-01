@@ -8,7 +8,8 @@ import {
     CONTROLLER_TOGGLE_TIMER,
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
-    CONTROLLER_ASSIGNS_FIRST_DEALER
+    CONTROLLER_ASSIGNS_FIRST_DEALER,
+    CONNTROLLER_RESET_DECK
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -43,14 +44,24 @@ describe( 'Controller Reducer', () => {
         expect( state.nextAppointment ).to.equal( 'opponentDraw' );
         expect( state.isPaused ).to.be.false;
     } );
-    it( 'should await for opponent to draw after player draws', () => {
+    it( 'should assign first dealer after opponent draws', () => {
         const initialState = { nextAppointment: 'opponentDraw' },
             state = controller( initialState, { type: OPPONENT_INITIAL_DRAW, card: {} } );
         expect( state.nextAppointment ).to.equal( 'assignFirstDealer' );
     } );
-    it( 'should await for opponent to draw after player draws', () => {
+    it( 'should reset deck after dealer is assigned', () => {
         const initialState = { nextAppointment: 'assignFirstDealer' },
             state = controller( initialState, { type: CONTROLLER_ASSIGNS_FIRST_DEALER, dealer: 'Player' } );
-        expect( state.nextAppointment ).to.equal( 'dealFirstCard' );
+        expect( state.nextAppointment ).to.equal( 'resetDeck' );
+    } );
+    it( 'should deal card to opponent if dealer is player', () => {
+        const initialState = { nextAppointment: 'resetDeck' },
+            state = controller( initialState, { type: CONNTROLLER_RESET_DECK, dealer: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'dealCardToOpponent' );
+    } );
+    it( 'should deal card to player if dealer is opponent', () => {
+        const initialState = { nextAppointment: 'resetDeck' },
+            state = controller( initialState, { type: CONNTROLLER_RESET_DECK, dealer: 'Opponent' } );
+        expect( state.nextAppointment ).to.equal( 'dealCardToPlayer' );
     } );
 } );

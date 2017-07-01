@@ -8,7 +8,8 @@ import {
     CONTROLLER_RESET_GAME,
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
-    CONTROLLER_ASSIGNS_FIRST_DEALER
+    CONTROLLER_ASSIGNS_FIRST_DEALER,
+    CONNTROLLER_RESET_DECK
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -39,5 +40,11 @@ describe( 'Game Reducer', () => {
         const initialState = { dealer: null },
             state = game( initialState, { type: CONTROLLER_ASSIGNS_FIRST_DEALER, dealer: 'Player' } );
         expect( state.dealer ).to.equal( 'Player' );
+    } );
+    it( 'should reset deck', () => {
+        const initialState = { deck: [] },
+            deck = buildDeck(),
+            state = game( initialState, { type: CONNTROLLER_RESET_DECK, deck } );
+        expect( state.deck.length ).to.equal( 52 );
     } );
 } );

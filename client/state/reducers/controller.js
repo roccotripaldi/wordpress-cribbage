@@ -7,7 +7,8 @@ import {
     CONTROLLER_TOGGLE_TIMER,
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
-    CONTROLLER_ASSIGNS_FIRST_DEALER
+    CONTROLLER_ASSIGNS_FIRST_DEALER,
+    CONNTROLLER_RESET_DECK
 } from '../action-types';
 
 export const defaultState = {
@@ -17,8 +18,11 @@ export const defaultState = {
 
 const controller = ( state = defaultState, action ) => {
     switch (action.type) {
+        case CONNTROLLER_RESET_DECK:
+            const nextAppointment = ( 'Opponent' === action.dealer ) ? 'dealCardToPlayer' : 'dealCardToOpponent';
+            return Object.assign( {}, state, { nextAppointment } );
         case CONTROLLER_ASSIGNS_FIRST_DEALER:
-            return Object.assign( {}, state, { nextAppointment: 'dealFirstCard' } );
+            return Object.assign( {}, state, { nextAppointment: 'resetDeck' } );
         case OPPONENT_INITIAL_DRAW:
             return Object.assign( {}, state, { nextAppointment: 'assignFirstDealer' } );
         case PLAYER_INITIAL_DRAW:

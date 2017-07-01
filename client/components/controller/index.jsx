@@ -3,16 +3,14 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import shuffle from 'lodash/shuffle';
 /**
  * Internal Dependencies
  */
 import { getStatusMessage } from './status-messages';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
-import { controllerBuildsDeck, assignFistDealer } from 'state/actions/controller';
+import { controllerBuildsDeck, assignFistDealer, resetDeck } from 'state/actions/controller';
 import { opponentDraws } from 'state/actions/player';
-import { buildDeck } from 'lib/deck';
-import { getDeck } from 'state/selectors/game';
+import { getDeck, getDealer } from 'state/selectors/game';
 import { getPlayerInitialDraw, getOpponentInitialDraw } from 'state/selectors/players';
 
 let appointmentTimer;
@@ -42,8 +40,7 @@ class Controller extends Component {
 
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
-                const deck = shuffle( buildDeck() );
-                this.props.controllerBuildsDeck( deck );
+                this.props.controllerBuildsDeck();
                 break;
             case 'opponentDraw':
                 const card = this.props.deck[0];
@@ -51,6 +48,9 @@ class Controller extends Component {
                 break;
             case 'assignFirstDealer':
                 this.props.assignFistDealer( this.props.playerInitialDraw, this.props.opponentInitialDraw );
+                break;
+            case 'resetDeck':
+                this.props.resetDeck( this.props.dealer );
                 break;
         }
     };
@@ -74,12 +74,14 @@ export default connect(
             statusMessage: getStatusMessage( state, nextAppointment, paused ),
             deck: getDeck( state ),
             playerInitialDraw: getPlayerInitialDraw( state ),
-            opponentInitialDraw: getOpponentInitialDraw( state )
+            opponentInitialDraw: getOpponentInitialDraw( state ),
+            dealer: getDealer( state )
         }
     },
     {
         controllerBuildsDeck,
         opponentDraws,
-        assignFistDealer
+        assignFistDealer,
+        resetDeck
     }
 )( Controller );
