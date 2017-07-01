@@ -13,6 +13,8 @@ import difference from 'lodash/difference';
 import Card from 'components/game/card';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
+import { playerDiscards } from 'state/actions/player';
+import { getDealer } from 'state/selectors/game';
 
 class Hand extends Component {
     constructor( props ) {
@@ -36,7 +38,17 @@ class Hand extends Component {
 
     handleDiscard = ( event ) => {
         event.preventDefault();
-        console.log( 'discard!' );
+        if ( ! this.props.paused ) {
+            const cards = this.state.selectedCards.map( ( index ) => {
+                return this.props.player.hand[ index ];
+            } );
+            this.props.playerDiscards(
+                cards,
+                this.state.selectedCards,
+                this.props.dealer
+            );
+            this.setState( { selectedCards: [] } );
+        }
     };
 
     renderLabel() {
@@ -118,7 +130,9 @@ export default connect(
         return {
             player: ( ownProps.type === "Opponent" ) ? getOpponent( state ) : getPlayer( state ),
             nextAppointment: getNextAppointment( state ),
-            paused: isPaused( state )
+            paused: isPaused( state ),
+            dealer: getDealer( state )
         }
-    }
+    },
+    { playerDiscards }
 )( Hand );

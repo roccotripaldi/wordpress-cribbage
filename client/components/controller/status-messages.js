@@ -12,6 +12,8 @@ export const getStatusMessage = ( state, nextAppointment, paused ) => {
         return 'Game is paused.';
     }
     switch( nextAppointment ) {
+        case 'opponentDiscards':
+            return 'Waiting for opponent to discard...';
         case 'playerDiscards':
             dealer = getDealer( state );
             person = ( 'Player' === dealer ) ? 'your' : "your opponent's";

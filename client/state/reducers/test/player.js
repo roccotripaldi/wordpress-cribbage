@@ -6,7 +6,8 @@ import {
     CONTROLLER_RESET_GAME,
     PLAYER_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
-    CONTROLLER_DEALS_CARD_TO_PLAYER
+    CONTROLLER_DEALS_CARD_TO_PLAYER,
+    PLAYER_DISCARDS
 } from '../../action-types';
 
 
@@ -38,5 +39,49 @@ describe( 'Player Reducer', () => {
             initialState = { hand: [ card ] },
             state = player( initialState, { type: CONTROLLER_DEALS_CARD_TO_PLAYER, card: newCard } );
         expect( state.hand ).to.deep.equal( [ newCard, card ] );
+    } );
+    it( 'should remove cards from hand on discard', () => {
+        const hand = [
+            buildCard( 'Ace', 'Spades'),
+            buildCard( 'Ace', 'Hearts' ),
+            buildCard( 'Ace', 'Diamonds' ),
+            buildCard( 'Ace', 'Clubs' ),
+            buildCard( '2', 'Hearts' ),
+            buildCard( '5', 'Clubs' )
+        ],
+            initialState = { hand },
+            state = player( initialState, { type: PLAYER_DISCARDS, cardIndexes: [ 2, 4 ], dealer: 'Opponent' } ),
+            expextedState = [
+                buildCard( 'Ace', 'Spades'),
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( 'Ace', 'Clubs' ),
+                buildCard( '5', 'Clubs' )
+            ];
+        expect( state.hand ).to.deep.equal( expextedState );
+    } );
+    it( 'should remove cards from hand, and add to crib on discard if it is players crib', () => {
+        const hand = [
+                buildCard( 'Ace', 'Spades'),
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( 'Ace', 'Diamonds' ),
+                buildCard( 'Ace', 'Clubs' ),
+                buildCard( '2', 'Hearts' ),
+                buildCard( '5', 'Clubs' )
+            ],
+            initialState = { hand, crib: [] },
+            state = player( initialState, {
+                type: PLAYER_DISCARDS,
+                cardIndexes: [ 2, 4 ],
+                cards: [ buildCard( 'Ace', 'Diamonds' ), buildCard( '2', 'Hearts' ) ],
+                dealer: 'Player'
+            } ),
+            expextedState = [
+                buildCard( 'Ace', 'Spades'),
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( 'Ace', 'Clubs' ),
+                buildCard( '5', 'Clubs' )
+            ];
+        expect( state.hand ).to.deep.equal( expextedState );
+        expect( state.crib ).to.deep.equal( [ buildCard( 'Ace', 'Diamonds' ), buildCard( '2', 'Hearts' ) ] );
     } );
 } );

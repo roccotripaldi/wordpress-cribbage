@@ -5,7 +5,8 @@ import {
     CONTROLLER_RESET_GAME,
     OPPONENT_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
-    CONTROLLER_DEALS_CARD_TO_OPPONENT
+    CONTROLLER_DEALS_CARD_TO_OPPONENT,
+    PLAYER_DISCARDS
 } from '../action-types';
 
 export const defaultState = {
@@ -17,6 +18,11 @@ export const defaultState = {
 
 const opponent = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case PLAYER_DISCARDS:
+            if ( 'Opponent' === action.dealer ) {
+                return Object.assign( {}, state, { crib: action.cards } );
+            }
+            return state;
         case CONTROLLER_DEALS_CARD_TO_OPPONENT:
             let newHand = state.hand.slice();
             newHand.splice( 0, 0, action.card );

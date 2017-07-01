@@ -12,7 +12,8 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
-    CONTROLLER_DEAL_COMPLETE
+    CONTROLLER_DEAL_COMPLETE,
+    PLAYER_DISCARDS
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -91,5 +92,10 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'resetDeck' },
             state = controller( initialState, { type: CONTROLLER_DEAL_COMPLETE } );
         expect( state.timerSpeed ).to.equal( defaultState.timerSpeed );
+    } );
+    it( 'should await opponent discard after player discards', () => {
+        const initialState = { nextAppointment: 'playerDiscards' },
+            state = controller( initialState, { type: PLAYER_DISCARDS } );
+        expect( state.nextAppointment ).to.equal( 'opponentDiscards' );
     } );
 } );
