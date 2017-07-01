@@ -16,20 +16,21 @@ import {
 
 export const defaultState = {
     nextAppointment: 'buildDeck',
-    isPaused: false
+    isPaused: false,
+    timerSpeed: 2000
 };
 
 const controller = ( state = defaultState, action ) => {
     switch (action.type) {
         case CONTROLLER_DEAL_COMPLETE:
-            return Object.assign( {}, state, { nextAppointment: 'playerDiscards' } );
+            return Object.assign( {}, state, { nextAppointment: 'playerDiscards', timerSpeed: defaultState.timerSpeed } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:
             return Object.assign( {}, state, { nextAppointment: 'dealCardToOpponent' } );
         case CONTROLLER_DEALS_CARD_TO_OPPONENT:
             return Object.assign( {}, state, { nextAppointment: 'dealCardToPlayer' } );
         case CONNTROLLER_RESET_DECK:
             const nextAppointment = ( 'Opponent' === action.dealer ) ? 'dealCardToPlayer' : 'dealCardToOpponent';
-            return Object.assign( {}, state, { nextAppointment } );
+            return Object.assign( {}, state, { nextAppointment, timerSpeed: 500 } );
         case CONTROLLER_ASSIGNS_FIRST_DEALER:
             return Object.assign( {}, state, { nextAppointment: 'resetDeck' } );
         case OPPONENT_INITIAL_DRAW:

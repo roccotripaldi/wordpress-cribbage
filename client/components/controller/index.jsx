@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
  * Internal Dependencies
  */
 import { getStatusMessage } from './status-messages';
-import { getNextAppointment, isPaused } from 'state/selectors/controller';
+import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
 import { opponentDraws } from 'state/actions/player';
 import { getDeck, getDealer } from 'state/selectors/game';
 import { getPlayerInitialDraw, getOpponentInitialDraw, getPlayer, getOpponent } from 'state/selectors/players';
@@ -26,7 +26,7 @@ class Controller extends Component {
     componentDidMount() {
         if ( ! this.props.paused ) {
             console.log( 'Setting timer on mount' );
-            appointmentTimer = setInterval( this.checkAppointments, 2000 );
+            appointmentTimer = setInterval( this.checkAppointments, this.props.timerSpeed );
         } else {
             clearInterval( appointmentTimer );
             console.log( 'timer is paused on mount' );
@@ -36,7 +36,7 @@ class Controller extends Component {
         clearInterval( appointmentTimer );
         if ( ! nextProps.paused ) {
             console.log( 'resetting timer on received props' );
-            appointmentTimer = setInterval( this.checkAppointments, 2000 );
+            appointmentTimer = setInterval( this.checkAppointments, nextProps.timerSpeed );
         } else {
             console.log( 'timer is paused on received props' );
         }
@@ -95,7 +95,8 @@ export default connect(
             opponentInitialDraw: getOpponentInitialDraw( state ),
             dealer: getDealer( state ),
             player: getPlayer( state ),
-            opponent: getOpponent( state )
+            opponent: getOpponent( state ),
+            timerSpeed: getTimerSpeed( state )
         }
     },
     {

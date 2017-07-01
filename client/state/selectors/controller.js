@@ -10,3 +10,7 @@ export const getNextAppointment = ( state ) => {
 export const isPaused = ( state ) => {
     return get( state, 'controller.isPaused' );
 };
+
+export const getTimerSpeed = ( state ) => {
+    return get( state, 'controller.timerSpeed' );
+}

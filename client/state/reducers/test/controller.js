@@ -67,6 +67,11 @@ describe( 'Controller Reducer', () => {
             state = controller( initialState, { type: CONNTROLLER_RESET_DECK, dealer: 'Opponent' } );
         expect( state.nextAppointment ).to.equal( 'dealCardToPlayer' );
     } );
+    it( 'should speed up timer after resetting deck', () => {
+        const initialState = { nextAppointment: 'resetDeck' },
+            state = controller( initialState, { type: CONNTROLLER_RESET_DECK, dealer: 'Opponent' } );
+        expect( state.timerSpeed ).to.equal( 500 );
+    } );
     it( 'should deal card to player after dealing card to opponent', () => {
         const initialState = { nextAppointment: 'dealCardToOpponent' },
             state = controller( initialState, { type: CONTROLLER_DEALS_CARD_TO_OPPONENT } );
@@ -81,5 +86,10 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'dealCardToPlayer' },
             state = controller( initialState, { type: CONTROLLER_DEAL_COMPLETE } );
         expect( state.nextAppointment ).to.equal( 'playerDiscards' );
+    } );
+    it( 'should slow down timer after deal is complete', () => {
+        const initialState = { nextAppointment: 'resetDeck' },
+            state = controller( initialState, { type: CONTROLLER_DEAL_COMPLETE } );
+        expect( state.timerSpeed ).to.equal( defaultState.timerSpeed );
     } );
 } );
