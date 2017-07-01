@@ -9,7 +9,9 @@ import {
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
     CONTROLLER_ASSIGNS_FIRST_DEALER,
-    CONNTROLLER_RESET_DECK
+    CONNTROLLER_RESET_DECK,
+    CONTROLLER_DEALS_CARD_TO_PLAYER,
+    CONTROLLER_DEALS_CARD_TO_OPPONENT
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -46,5 +48,15 @@ describe( 'Game Reducer', () => {
             deck = buildDeck(),
             state = game( initialState, { type: CONNTROLLER_RESET_DECK, deck } );
         expect( state.deck.length ).to.equal( 52 );
+    } );
+    it( 'should remove the top card from the deck after dealing to player', () => {
+        const initialState = { deck: buildDeck() },
+            state = game( initialState, { type: CONTROLLER_DEALS_CARD_TO_PLAYER } );
+        expect( state.deck.length ).to.equal( 51 );
+    } );
+    it( 'should remove the top card from the deck after dealing to opponent', () => {
+        const initialState = { deck: buildDeck() },
+            state = game( initialState, { type: CONTROLLER_DEALS_CARD_TO_OPPONENT } );
+        expect( state.deck.length ).to.equal( 51 );
     } );
 } );

@@ -10,7 +10,10 @@ import {
     CONTROLLER_RESET_GAME,
     CONTROLLER_TOGGLE_TIMER ,
     CONTROLLER_ASSIGNS_FIRST_DEALER,
-    CONNTROLLER_RESET_DECK
+    CONNTROLLER_RESET_DECK,
+    CONTROLLER_DEALS_CARD_TO_PLAYER,
+    CONTROLLER_DEALS_CARD_TO_OPPONENT,
+    CONTROLLER_DEAL_COMPLETE
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
 
@@ -53,5 +56,25 @@ export const assignFistDealer = ( playerDraw, opponentDraw ) => {
     return {
         type: CONTROLLER_ASSIGNS_FIRST_DEALER,
         dealer
+    }
+};
+
+export const dealCardToPlayer = ( card ) => {
+    return {
+        type: CONTROLLER_DEALS_CARD_TO_PLAYER,
+        card
+    }
+};
+
+export const dealCardToOpponent = ( card ) => {
+    return {
+        type: CONTROLLER_DEALS_CARD_TO_OPPONENT,
+        card
+    }
+};
+
+export const dealComplete = ( card ) => {
+    return {
+        type: CONTROLLER_DEAL_COMPLETE
     }
 };

@@ -5,7 +5,8 @@ import opponent, { defaultState } from '../opponent';
 import {
     CONTROLLER_RESET_GAME,
     OPPONENT_INITIAL_DRAW,
-    CONNTROLLER_RESET_DECK
+    CONNTROLLER_RESET_DECK,
+    CONTROLLER_DEALS_CARD_TO_OPPONENT
 } from '../../action-types';
 
 
@@ -30,5 +31,12 @@ describe( 'Opponent Reducer', () => {
         expect( state.hand ).to.be.an( 'Array' ).that.is.empty;
         expect( state.crib ).to.be.an( 'Array' ).that.is.empty;
         expect( state.initialDraw ).to.be.an( 'Array' ).that.is.empty;
+    } );
+    it( 'should add a card to hand', () => {
+        const card = buildCard( 'Ace', 'Diamonds' ),
+            newCard = buildCard( '10', 'Clubs' ),
+            initialState = { hand: [ card ] },
+            state = opponent( initialState, { type: CONTROLLER_DEALS_CARD_TO_OPPONENT, card: newCard } );
+        expect( state.hand ).to.deep.equal( [ newCard, card ] );
     } );
 } );

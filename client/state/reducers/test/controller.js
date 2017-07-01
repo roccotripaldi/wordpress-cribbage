@@ -9,7 +9,10 @@ import {
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
     CONTROLLER_ASSIGNS_FIRST_DEALER,
-    CONNTROLLER_RESET_DECK
+    CONNTROLLER_RESET_DECK,
+    CONTROLLER_DEALS_CARD_TO_PLAYER,
+    CONTROLLER_DEALS_CARD_TO_OPPONENT,
+    CONTROLLER_DEAL_COMPLETE
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -63,5 +66,20 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'resetDeck' },
             state = controller( initialState, { type: CONNTROLLER_RESET_DECK, dealer: 'Opponent' } );
         expect( state.nextAppointment ).to.equal( 'dealCardToPlayer' );
+    } );
+    it( 'should deal card to player after dealing card to opponent', () => {
+        const initialState = { nextAppointment: 'dealCardToOpponent' },
+            state = controller( initialState, { type: CONTROLLER_DEALS_CARD_TO_OPPONENT } );
+        expect( state.nextAppointment ).to.equal( 'dealCardToPlayer' );
+    } );
+    it( 'should deal card to opponent after dealing card to player', () => {
+        const initialState = { nextAppointment: 'dealCardToPlayer' },
+            state = controller( initialState, { type: CONTROLLER_DEALS_CARD_TO_PLAYER } );
+        expect( state.nextAppointment ).to.equal( 'dealCardToOpponent' );
+    } );
+    it( 'should await players discard when deal is complete', () => {
+        const initialState = { nextAppointment: 'dealCardToPlayer' },
+            state = controller( initialState, { type: CONTROLLER_DEAL_COMPLETE } );
+        expect( state.nextAppointment ).to.equal( 'playerDiscards' );
     } );
 } );

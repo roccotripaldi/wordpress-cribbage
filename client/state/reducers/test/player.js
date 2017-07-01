@@ -5,7 +5,8 @@ import player, { defaultState } from '../player';
 import {
     CONTROLLER_RESET_GAME,
     PLAYER_INITIAL_DRAW,
-    CONNTROLLER_RESET_DECK
+    CONNTROLLER_RESET_DECK,
+    CONTROLLER_DEALS_CARD_TO_PLAYER
 } from '../../action-types';
 
 
@@ -30,5 +31,12 @@ describe( 'Player Reducer', () => {
         expect( state.hand ).to.be.an( 'Array' ).that.is.empty;
         expect( state.crib ).to.be.an( 'Array' ).that.is.empty;
         expect( state.initialDraw ).to.be.an( 'Array' ).that.is.empty;
+    } );
+    it( 'should add a card to hand', () => {
+        const card = buildCard( 'Ace', 'Diamonds' ),
+            newCard = buildCard( '10', 'Clubs' ),
+            initialState = { hand: [ card ] },
+            state = player( initialState, { type: CONTROLLER_DEALS_CARD_TO_PLAYER, card: newCard } );
+        expect( state.hand ).to.deep.equal( [ newCard, card ] );
     } );
 } );
