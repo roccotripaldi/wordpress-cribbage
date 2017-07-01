@@ -10,4 +10,8 @@ export const getDeck = ( state ) => {
 
 export const isInitialized = ( state ) => {
     return ! isEmpty( get( state, 'game.deck' ) );
+};
+
+export const getDealer = ( state ) => {
+    return get( state, 'game.dealer' );
 }

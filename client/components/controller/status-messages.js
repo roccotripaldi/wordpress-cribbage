@@ -1,7 +1,8 @@
 import { getPlayerInitialDraw, getOpponentInitialDraw } from 'state/selectors/players';
+import { getDealer } from 'state/selectors/game';
 
 export const getStatusMessage = ( state, nextAppointment, paused ) => {
-    let card;
+    let card, firstDealer;
     if ( paused ) {
         return 'Game is paused.';
     }
@@ -16,6 +17,9 @@ export const getStatusMessage = ( state, nextAppointment, paused ) => {
         case 'assignFirstDealer':
             card = getOpponentInitialDraw( state );
             return 'Your opponent drew the ' + card.name + ' of ' + card.suit + '.';
+        case 'dealFirstCard':
+            firstDealer = getDealer( state );
+            return firstDealer + ' deals first and gets the first crib.';
         default:
             return 'WordPress Cribbage';
     }

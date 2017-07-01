@@ -7,7 +7,8 @@ import {
     CONTROLLER_RESET_GAME,
     CONTROLLER_TOGGLE_TIMER,
     PLAYER_INITIAL_DRAW,
-    OPPONENT_INITIAL_DRAW
+    OPPONENT_INITIAL_DRAW,
+    CONTROLLER_ASSIGNS_FIRST_DEALER
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -46,5 +47,10 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'opponentDraw' },
             state = controller( initialState, { type: OPPONENT_INITIAL_DRAW, card: {} } );
         expect( state.nextAppointment ).to.equal( 'assignFirstDealer' );
+    } );
+    it( 'should await for opponent to draw after player draws', () => {
+        const initialState = { nextAppointment: 'assignFirstDealer' },
+            state = controller( initialState, { type: CONTROLLER_ASSIGNS_FIRST_DEALER, dealer: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'dealFirstCard' );
     } );
 } );

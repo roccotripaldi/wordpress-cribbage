@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getDeck, isInitialized } from '../game';
+import { getDeck, isInitialized, getDealer } from '../game';
 
 describe( 'Game Selector', () => {
     describe( 'getDeck()', () => {
@@ -19,6 +19,12 @@ describe( 'Game Selector', () => {
             const initialized = isInitialized( { game: { deck: [1,2,3] } } );
             expect( initialized ).to.be.true;
         } );
+    } );
+    describe( 'getDealer()', () => {
+        it( 'should return dealer', () => {
+            const dealer = getDealer( { game: { dealer: 'Player' } } );
+            expect( dealer ).to.equal( 'Player' );
+        })
     } );
 } );
 

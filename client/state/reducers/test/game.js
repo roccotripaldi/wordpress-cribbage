@@ -7,7 +7,8 @@ import {
     CONTROLLER_BUILDS_DECK,
     CONTROLLER_RESET_GAME,
     PLAYER_INITIAL_DRAW,
-    OPPONENT_INITIAL_DRAW
+    OPPONENT_INITIAL_DRAW,
+    CONTROLLER_ASSIGNS_FIRST_DEALER
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -33,5 +34,10 @@ describe( 'Game Reducer', () => {
         const initialState = { deck: buildDeck() },
             state = game( initialState, { type: OPPONENT_INITIAL_DRAW, card: {} } );
         expect( state.deck.length ).to.equal( 51 );
+    } );
+    it( 'should assign the dealer', () => {
+        const initialState = { dealer: null },
+            state = game( initialState, { type: CONTROLLER_ASSIGNS_FIRST_DEALER, dealer: 'Player' } );
+        expect( state.dealer ).to.equal( 'Player' );
     } );
 } );
