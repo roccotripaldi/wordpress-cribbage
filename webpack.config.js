@@ -14,7 +14,7 @@ var webpackConfig = {
         admin: './client/index.js'
     },
     output: {
-        path: path.join( __dirname, 'client' ),
+        path: path.join( __dirname, 'client/build' ),
         filename: "bundle.min.js"
     },
     devtool: '#source-map',

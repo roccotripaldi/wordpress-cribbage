@@ -12,11 +12,11 @@ import { pegMatrix } from './peg-matrix';
 
 class Board extends Component {
     getPosition( player, peg ) {
-        const position = ( 'opponent' === player ) ? this.props.positions.opponent[ peg ] : this.props.positions.player[ peg ],
+        const position = ( 'Opponent' === player ) ? this.props.positions.Opponent[ peg ] : this.props.positions.Player[ peg ],
             style = { top: 0, left: 0 }
         if ( -1 === position ) {
             style.left = 34;
-            style.top = ( 'opponent' === player ) ? 4 : 25;
+            style.top = ( 'Opponent' === player ) ? 4 : 25;
         } else {
             const matrixPosition = pegMatrix[ player ][ position ];
             style.left = matrixPosition[0];
@@ -35,22 +35,22 @@ class Board extends Component {
                 <img
                     className="peg peg0 player"
                     src={ pegPlayerSrc }
-                    style={ this.getPosition( 'player', 0 ) }
+                    style={ this.getPosition( 'Player', 0 ) }
                 />
                 <img
                     className="peg peg1 player"
                     src={ pegPlayerSrc }
-                    style={ this.getPosition( 'player', 1 ) }
+                    style={ this.getPosition( 'Player', 1 ) }
                 />
                 <img
                     className="peg peg0 opponent"
                     src={ pegOpponentSrc }
-                    style={ this.getPosition( 'opponent', 0 ) }
+                    style={ this.getPosition( 'Opponent', 0 ) }
                 />
                 <img
                     className="peg peg1 opponent"
                     src={ pegOpponentSrc }
-                    style={ this.getPosition( 'opponent', 1 ) }
+                    style={ this.getPosition( 'Opponent', 1 ) }
                 />
             </div>
         );

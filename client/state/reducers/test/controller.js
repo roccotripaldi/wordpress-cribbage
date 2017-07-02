@@ -15,7 +15,8 @@ import {
     CONTROLLER_DEAL_COMPLETE,
     PLAYER_DISCARDS,
     OPPONENT_DISCARDS,
-    CONTROLLER_CUT_CARD
+    CONTROLLER_CUT_CARD,
+    CONTROLLER_HIS_HEALS
 } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -128,5 +129,15 @@ describe( 'Controller Reducer', () => {
             card = buildCard( '10', 'Hearts' ),
             state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Player', card } );
         expect( state.nextAppointment ).to.equal( 'opponentScores' );
+    } );
+    it( 'should calculate opponents score after his heels if player is person', () => {
+        const initialState = { nextAppointment: 'awardHisHeels' },
+            state = controller( initialState, { type: CONTROLLER_HIS_HEALS, person: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'opponentScores' );
+    } );
+    it( 'should calculate player score after his heels if opponent is person', () => {
+        const initialState = { nextAppointment: 'awardHisHeels' },
+            state = controller( initialState, { type: CONTROLLER_HIS_HEALS, person: 'Opponent' } );
+        expect( state.nextAppointment ).to.equal( 'playerScores' );
     } );
 } );

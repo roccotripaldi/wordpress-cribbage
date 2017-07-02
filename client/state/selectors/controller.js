@@ -13,4 +13,4 @@ export const isPaused = ( state ) => {
 
 export const getTimerSpeed = ( state ) => {
     return get( state, 'controller.timerSpeed' );
-}
+};

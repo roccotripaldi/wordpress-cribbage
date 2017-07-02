@@ -11,6 +11,7 @@ import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/con
 import { opponentDraws, opponentDiscards } from 'state/actions/player';
 import { getDeck, getDealer } from 'state/selectors/game';
 import { getPlayerInitialDraw, getOpponentInitialDraw, getPlayer, getOpponent } from 'state/selectors/players';
+import { getLowestPegForPerson } from 'state/selectors/board';
 import {
     controllerBuildsDeck,
     assignFistDealer,
@@ -18,7 +19,8 @@ import {
     dealCardToPlayer,
     dealCardToOpponent,
     dealComplete,
-    selectRandomCutCard
+    selectRandomCutCard,
+    awardHisHeels
 } from 'state/actions/controller';
 
 let appointmentTimer;
@@ -45,7 +47,7 @@ class Controller extends Component {
 
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
-        let card;
+        let card, pegIndex;
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -77,6 +79,10 @@ class Controller extends Component {
             case 'opponentCuts':
                 this.props.selectRandomCutCard( this.props.deck );
                 break;
+            case 'awardHisHeels':
+                pegIndex = ( this.props.dealer === 'Player' ) ? this.props.playersLowestPeg : this.props.opponentsLowestPeg;
+                this.props.awardHisHeels( this.props.dealer, pegIndex );
+                break;
         }
     };
 
@@ -103,7 +109,9 @@ export default connect(
             dealer: getDealer( state ),
             player: getPlayer( state ),
             opponent: getOpponent( state ),
-            timerSpeed: getTimerSpeed( state )
+            timerSpeed: getTimerSpeed( state ),
+            playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
+            opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' )
         }
     },
     {
@@ -115,6 +123,7 @@ export default connect(
         dealCardToOpponent,
         dealComplete,
         opponentDiscards,
-        selectRandomCutCard
+        selectRandomCutCard,
+        awardHisHeels
     }
 )( Controller );

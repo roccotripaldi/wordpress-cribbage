@@ -40,7 +40,7 @@ class WP_Cribbage {
 		if ( empty( $GLOBALS['wp']->query_vars['cribbage'] ) )
 			return $template;
 
-		wp_register_script( 'wp_cribbage', WP_CRIBBAGE_PATH . 'client/bundle.min.js' );
+		wp_register_script( 'wp_cribbage', WP_CRIBBAGE_PATH . 'client/build/bundle.min.js' );
 		wp_register_style( 'wp_cribbage', WP_CRIBBAGE_PATH . 'client/css/app.min.css' );
 
 		$wp_cribbage_template = WP_CRIBBAGE_DIR . '/app.php';
