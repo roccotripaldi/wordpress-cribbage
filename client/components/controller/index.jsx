@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  */
 import { getStatusMessage } from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
-import { opponentDraws } from 'state/actions/player';
+import { opponentDraws, opponentDiscards } from 'state/actions/player';
 import { getDeck, getDealer } from 'state/selectors/game';
 import { getPlayerInitialDraw, getOpponentInitialDraw, getPlayer, getOpponent } from 'state/selectors/players';
 import {
@@ -70,6 +70,9 @@ class Controller extends Component {
                     this.props.dealCardToPlayer( card );
                 }
                 break;
+            case 'opponentDiscards':
+                this.props.opponentDiscards( this.props.opponent.hand, this.props.dealer );
+                break;
         }
     };
 
@@ -106,6 +109,7 @@ export default connect(
         resetDeck,
         dealCardToPlayer,
         dealCardToOpponent,
-        dealComplete
+        dealComplete,
+        opponentDiscards
     }
 )( Controller );

@@ -7,7 +7,8 @@ import {
     PLAYER_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
-    PLAYER_DISCARDS
+    PLAYER_DISCARDS,
+    OPPONENT_DISCARDS
 } from '../../action-types';
 
 
@@ -83,5 +84,21 @@ describe( 'Player Reducer', () => {
             ];
         expect( state.hand ).to.deep.equal( expextedState );
         expect( state.crib ).to.deep.equal( [ buildCard( 'Ace', 'Diamonds' ), buildCard( '2', 'Hearts' ) ] );
+    } );
+    it( 'should add cards to crib when a opponent discards and it is players crib', () => {
+        const card1 = buildCard( '4', 'Hearts' ),
+            card2 = buildCard( '2', 'Hearts' ),
+            card3 = buildCard( '5', 'Clubs' ),
+            card4 = buildCard( '8', 'Hearts' ),
+            initialState = { crib: [ card1, card2 ] },
+            state = player( initialState, { type: OPPONENT_DISCARDS, cards: [ card3, card4 ], dealer: 'Player' } );
+        expect( state.crib ).to.deep.equal( [ card3, card4, card1, card2 ] );
+    } );
+    it( 'should not add cards to crib when opponent discards and it is opponents crib', () => {
+        const card1 = buildCard('4', 'Hearts'),
+            card2 = buildCard('2', 'Hearts'),
+            initialState = {crib: []},
+            state = player(initialState, {type: OPPONENT_DISCARDS, cards: [card1, card2], dealer: 'Opponent'});
+        expect( state.crib ).to.deep.equal( [] );
     } );
 } );

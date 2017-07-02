@@ -10,8 +10,13 @@ export const getStatusMessage = ( state, nextAppointment, paused ) => {
     let card, dealer, person;
     if ( paused ) {
         return 'Game is paused.';
+
     }
     switch( nextAppointment ) {
+        case 'playerCuts':
+            return 'Tap the deck to cut a card!';
+        case 'opponentCuts':
+            return 'Waiting for opponent to cut a card...';
         case 'opponentDiscards':
             return 'Waiting for opponent to discard...';
         case 'playerDiscards':

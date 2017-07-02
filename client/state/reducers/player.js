@@ -6,7 +6,8 @@ import {
     PLAYER_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
-    PLAYER_DISCARDS
+    PLAYER_DISCARDS,
+    OPPONENT_DISCARDS
 } from '../action-types';
 
 export const defaultState = {
@@ -17,10 +18,16 @@ export const defaultState = {
 };
 
 const player = ( state = defaultState, action ) => {
-    let newHand;
+    let newHand, newState, newCrib;
     switch ( action.type ) {
+        case OPPONENT_DISCARDS:
+            if ( 'Player' === action.dealer ) {
+                newCrib = state.crib.slice();
+                newCrib.splice( 0, 0, action.cards[0], action.cards[1] );
+                return Object.assign( {}, state, { crib: newCrib } );
+            }
+            return state;
         case PLAYER_DISCARDS:
-            let newState;
             newHand = state.hand.slice();
             newState = {
                 hand: newHand.filter( ( card, index ) => {

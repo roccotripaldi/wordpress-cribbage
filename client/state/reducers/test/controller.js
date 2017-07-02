@@ -13,7 +13,8 @@ import {
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     CONTROLLER_DEAL_COMPLETE,
-    PLAYER_DISCARDS
+    PLAYER_DISCARDS,
+    OPPONENT_DISCARDS
 } from '../../action-types';
 
 describe( 'Controller Reducer', () => {
@@ -97,5 +98,15 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'playerDiscards' },
             state = controller( initialState, { type: PLAYER_DISCARDS } );
         expect( state.nextAppointment ).to.equal( 'opponentDiscards' );
+    } );
+    it( 'should await opponent cut after opponent discards and player is dealer', () => {
+        const initialState = { nextAppointment: 'opponentDiscards' },
+            state = controller( initialState, { type: OPPONENT_DISCARDS, dealer: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'opponentCuts' );
+    } );
+    it( 'should await player cut after opponent discards and opponent is dealer', () => {
+        const initialState = { nextAppointment: 'opponentDiscards' },
+            state = controller( initialState, { type: OPPONENT_DISCARDS, dealer: 'Opponent' } );
+        expect( state.nextAppointment ).to.equal( 'playerCuts' );
     } );
 } );

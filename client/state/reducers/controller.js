@@ -12,7 +12,8 @@ import {
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     CONTROLLER_DEAL_COMPLETE,
-    PLAYER_DISCARDS
+    PLAYER_DISCARDS,
+    OPPONENT_DISCARDS
 } from '../action-types';
 
 export const defaultState = {
@@ -22,7 +23,11 @@ export const defaultState = {
 };
 
 const controller = ( state = defaultState, action ) => {
+    let nextAppointment;
     switch (action.type) {
+        case OPPONENT_DISCARDS:
+            nextAppointment = ( 'Opponent' === action.dealer ) ? 'playerCuts' : 'opponentCuts';
+            return Object.assign( {}, state, { nextAppointment } );
         case PLAYER_DISCARDS:
             return Object.assign( {}, state, { nextAppointment: 'opponentDiscards' } );
         case CONTROLLER_DEAL_COMPLETE:
@@ -32,7 +37,7 @@ const controller = ( state = defaultState, action ) => {
         case CONTROLLER_DEALS_CARD_TO_OPPONENT:
             return Object.assign( {}, state, { nextAppointment: 'dealCardToPlayer' } );
         case CONNTROLLER_RESET_DECK:
-            const nextAppointment = ( 'Opponent' === action.dealer ) ? 'dealCardToPlayer' : 'dealCardToOpponent';
+            nextAppointment = ( 'Opponent' === action.dealer ) ? 'dealCardToPlayer' : 'dealCardToOpponent';
             return Object.assign( {}, state, { nextAppointment, timerSpeed: 500 } );
         case CONTROLLER_ASSIGNS_FIRST_DEALER:
             return Object.assign( {}, state, { nextAppointment: 'resetDeck' } );

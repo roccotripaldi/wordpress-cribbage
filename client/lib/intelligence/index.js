@@ -115,7 +115,7 @@ export default class Intelligence {
     }
 
     getScore() {
-        if( this.hand.length != 4 ) {
+        if( this.hand.length !== 4 ) {
             return null;
         }
         const fifteens = this.getFifteensScore(),
