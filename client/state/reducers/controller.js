@@ -13,7 +13,8 @@ import {
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     CONTROLLER_DEAL_COMPLETE,
     PLAYER_DISCARDS,
-    OPPONENT_DISCARDS
+    OPPONENT_DISCARDS,
+    CONTROLLER_CUT_CARD
 } from '../action-types';
 
 export const defaultState = {
@@ -25,6 +26,13 @@ export const defaultState = {
 const controller = ( state = defaultState, action ) => {
     let nextAppointment;
     switch (action.type) {
+        case CONTROLLER_CUT_CARD:
+            if ( action.card.name === 'Jack' ) {
+                nextAppointment = 'awardHisHeels';
+            } else {
+                nextAppointment = ( action.dealer === 'Player' ) ? 'opponentScores' : 'playerScores';
+            }
+            return Object.assign( {}, state, { nextAppointment } );
         case OPPONENT_DISCARDS:
             nextAppointment = ( 'Opponent' === action.dealer ) ? 'playerCuts' : 'opponentCuts';
             return Object.assign( {}, state, { nextAppointment } );

@@ -4,15 +4,25 @@ import {
     getOpponent,
     getPlayer
 } from 'state/selectors/players';
-import { getDealer } from 'state/selectors/game';
+import { getDealer, getCutCard } from 'state/selectors/game';
 
 export const getStatusMessage = ( state, nextAppointment, paused ) => {
-    let card, dealer, person;
+    let card, dealer, person, cutCard, otherPerson;
     if ( paused ) {
         return 'Game is paused.';
-
     }
     switch( nextAppointment ) {
+        case 'playerScores':
+        case 'opponentScores':
+            cutCard = getCutCard( state );
+            dealer = getDealer( state );
+            person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';
+            return person + ' cut the ' + cutCard.name + ' of ' + cutCard.suit + '. Calculating scores...';
+        case 'awardHisHeels':
+            dealer = getDealer( state );
+            person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';
+            otherPerson = ( 'Opponent' === dealer ) ? 'your opponent' : 'you';
+            return person + ' cut a Jack. Two points awarded to ' + otherPerson + '!' ;
         case 'playerCuts':
             return 'Tap the deck to cut a card!';
         case 'opponentCuts':

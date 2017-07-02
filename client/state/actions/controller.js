@@ -13,7 +13,8 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
-    CONTROLLER_DEAL_COMPLETE
+    CONTROLLER_DEAL_COMPLETE,
+    CONTROLLER_CUT_CARD
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
 
@@ -76,5 +77,14 @@ export const dealCardToOpponent = ( card ) => {
 export const dealComplete = ( card ) => {
     return {
         type: CONTROLLER_DEAL_COMPLETE
+    }
+};
+
+export const selectRandomCutCard = ( deck, dealer ) => {
+    const randomCard = deck[ Math.floor( Math.random() * deck.length ) ];
+    return {
+        type: CONTROLLER_CUT_CARD,
+        card: randomCard,
+        dealer
     }
 };

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { defaultState } from '../game';
 import game from '../game';
-import { buildDeck } from '../../../lib/deck/';
+import { buildDeck, buildCard } from '../../../lib/deck/';
 import {
     CONTROLLER_BUILDS_DECK,
     CONTROLLER_RESET_GAME,
@@ -11,7 +11,8 @@ import {
     CONTROLLER_ASSIGNS_FIRST_DEALER,
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
-    CONTROLLER_DEALS_CARD_TO_OPPONENT
+    CONTROLLER_DEALS_CARD_TO_OPPONENT,
+    CONTROLLER_CUT_CARD
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -58,5 +59,11 @@ describe( 'Game Reducer', () => {
         const initialState = { deck: buildDeck() },
             state = game( initialState, { type: CONTROLLER_DEALS_CARD_TO_OPPONENT } );
         expect( state.deck.length ).to.equal( 51 );
+    } );
+    it( 'should set cut card', () => {
+        const initialState = { cutCard: null },
+            card = buildCard( 'Ace', 'Spades' ),
+            state = game( initialState, { type: CONTROLLER_CUT_CARD, card } );
+        expect( state.cutCard ).to.deep.equal( card );
     } );
 } );

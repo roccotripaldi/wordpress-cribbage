@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getDeck, isInitialized, getDealer } from '../game';
+import { getDeck, isInitialized, getDealer, getCutCard } from '../game';
+import { buildCard } from '../../../lib/deck';
 
 describe( 'Game Selector', () => {
     describe( 'getDeck()', () => {
@@ -25,6 +26,11 @@ describe( 'Game Selector', () => {
             const dealer = getDealer( { game: { dealer: 'Player' } } );
             expect( dealer ).to.equal( 'Player' );
         })
+    } );
+    describe( 'getCutCard()', () => {
+        const expectedCard = buildCard( 'Ace', 'Spades' ),
+            cutCard = getCutCard( { game: { cutCard: expectedCard } } );
+        expect( cutCard ).to.deep.equal( expectedCard );
     } );
 } );
 

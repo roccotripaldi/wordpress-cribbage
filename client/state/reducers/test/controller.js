@@ -14,8 +14,10 @@ import {
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     CONTROLLER_DEAL_COMPLETE,
     PLAYER_DISCARDS,
-    OPPONENT_DISCARDS
+    OPPONENT_DISCARDS,
+    CONTROLLER_CUT_CARD
 } from '../../action-types';
+import { buildCard } from '../../../lib/deck';
 
 describe( 'Controller Reducer', () => {
     it( 'should return a the default state', () => {
@@ -108,5 +110,23 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'opponentDiscards' },
             state = controller( initialState, { type: OPPONENT_DISCARDS, dealer: 'Opponent' } );
         expect( state.nextAppointment ).to.equal( 'playerCuts' );
+    } );
+    it( 'should award his heels if a jack is cut', () => {
+        const initialState = { nextAppointment: 'playerCuts' },
+            card = buildCard( 'Jack', 'Hearts' ),
+            state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Opponent', card } );
+        expect( state.nextAppointment ).to.equal( 'awardHisHeels' );
+    } );
+    it( 'should calculate players score if opponent is dealer and a jack is not drawn', () => {
+        const initialState = { nextAppointment: 'playerCuts' },
+            card = buildCard( '10', 'Hearts' ),
+            state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Opponent', card } );
+        expect( state.nextAppointment ).to.equal( 'playerScores' );
+    } );
+    it( 'should calculate opponents score if player is dealer and a jack is not drawn', () => {
+        const initialState = { nextAppointment: 'playerCuts' },
+            card = buildCard( '10', 'Hearts' ),
+            state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Player', card } );
+        expect( state.nextAppointment ).to.equal( 'opponentScores' );
     } );
 } );

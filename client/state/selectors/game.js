@@ -14,4 +14,8 @@ export const isInitialized = ( state ) => {
 
 export const getDealer = ( state ) => {
     return get( state, 'game.dealer' );
-}
+};
+
+export const getCutCard = ( state ) => {
+    return get( state, 'game.cutCard' );
+};

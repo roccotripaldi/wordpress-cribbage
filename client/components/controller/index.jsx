@@ -17,7 +17,8 @@ import {
     resetDeck,
     dealCardToPlayer,
     dealCardToOpponent,
-    dealComplete
+    dealComplete,
+    selectRandomCutCard
 } from 'state/actions/controller';
 
 let appointmentTimer;
@@ -73,6 +74,9 @@ class Controller extends Component {
             case 'opponentDiscards':
                 this.props.opponentDiscards( this.props.opponent.hand, this.props.dealer );
                 break;
+            case 'opponentCuts':
+                this.props.selectRandomCutCard( this.props.deck );
+                break;
         }
     };
 
@@ -110,6 +114,7 @@ export default connect(
         dealCardToPlayer,
         dealCardToOpponent,
         dealComplete,
-        opponentDiscards
+        opponentDiscards,
+        selectRandomCutCard
     }
 )( Controller );

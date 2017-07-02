@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { defaultState } from '../controller';
-import { assignFistDealer } from '../controller';
+import { assignFistDealer, selectRandomCutCard } from '../controller';
 import { CONTROLLER_ASSIGNS_FIRST_DEALER } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -24,6 +24,19 @@ describe( 'Controller Actions', () => {
                 opponentCard = buildCard( 'King', 'Clubs' ),
                 assignment = assignFistDealer( playerCard, opponentCard );
             expect( assignment.dealer ).to.equal( 'Opponent' );
+        } );
+    } );
+    describe( 'selectRandomCutCard()', () => {
+        it( 'should select a random card from the deck', () => {
+            const deck = [
+                buildCard( 'King', 'Diamonds' ),
+                buildCard( 'King', 'Clubs' ),
+                buildCard( 'Jack', 'Hearts' ),
+                buildCard( '8', 'Diamonds' )
+            ],
+                cutCardAction = selectRandomCutCard( deck, 'Player' );
+            expect( cutCardAction.card ).to.have.property( 'name' );
+            expect( cutCardAction.card ).to.have.property( 'suit' );
         } );
     } );
 } );

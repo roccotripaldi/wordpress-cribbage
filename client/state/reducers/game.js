@@ -9,7 +9,8 @@ import {
     CONTROLLER_ASSIGNS_FIRST_DEALER,
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
-    CONTROLLER_DEALS_CARD_TO_OPPONENT
+    CONTROLLER_DEALS_CARD_TO_OPPONENT,
+    CONTROLLER_CUT_CARD
 } from '../action-types';
 
 export const defaultState = {
@@ -25,6 +26,8 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case CONTROLLER_CUT_CARD:
+            return Object.assign( {}, state, { cutCard: action.card } );
         case CONTROLLER_ASSIGNS_FIRST_DEALER:
             return Object.assign( {}, state, { dealer: action.dealer } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:

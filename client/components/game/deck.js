@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
  * Internal Dependencies
 */
 import Card from './card';
-import { getDeck } from 'state/selectors/game';
+import { getDeck, getCutCard } from 'state/selectors/game';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDraws } from 'state/actions/player';
+import { selectRandomCutCard } from 'state/actions/controller';
 
 class Deck extends Component {
     handleClick = ( event ) => {
@@ -24,16 +25,23 @@ class Deck extends Component {
             const card = this.props.deck[0];
             this.props.playerDraws( card );
         }
+
+        if ( 'playerCuts' === this.props.nextAppointment ) {
+            this.props.selectRandomCutCard( this.props.deck );
+        }
     };
+
+    renderCards() {
+        if ( this.props.cutCard ) {
+            return <Card card={ this.props.cutCard } />;
+        }
+        return <Card faceDown={ true } />;
+    }
 
     render() {
         return (
             <div className="deck" onClick={ this.handleClick }>
-                {
-                    this.props.deck.map( card => (
-                        <Card key={ card.name + card.suit } card={ card } faceDown={ true } />
-                    ) )
-                }
+                { this.renderCards() }
             </div>
         );
     }
@@ -44,10 +52,12 @@ export default connect(
         return {
             deck: getDeck( state ),
             nextAppointment: getNextAppointment( state ),
-            paused: isPaused( state )
+            paused: isPaused( state ),
+            cutCard: getCutCard( state )
         }
     },
     {
-        playerDraws
+        playerDraws,
+        selectRandomCutCard
     }
 )( Deck );
