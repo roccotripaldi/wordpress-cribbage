@@ -32,24 +32,20 @@ class Board extends Component {
         return (
             <div className="board">
                 <img src={ boardSrc } width="700" />
-                <img
+                <span
                     className="peg peg0 player"
-                    src={ pegPlayerSrc }
                     style={ this.getPosition( 'Player', 0 ) }
                 />
-                <img
+                <span
                     className="peg peg1 player"
-                    src={ pegPlayerSrc }
                     style={ this.getPosition( 'Player', 1 ) }
                 />
-                <img
+                <span
                     className="peg peg0 opponent"
-                    src={ pegOpponentSrc }
                     style={ this.getPosition( 'Opponent', 0 ) }
                 />
-                <img
+                <span
                     className="peg peg1 opponent"
-                    src={ pegOpponentSrc }
                     style={ this.getPosition( 'Opponent', 1 ) }
                 />
             </div>

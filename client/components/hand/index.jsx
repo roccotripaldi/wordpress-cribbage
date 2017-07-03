@@ -22,6 +22,12 @@ class Hand extends Component {
         this.state = { selectedCards: [] };
     }
 
+    componentDidUpdate() {
+        if ( this.props.player.hand.length === 0 && this.state.selectedCards.length === 2 ){
+            this.setState( { selectedCards: [] } );
+        }
+    }
+
     handleClick = ( event ) => {
         const index = parseInt( event.target.getAttribute( 'data-index' ) ),
             { selectedCards } = this.state;
@@ -129,7 +135,7 @@ class Hand extends Component {
         if ( this.state.selectedCards.length < 2 || this.props.type === 'Opponent' ) {
             return null;
         }
-        return <input className="discard-button" value="Send cards to crib" onClick={ this.handleDiscard } />;
+        return <button type="button" onClick={ this.handleDiscard }>Send Cards To Crib</button>;
     }
 
     render() {
