@@ -16,7 +16,9 @@ import {
     PLAYER_DISCARDS,
     OPPONENT_DISCARDS,
     CONTROLLER_CUT_CARD,
-    CONTROLLER_HIS_HEALS
+    CONTROLLER_HIS_HEALS,
+    CONTROLLER_SCORES_OPPONENT,
+    CONTROLLER_SCORES_PLAYER
 } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -139,5 +141,15 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'awardHisHeels' },
             state = controller( initialState, { type: CONTROLLER_HIS_HEALS, person: 'Opponent' } );
         expect( state.nextAppointment ).to.equal( 'playerScores' );
+    } );
+    it( 'should await acceptance after scoring player', () => {
+        const initialState = { nextAppointment: 'playerScores' },
+            state = controller( initialState, { type: CONTROLLER_SCORES_PLAYER } );
+        expect( state.nextAppointment ).to.equal( 'playerAcceptsOwnScore' );
+    } );
+    it( 'should await acceptance after scoring player', () => {
+        const initialState = { nextAppointment: 'playerScores' },
+            state = controller( initialState, { type: CONTROLLER_SCORES_OPPONENT } );
+        expect( state.nextAppointment ).to.equal( 'playerAcceptsOpponentsScore' );
     } );
 } );

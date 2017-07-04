@@ -10,7 +10,9 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
-    CONTROLLER_CUT_CARD
+    CONTROLLER_CUT_CARD,
+    CONTROLLER_SCORES_OPPONENT,
+    CONTROLLER_SCORES_PLAYER
 } from '../action-types';
 
 export const defaultState = {
@@ -26,6 +28,10 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case CONTROLLER_SCORES_PLAYER:
+            return Object.assign( {}, state, { playersHandScore: action.score } );
+        case CONTROLLER_SCORES_OPPONENT:
+            return Object.assign( {}, state, { opponentsHandScore: action.score } );
         case CONTROLLER_CUT_CARD:
             return Object.assign( {}, state, { cutCard: action.card } );
         case CONTROLLER_ASSIGNS_FIRST_DEALER:

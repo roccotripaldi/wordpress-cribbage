@@ -11,6 +11,8 @@ import { isInitialized } from 'state/selectors/game';
 import { isPaused } from 'state/selectors/controller';
 import { resetGame, toggleTimer } from 'state/actions/controller';
 
+import { imageDir } from 'components/constants';
+
 class Menu extends Component {
 
     handleReset = ( event ) => {
@@ -34,10 +36,16 @@ class Menu extends Component {
         return <a className="menu__reset" onClick={ this.handleReset }>Reset Game</a>;
     }
     render() {
+        const iconSrc = imageDir + 'wp-cribbage-logo.png';
         return (
-            <div className="menu">
-                { this.renderPauseButton() }
-                { this.renderResetButton() }
+            <div>
+                <div className="banner">
+                    <img src={ iconSrc } /> <span>WordPress Cribbage</span>
+                </div>
+                <div className="menu">
+                    { this.renderPauseButton() }
+                    { this.renderResetButton() }
+                </div>
             </div>
         );
     }

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { getStatusMessage } from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
 import { opponentDraws, opponentDiscards } from 'state/actions/player';
-import { getDeck, getDealer } from 'state/selectors/game';
+import { getDeck, getDealer, getCutCard } from 'state/selectors/game';
 import { getPlayerInitialDraw, getOpponentInitialDraw, getPlayer, getOpponent } from 'state/selectors/players';
 import { getLowestPegForPerson } from 'state/selectors/board';
 import {
@@ -20,7 +20,8 @@ import {
     dealCardToOpponent,
     dealComplete,
     selectRandomCutCard,
-    awardHisHeels
+    awardHisHeels,
+    setScore
 } from 'state/actions/controller';
 
 let appointmentTimer;
@@ -47,7 +48,7 @@ class Controller extends Component {
 
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
-        let card, pegIndex;
+        let card, pegIndex, hand, person;
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -83,13 +84,21 @@ class Controller extends Component {
                 pegIndex = ( this.props.dealer === 'Player' ) ? this.props.playersLowestPeg : this.props.opponentsLowestPeg;
                 this.props.awardHisHeels( this.props.dealer, pegIndex );
                 break;
+            case 'playerScores':
+            case 'opponentScores':
+                person = ( this.props.nextAppointment === 'playerScores' ) ? 'Player' : 'Opponent';
+                hand = ( this.props.nextAppointment === 'playerScores' ) ? this.props.player.hand : this.props.opponent.hand;
+                this.props.setScore( hand, this.props.cutCard, person );
+                break;
         }
     };
 
     render() {
         return (
             <div className="controller">
-                <p>{ this.props.statusMessage }</p>
+                <div className="controller__inner1">
+                    <p>{ this.props.statusMessage }</p>
+                </div>
             </div>
         );
     }
@@ -111,7 +120,8 @@ export default connect(
             opponent: getOpponent( state ),
             timerSpeed: getTimerSpeed( state ),
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
-            opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' )
+            opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' ),
+            cutCard: getCutCard( state )
         }
     },
     {
@@ -124,6 +134,7 @@ export default connect(
         dealComplete,
         opponentDiscards,
         selectRandomCutCard,
-        awardHisHeels
+        awardHisHeels,
+        setScore
     }
 )( Controller );

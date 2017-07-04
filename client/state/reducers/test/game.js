@@ -12,7 +12,9 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
-    CONTROLLER_CUT_CARD
+    CONTROLLER_CUT_CARD,
+    CONTROLLER_SCORES_OPPONENT,
+    CONTROLLER_SCORES_PLAYER
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -65,5 +67,15 @@ describe( 'Game Reducer', () => {
             card = buildCard( 'Ace', 'Spades' ),
             state = game( initialState, { type: CONTROLLER_CUT_CARD, card } );
         expect( state.cutCard ).to.deep.equal( card );
+    } );
+    it ( 'should set players score', () => {
+        const scoreObjectFromIntellegence = {},
+            state = game( {}, { type: CONTROLLER_SCORES_PLAYER, score: scoreObjectFromIntellegence } );
+        expect( state.playersHandScore ).to.deep.equal( scoreObjectFromIntellegence );
+    } );
+    it ( 'should set opponents score', () => {
+        const scoreObjectFromIntellegence = {},
+            state = game( {}, { type: CONTROLLER_SCORES_OPPONENT, score: scoreObjectFromIntellegence } );
+        expect( state.opponentsHandScore ).to.deep.equal( scoreObjectFromIntellegence );
     } );
 } );

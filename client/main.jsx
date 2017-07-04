@@ -10,11 +10,21 @@ import Controller from 'components/controller';
 let Main = () => {
     return(
         <div className="cribbage">
-            <Menu />
-            <Controller />
-            <Hand type="Opponent" />
-            <Game />
-            <Hand type="Player" />
+            <div className="cribbage__inner1">
+                <Menu />
+                <div className="play-area">
+                    <div className="play-area__inner1">
+                        <div className="play-area__inner2">
+                            <div className="play-area__inner3">
+                                <Controller />
+                                <Hand type="Opponent" />
+                                <Game />
+                                <Hand type="Player" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

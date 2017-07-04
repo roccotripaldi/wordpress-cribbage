@@ -1,28 +1,87 @@
+@font-face {
+  font-family: 'px_sans';
+  src: url('../fonts/px_sans_nouveaux-webfont.woff2') format('woff2'),
+  url('../fonts/px_sans_nouveaux-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  background-color: black;
+  background-color: #008083;
   font-size: 14px;
   color: white;
+  font-family: 'px_sans', sans-serif;
+  font-size: 9px;
+  padding: 0;
+  margin: 0;
 }
 
 .cribbage {
-  position: relative;
-  width: 1000px;
-  margin: 0 auto;
+  border-left: 1px solid #c6c6c6;
+  border-top: 1px solid #c6c6c6;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
+  .cribbage__inner1 {
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-right: 1px solid #848484;
+    border-bottom: 1px solid #848484;
+  }
+}
+
+
+.play-area {
+  margin: 0;
   padding: 0;
+  background-color: green;
+  border-left: 10px solid #c6c6c6;
+  border-right: 10px solid #c6c6c6;
+  border-bottom: 10px solid #c6c6c6;
+  .play-area__inner1 {
+    border-left: 1px solid #848484;
+    border-top: 1px solid #848484;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    .play-area__inner2 {
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      border-right: 1px solid #c6c6c6;
+      border-bottom: 1px solid #c6c6c6;
+      .play-area__inner3 {
+        width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        height: 570px;
+      }
+    }
+  }
+}
+
+.banner {
+  height: 20px;
+  padding: 5px 0 5px 20px;
+  background-color: blue;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #c6c6c6;
+  span {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+  }
 }
 
 .menu {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100px;
-  height: 50px;
+  height: 23px;
+  padding-top: 7px;
+  background-color: #c6c6c6;
+  padding-left: 20px;
   a {
-    display: block;
-    color: orange;
+    color: black;
     cursor: pointer;
+    margin-right: 10px;
     &:hover {
-      color: white;
+      text-decoration: underline;
     }
   }
 }
@@ -134,12 +193,26 @@ body {
 
 .controller {
   position: absolute;
-  background-color: green;
-  width: 185px;
-  height: 100px;
   top: 220px;
   left: 0;
+  width: 187px;
+  height: 102px;
+  border-left: 1px solid darkgreen;
+  border-top: 1px solid darkgreen;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.controller__inner1 {
+  background-color: lightyellow;
+  width: 185px;
+  height: 100px;
   text-align: center;
+  color: black;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid green;
+  border-bottom: 1px solid green;
 }
 
 .peg {

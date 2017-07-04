@@ -23,7 +23,8 @@ class Hand extends Component {
     }
 
     componentDidUpdate() {
-        if ( this.props.player.hand.length === 0 && this.state.selectedCards.length === 2 ){
+        if ( this.props.player.hand.length === 0 && this.state.selectedCards.length === 2 ) {
+            // Fixes a bug that shows the discard button after game is reset.
             this.setState( { selectedCards: [] } );
         }
     }
