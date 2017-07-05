@@ -16,7 +16,7 @@ class Board extends Component {
             style = { top: 0, left: 0 }
         if ( -1 === position ) {
             style.left = 34;
-            style.top = ( 'Opponent' === player ) ? 4 : 25;
+            style.top = ( 'Opponent' === player ) ? 3 : 24;
         } else {
             const matrixPosition = pegMatrix[ player ][ position ];
             style.left = matrixPosition[0];

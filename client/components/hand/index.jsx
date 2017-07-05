@@ -67,28 +67,30 @@ class Hand extends Component {
 
         return (
             <div className="crib">
-                <p>Crib</p>
-                { crib.map( ( card, index ) => {
-                    return (
-                        <Card
-                            key={ card.name + card.suit }
-                            card={ card }
-                            faceDown={ true }
-                            index={ index }
-                        />
-                    )
-                } ) }
+                <div className="crib__cards">
+                    { crib.map( ( card, index ) => {
+                        return (
+                            <Card
+                                key={ card.name + card.suit }
+                                card={ card }
+                                faceDown={ true }
+                                index={ index }
+                            />
+                        )
+                    } ) }
+                </div>
             </div>
         );
     }
 
     renderLabel() {
         const { hand, initialDraw } = this.props.player;
-        let label;
+        let label, person;
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
-        label = isEmpty( hand ) ? 'Initial Draw' : this.props.type + "'s hand:";
+        person = ( this.props.type === 'Player' ) ? 'Your' : "Opponent's"
+        label = isEmpty( hand ) ? 'Initial Draw' : person + ' hand:';
         return <p>{ label }</p>;
     }
 
@@ -136,7 +138,13 @@ class Hand extends Component {
         if ( this.state.selectedCards.length < 2 || this.props.type === 'Opponent' ) {
             return null;
         }
-        return <button type="button" onClick={ this.handleDiscard }>Send Cards To Crib</button>;
+        return (
+            <a className="button" onClick={ this.handleDiscard }>
+                <span className="button__inner">
+                    Send Cards To Crib
+                </span>
+            </a>
+        );
     }
 
     render() {

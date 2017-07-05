@@ -32,10 +32,17 @@ class Deck extends Component {
     };
 
     renderCards() {
+        let cutCard = null, deckIndex = 0;
         if ( this.props.cutCard ) {
-            return <Card card={ this.props.cutCard } />;
+            cutCard = <Card card={ this.props.cutCard } index={ 1 } />;
+            deckIndex = 2;
         }
-        return <Card faceDown={ true } />;
+        return (
+            <div>
+                <Card faceDown={ true } index={ deckIndex } />
+                { cutCard }
+            </div>
+        );
     }
 
     render() {

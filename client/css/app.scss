@@ -89,15 +89,19 @@ body {
 .hand {
   width: 480px;
   position: absolute;
-  height: 156px;
-  left: 260px;
+  height: 148px;
+  left: 230px;
   top: 364px;
+  p {
+    padding: 0;
+    margin: 20px 0 0 0;
+  }
   &.Opponent {
-    top: 20px;
+    top: 0;
   }
   img {
     position: absolute;
-    top: 46px;
+    top: 42px;
     left: 0;
     -webkit-transition: top 0.5s, left 0.5s;
     -moz-transition: top 0.5s, left 0.5s;
@@ -127,14 +131,16 @@ body {
   }
   .crib {
     position: absolute;
-    top: 0;
+    top: 28px;
     left: 520px;
-    padding: 0 5px 5px 5px;
-    border: 1px solid;
-    width: 200px;
-    height: 150px;
+    width: 192px;
+    height: 130px;
+    border-left: 1px solid darkgreen;
+    border-top: 1px solid darkgreen;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
     img {
-      top: 40px;
+      top: 14px;
       left: 10px;
       &.card1 {
         left: 40px;
@@ -149,20 +155,56 @@ body {
         left: 130px;
       }
     }
-    p {
-      text-align: center;
+    .crib__cards {
+      width: 190px;
+      height: 128px;
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      border-right: 1px solid green;
+      border-bottom: 1px solid green;
+      background: url( '../../images/dark-green-pattern-bg.gif');
     }
   }
-  button {
+  .button {
     position: absolute;
-    width: 100px;
-    top: 100px;
-    left: -150px;
-    background-color: orange;
-    color: white;
+    width: 146px;
+    top: 80px;
+    left: -195px;
+  }
+}
+
+.button {
+  background-color: #c6c6c6;
+  color: black;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  border-left: 1px solid white;
+  border-top: 1px solid white;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  .button__inner {
     padding: 5px;
-    text-align: center;
-    cursor: pointer;
+    display: block;
+    border-left: 1px solid #c6c6c6;
+    border-top: 1px solid #c6c6c6;
+    border-right: 1px solid #848484;
+    border-bottom: 1px solid #848484;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    border-left: 1px solid #848484;
+    border-top: 1px solid #848484;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    .button__inner {
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      border-right: 1px solid #c6c6c6;
+      border-bottom: 1px solid #c6c6c6;
+    }
   }
 }
 
@@ -178,35 +220,46 @@ body {
     left: 300px;
   }
   .deck {
-    width: 80px;
+    width: 160px;
     position: absolute;
     height: 106px;
-    left: 200px;
+    left: 70px;
     top: 21px;
     img {
+      -webkit-transition: left 0.5s;
+      -moz-transition: left 0.5s;
+      transition: left 0.5s;
       position: absolute;
       top: 0;
-      left: 0;
+      left: 40px;
+      &.card1 {
+        left: 80px;
+      }
+      &.card2 {
+        left: 0;
+      }
     }
   }
 }
 
 .controller {
   position: absolute;
-  top: 220px;
+  top: 44px;
   left: 0;
-  width: 187px;
-  height: 102px;
+  width: 188px;
+  height: 100px;
   border-left: 1px solid darkgreen;
   border-top: 1px solid darkgreen;
   border-right: 1px solid white;
   border-bottom: 1px solid white;
+  font-size: 8px;
 }
 
 .controller__inner1 {
+  padding: 5px;
   background-color: lightyellow;
-  width: 185px;
-  height: 100px;
+  width: 176px;
+  height: 88px;
   text-align: center;
   color: black;
   border-left: 1px solid black;
