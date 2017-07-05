@@ -17,7 +17,11 @@ import {
     CONTROLLER_CUT_CARD,
     CONTROLLER_HIS_HEALS,
     CONTROLLER_SCORES_OPPONENT,
-    CONTROLLER_SCORES_PLAYER
+    CONTROLLER_SCORES_PLAYER,
+    PLAYER_ACCEPTS_CRIB_SCORE,
+    PLAYER_ACCEPTS_OPPONENTS_SCORE,
+    PLAYER_ACCEPTS_OWN_SCORE,
+    CONTROLLER_SCORES_CRIB
 } from '../action-types';
 
 export const defaultState = {
@@ -29,6 +33,16 @@ export const defaultState = {
 const controller = ( state = defaultState, action ) => {
     let nextAppointment;
     switch (action.type) {
+        case PLAYER_ACCEPTS_CRIB_SCORE:
+            return Object.assign( {}, state, { nextAppointment: 'handComplete' } );
+        case PLAYER_ACCEPTS_OPPONENTS_SCORE:
+            nextAppointment = ( action.dealer === 'Player' ) ? 'playerScores' : 'cribScores';
+            return Object.assign( {}, state, { nextAppointment } );
+        case PLAYER_ACCEPTS_OWN_SCORE:
+            nextAppointment = ( action.dealer === 'Player' ) ? 'cribScores' : 'opponentScores';
+            return Object.assign( {}, state, { nextAppointment } );
+        case CONTROLLER_SCORES_CRIB:
+            return Object.assign( {}, state, { nextAppointment: 'playerAcceptsCribScore' } );
         case CONTROLLER_SCORES_OPPONENT:
             return Object.assign( {}, state, { nextAppointment: 'playerAcceptsOpponentsScore' } );
         case CONTROLLER_SCORES_PLAYER:

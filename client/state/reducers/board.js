@@ -1,7 +1,13 @@
 /**
  * Internal Dependencies
  */
-import { CONTROLLER_RESET_GAME, CONTROLLER_HIS_HEALS } from '../action-types';
+import {
+    CONTROLLER_RESET_GAME,
+    CONTROLLER_HIS_HEALS,
+    PLAYER_ACCEPTS_CRIB_SCORE,
+    PLAYER_ACCEPTS_OPPONENTS_SCORE,
+    PLAYER_ACCEPTS_OWN_SCORE
+} from '../action-types';
 
 export const defaultState = {
     Opponent: [ -1, 0 ],
@@ -11,7 +17,13 @@ export const defaultState = {
 const board = (state = defaultState, action) => {
     let newArray, score;
     switch (action.type) {
+        case PLAYER_ACCEPTS_CRIB_SCORE:
+        case PLAYER_ACCEPTS_OWN_SCORE:
+        case PLAYER_ACCEPTS_OPPONENTS_SCORE:
         case CONTROLLER_HIS_HEALS:
+            if ( action.points === 0 ) {
+                return state;
+            }
             score = ( action.pegIndex === 0 ) ? state[ action.person ][1] : state[ action.person ][0];
             newArray = state[ action.person ].map( ( position, index ) => {
                 if ( index === action.pegIndex ) {

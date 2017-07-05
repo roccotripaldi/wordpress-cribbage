@@ -9,10 +9,11 @@ import { connect } from 'react-redux';
 import Card from 'components/game/card';
 import Banner from 'components/ui/banner';
 import Button from 'components/ui/button';
-import { getNextAppointment } from 'state/selectors/controller';
+import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { getDealer, getCutCard, getScore } from 'state/selectors/game';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getLowestPegForPerson } from 'state/selectors/board';
+import { acceptScore } from 'state/actions/player';
 
 const summaryAppointments = [
     'playerAcceptsOwnScore',
@@ -21,6 +22,26 @@ const summaryAppointments = [
 ];
 
 class ScoreSummary extends Component {
+    approveScore = ( event ) => {
+        let pegIndex = this.props.playersLowestPeg;
+        event.preventDefault();
+        if ( this.props.paused ) {
+            return;
+        }
+        if (
+            'playerAcceptsOpponentsScore' === this.props.nextAppointment ||
+            ( 'playerAcceptsCribScore' === this.props.nextAppointment && this.props.dealer === 'Opponent' )
+        ) {
+            pegIndex = this.props.opponentsLowestPeg;
+        }
+        this.props.acceptScore(
+            this.props.scores.score,
+            this.props.nextAppointment,
+            this.props.dealer,
+            pegIndex
+        );
+    };
+
     getLabel() {
         switch ( this.props.nextAppointment ) {
             case 'playerAcceptsOwnScore':
@@ -68,12 +89,12 @@ class ScoreSummary extends Component {
         }
     }
 
-    renderCardCombination = ( combination ) => {
+    renderCardCombination = ( combination, index ) => {
         return (
-            <li><a>
-                { combination.map( ( card ) => {
+            <li key={ index }><a>
+                { combination.map( ( card, cardIndex ) => {
                     return (
-                        <span className="card-symbol">
+                        <span className="card-symbol" key={ cardIndex }>
                             { this.getNameSymbol( card.name ) }
                             { this.getSuitSymbol( card.suit ) }
                         </span>
@@ -193,7 +214,7 @@ class ScoreSummary extends Component {
                             />
                         </div>
                     </div>
-                    <Button>Ok</Button>
+                    <Button onClick={ this.approveScore }>Ok</Button>
                 </div>
             </div>
         );
@@ -202,7 +223,7 @@ class ScoreSummary extends Component {
 
 export default connect(
     state => {
-        let cards, scores;
+        let cards = null, scores = null;
         const nextAppointment = getNextAppointment( state ),
             dealer = getDealer( state );
         if ( 'playerAcceptsOwnScore' === nextAppointment ) {
@@ -222,7 +243,9 @@ export default connect(
             scores,
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
             opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' ),
-            cutCard: getCutCard( state )
+            cutCard: getCutCard( state ),
+            paused: isPaused( state )
         }
-    }
+    },
+    { acceptScore }
 )( ScoreSummary );

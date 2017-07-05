@@ -14,7 +14,8 @@ import {
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     CONTROLLER_CUT_CARD,
     CONTROLLER_SCORES_OPPONENT,
-    CONTROLLER_SCORES_PLAYER
+    CONTROLLER_SCORES_PLAYER,
+    CONTROLLER_SCORES_CRIB
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -77,5 +78,10 @@ describe( 'Game Reducer', () => {
         const scoreObjectFromIntellegence = {},
             state = game( {}, { type: CONTROLLER_SCORES_OPPONENT, score: scoreObjectFromIntellegence } );
         expect( state.opponentsHandScore ).to.deep.equal( scoreObjectFromIntellegence );
+    } );
+    it ( 'should set crib score', () => {
+        const scoreObjectFromIntellegence = {},
+            state = game( {}, { type: CONTROLLER_SCORES_CRIB, score: scoreObjectFromIntellegence } );
+        expect( state.cribScore ).to.deep.equal( scoreObjectFromIntellegence );
     } );
 } );

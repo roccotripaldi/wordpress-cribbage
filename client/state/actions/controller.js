@@ -17,7 +17,8 @@ import {
     CONTROLLER_CUT_CARD,
     CONTROLLER_HIS_HEALS,
     CONTROLLER_SCORES_OPPONENT,
-    CONTROLLER_SCORES_PLAYER
+    CONTROLLER_SCORES_PLAYER,
+    CONTROLLER_SCORES_CRIB
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
 import Intelligence from '../../lib/intelligence';
@@ -102,9 +103,16 @@ export const awardHisHeels = ( person, pegIndex ) => {
     }
 };
 
-export const setScore = ( hand, cutCard, person ) => {
-    const intel = new Intelligence( hand, cutCard ),
-        type = ( 'Player' === person ) ? CONTROLLER_SCORES_PLAYER : CONTROLLER_SCORES_OPPONENT;
+export const setScore = ( hand, cutCard, actionType ) => {
+    let type;
+    const intel = new Intelligence( hand, cutCard );
+        if ( 'playerScores' === actionType ) {
+            type = CONTROLLER_SCORES_PLAYER;
+        } else if ( 'opponentScores' === actionType ) {
+            type = CONTROLLER_SCORES_OPPONENT;
+        } else if ( 'cribScores' === actionType ) {
+            type = CONTROLLER_SCORES_CRIB;
+        }
     return {
         type,
         score: intel.getScore()

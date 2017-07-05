@@ -18,7 +18,11 @@ import {
     CONTROLLER_CUT_CARD,
     CONTROLLER_HIS_HEALS,
     CONTROLLER_SCORES_OPPONENT,
-    CONTROLLER_SCORES_PLAYER
+    CONTROLLER_SCORES_PLAYER,
+    CONTROLLER_SCORES_CRIB,
+    PLAYER_ACCEPTS_OPPONENTS_SCORE,
+    PLAYER_ACCEPTS_OWN_SCORE,
+    PLAYER_ACCEPTS_CRIB_SCORE
 } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -151,5 +155,35 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'playerScores' },
             state = controller( initialState, { type: CONTROLLER_SCORES_OPPONENT } );
         expect( state.nextAppointment ).to.equal( 'playerAcceptsOpponentsScore' );
+    } );
+    it( 'should score crib after player accepts their own score, if player is dealer', () => {
+        const initialState = { nextAppointment: 'playerAcceptsOwnScore' },
+            state = controller( initialState, { type: PLAYER_ACCEPTS_OWN_SCORE, dealer: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'cribScores' );
+    } );
+    it( 'should score opponent after player accepts their own score, if opponent is dealer', () => {
+        const initialState = { nextAppointment: 'playerAcceptsOwnScore' },
+            state = controller( initialState, { type: PLAYER_ACCEPTS_OWN_SCORE, dealer: 'Opponent' } );
+        expect( state.nextAppointment ).to.equal( 'opponentScores' );
+    } );
+    it( 'should score crib after player accepts opponent score, if opponent is dealer', () => {
+        const initialState = { nextAppointment: 'playerAcceptsOwnScore' },
+            state = controller( initialState, { type: PLAYER_ACCEPTS_OPPONENTS_SCORE, dealer: 'Opponent' } );
+        expect( state.nextAppointment ).to.equal( 'cribScores' );
+    } );
+    it( 'should score player after player accepts opponent score, if player is dealer', () => {
+        const initialState = { nextAppointment: 'playerAcceptsOwnScore' },
+            state = controller( initialState, { type: PLAYER_ACCEPTS_OPPONENTS_SCORE, dealer: 'Player' } );
+        expect( state.nextAppointment ).to.equal( 'playerScores' );
+    } );
+    it( 'should wait for player to accept crib score after scoring crib', () => {
+        const initialState = { nextAppointment: 'cribScores' },
+            state = controller( initialState, { type: CONTROLLER_SCORES_CRIB } );
+        expect( state.nextAppointment ).to.equal( 'playerAcceptsCribScore' );
+    } );
+    it( 'should complete the hand after crib score is accepted', () => {
+        const initialState = { nextAppointment: 'playerAcceptsCribScore' },
+            state = controller( initialState, { type: PLAYER_ACCEPTS_CRIB_SCORE } );
+        expect( state.nextAppointment ).to.equal( 'handComplete' );
     } );
 } );

@@ -86,9 +86,15 @@ class Controller extends Component {
                 break;
             case 'playerScores':
             case 'opponentScores':
-                person = ( this.props.nextAppointment === 'playerScores' ) ? 'Player' : 'Opponent';
-                hand = ( this.props.nextAppointment === 'playerScores' ) ? this.props.player.hand : this.props.opponent.hand;
-                this.props.setScore( hand, this.props.cutCard, person );
+            case 'cribScores':
+                let hand = this.props.player.hand;
+                if ( 'opponentScores' === this.props.nextAppointment ) {
+                    hand = this.props.opponent.hand;
+                }
+                if ( 'cribScores' === this.props.nextAppointment ) {
+                    hand = ( this.props.dealer === 'Player' ) ? this.props.player.crib : this.props.opponent.crib;
+                }
+                this.props.setScore( hand, this.props.cutCard, this.props.nextAppointment );
                 break;
         }
     };

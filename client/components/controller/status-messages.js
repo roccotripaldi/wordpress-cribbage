@@ -12,14 +12,21 @@ export const getStatusMessage = ( state, nextAppointment, paused ) => {
         return 'Game is paused.';
     }
     switch( nextAppointment ) {
+        case 'handComplete':
+            return 'Hand is complete';
         case 'playerAcceptsOpponentsScore':
             return 'Review and accept your opponent\s score.';
+        case 'cribScores':
         case 'playerScores':
         case 'opponentScores':
-            cutCard = getCutCard( state );
-            dealer = getDealer( state );
-            person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';
-            return person + ' cut the ' + cutCard.name + ' of ' + cutCard.suit + '. Calculating scores...';
+            person = 'your';
+            if ( nextAppointment === 'cribScores' ) {
+                person = 'crib';
+            }
+            if ( nextAppointment === 'opponentScores' ) {
+                person = 'your opponent\'s';
+            }
+            return 'Calculating ' + person + ' score...';
         case 'awardHisHeels':
             dealer = getDealer( state );
             person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';

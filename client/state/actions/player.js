@@ -9,7 +9,10 @@ import {
     PLAYER_INITIAL_DRAW,
     OPPONENT_INITIAL_DRAW,
     PLAYER_DISCARDS,
-    OPPONENT_DISCARDS
+    OPPONENT_DISCARDS,
+    PLAYER_ACCEPTS_CRIB_SCORE,
+    PLAYER_ACCEPTS_OPPONENTS_SCORE,
+    PLAYER_ACCEPTS_OWN_SCORE
 } from '../action-types';
 import Analyzer from '../../lib/intelligence/analyzer';
 
@@ -53,4 +56,19 @@ export const opponentDiscards = ( hand, dealer ) => {
         dealer,
         cardIndexes: discardIndexes
     }
+};
+
+export const acceptScore = ( points, actionType, dealer, pegIndex ) => {
+    let type, person = null;
+    if ( actionType === 'playerAcceptsOwnScore' ) {
+        type = PLAYER_ACCEPTS_OWN_SCORE;
+        person = 'Player';
+    } else if ( actionType === 'playerAcceptsOpponentsScore' ) {
+        type = PLAYER_ACCEPTS_OPPONENTS_SCORE;
+        person = 'Opponent'
+    } else {
+        person = dealer;
+        type = PLAYER_ACCEPTS_CRIB_SCORE;
+    }
+    return { type, points, dealer, person, pegIndex }
 };
