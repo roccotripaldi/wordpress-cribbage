@@ -46,6 +46,11 @@ class Controller extends Component {
         }
     }
 
+    isGameOver() {
+        return this.props.player.score >= 120 ||
+            this.props.opponent.score >= 120;
+    }
+
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
         let card, pegIndex, hand, person;
@@ -95,6 +100,10 @@ class Controller extends Component {
                     hand = ( this.props.dealer === 'Player' ) ? this.props.player.crib : this.props.opponent.crib;
                 }
                 this.props.setScore( hand, this.props.cutCard, this.props.nextAppointment );
+                break;
+            case 'handComplete':
+                person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
+                this.props.resetDeck( person );
                 break;
         }
     };

@@ -7,7 +7,10 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_PLAYER,
     PLAYER_DISCARDS,
-    OPPONENT_DISCARDS
+    OPPONENT_DISCARDS,
+    PLAYER_ACCEPTS_OWN_SCORE,
+    CONTROLLER_HIS_HEALS,
+    PLAYER_ACCEPTS_CRIB_SCORE
 } from '../action-types';
 
 export const defaultState = {
@@ -20,6 +23,14 @@ export const defaultState = {
 const player = ( state = defaultState, action ) => {
     let newHand, newState, newCrib;
     switch ( action.type ) {
+        case CONTROLLER_HIS_HEALS:
+        case PLAYER_ACCEPTS_CRIB_SCORE:
+            if ( action.person === 'Player' ) {
+                return Object.assign( {}, state, { score: state.score + action.points } );
+            }
+            return state;
+        case PLAYER_ACCEPTS_OWN_SCORE:
+            return Object.assign( {}, state, { score: state.score + action.points } );
         case OPPONENT_DISCARDS:
             if ( 'Player' === action.dealer ) {
                 newCrib = state.crib.slice();

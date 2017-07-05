@@ -47,6 +47,7 @@ const game = ( state = defaultState, action ) => {
         case CONTROLLER_RESET_GAME:
             return defaultState;
         case CONNTROLLER_RESET_DECK:
+            return Object.assign( {}, defaultState, { deck: action.deck, dealer: action.dealer } );
         case CONTROLLER_BUILDS_DECK:
             return Object.assign( {}, state, { deck: action.deck } );
         default:

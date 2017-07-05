@@ -8,7 +8,10 @@ import {
     CONNTROLLER_RESET_DECK,
     CONTROLLER_DEALS_CARD_TO_OPPONENT,
     PLAYER_DISCARDS,
-    OPPONENT_DISCARDS
+    OPPONENT_DISCARDS,
+    PLAYER_ACCEPTS_OPPONENTS_SCORE,
+    CONTROLLER_HIS_HEALS,
+    PLAYER_ACCEPTS_CRIB_SCORE
 } from '../../action-types';
 
 
@@ -102,5 +105,30 @@ describe( 'Opponent Reducer', () => {
             ];
         expect( state.hand ).to.deep.equal( expextedState );
         expect( state.crib ).to.deep.equal( [ cribCard3, cribCard4, cribCard1, cribCard2 ] );
+    } );
+    it( 'should increment score after hand is scored', () => {
+        const initialState = { score: 10 },
+            state = opponent( initialState, { type: PLAYER_ACCEPTS_OPPONENTS_SCORE, points: 12 } );
+        expect( state.score ).to.equal( 22 );
+    } );
+    it( 'should increment score after crib is scored if opponent is dealer', () => {
+        const initialState = { score: 10 },
+            state = opponent( initialState, { type: PLAYER_ACCEPTS_CRIB_SCORE, points: 12, person: 'Opponent' } );
+        expect( state.score ).to.equal( 22 );
+    } );
+    it( 'should not increment score after crib is scored if player is dealer', () => {
+        const initialState = { score: 10 },
+            state = opponent( initialState, { type: PLAYER_ACCEPTS_CRIB_SCORE, points: 12, person: 'Player' } );
+        expect( state.score ).to.equal( 10 );
+    } );
+    it( 'should increment score after his heels is scored if opponent is dealer', () => {
+        const initialState = { score: 10 },
+            state = opponent( initialState, { type: CONTROLLER_HIS_HEALS, points: 2, person: 'Opponent' } );
+        expect( state.score ).to.equal( 12 );
+    } );
+    it( 'should not increment score after his heels is scored if player is dealer', () => {
+        const initialState = { score: 10 },
+            state = opponent( initialState, { type: CONTROLLER_HIS_HEALS, points: 2, person: 'Player' } );
+        expect( state.score ).to.equal( 10 );
     } );
 } );

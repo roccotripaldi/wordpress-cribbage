@@ -47,11 +47,16 @@ describe( 'Game Reducer', () => {
             state = game( initialState, { type: CONTROLLER_ASSIGNS_FIRST_DEALER, dealer: 'Player' } );
         expect( state.dealer ).to.equal( 'Player' );
     } );
-    it( 'should reset deck', () => {
-        const initialState = { deck: [] },
+    it( 'should reset deck, set dealer and clear state', () => {
+        const initialState = { deck: [], dealer: 'Player', cutCard: {}, opponentsHandScore: {}, playersHandScore: {}, cribScore: {} },
             deck = buildDeck(),
-            state = game( initialState, { type: CONNTROLLER_RESET_DECK, deck } );
+            state = game( initialState, { type: CONNTROLLER_RESET_DECK, deck, dealer: 'Opponent' } );
         expect( state.deck.length ).to.equal( 52 );
+        expect( state.dealer ).to.equal( 'Opponent' );
+        expect( state.cutCard ).to.be.null;
+        expect( state.playersHandScore ).to.be.null;
+        expect( state.opponentsHandScore ).to.be.null;
+        expect( state.cribScore ).to.be.null;
     } );
     it( 'should remove the top card from the deck after dealing to player', () => {
         const initialState = { deck: buildDeck() },
