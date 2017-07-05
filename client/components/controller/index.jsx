@@ -78,7 +78,7 @@ class Controller extends Component {
                 this.props.opponentDiscards( this.props.opponent.hand, this.props.dealer );
                 break;
             case 'opponentCuts':
-                this.props.selectRandomCutCard( this.props.deck );
+                this.props.selectRandomCutCard( this.props.deck, this.props.dealer );
                 break;
             case 'awardHisHeels':
                 pegIndex = ( this.props.dealer === 'Player' ) ? this.props.playersLowestPeg : this.props.opponentsLowestPeg;

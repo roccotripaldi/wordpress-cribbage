@@ -11,6 +11,7 @@ import difference from 'lodash/difference';
  * Internal Dependecies
  */
 import Card from 'components/game/card';
+import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDiscards } from 'state/actions/player';
@@ -138,13 +139,7 @@ class Hand extends Component {
         if ( this.state.selectedCards.length < 2 || this.props.type === 'Opponent' ) {
             return null;
         }
-        return (
-            <a className="button" onClick={ this.handleDiscard }>
-                <span className="button__inner">
-                    Send Cards To Crib
-                </span>
-            </a>
-        );
+        return <Button onClick={ this.handleDiscard }>Send Cards To Crib</Button>;
     }
 
     render() {

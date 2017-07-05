@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
  * Internal Dependencies
 */
 import Card from './card';
-import { getDeck, getCutCard } from 'state/selectors/game';
+import { getDeck, getCutCard, getDealer } from 'state/selectors/game';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDraws } from 'state/actions/player';
 import { selectRandomCutCard } from 'state/actions/controller';
@@ -27,7 +27,7 @@ class Deck extends Component {
         }
 
         if ( 'playerCuts' === this.props.nextAppointment ) {
-            this.props.selectRandomCutCard( this.props.deck );
+            this.props.selectRandomCutCard( this.props.deck, this.props.dealer );
         }
     };
 
@@ -60,7 +60,8 @@ export default connect(
             deck: getDeck( state ),
             nextAppointment: getNextAppointment( state ),
             paused: isPaused( state ),
-            cutCard: getCutCard( state )
+            cutCard: getCutCard( state ),
+            dealer: getDealer( state )
         }
     },
     {

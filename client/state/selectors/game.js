@@ -19,3 +19,7 @@ export const getDealer = ( state ) => {
 export const getCutCard = ( state ) => {
     return get( state, 'game.cutCard' );
 };
+
+export const getScore = ( state, type ) => {
+    return get( state, 'game.' + type );
+};

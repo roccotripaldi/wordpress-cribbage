@@ -12,6 +12,8 @@ export const getStatusMessage = ( state, nextAppointment, paused ) => {
         return 'Game is paused.';
     }
     switch( nextAppointment ) {
+        case 'playerAcceptsOpponentsScore':
+            return 'Review and accept your opponent\s score.';
         case 'playerScores':
         case 'opponentScores':
             cutCard = getCutCard( state );

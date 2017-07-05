@@ -65,9 +65,11 @@ body {
   font-weight: bold;
   border: 1px solid #c6c6c6;
   span {
-    position: absolute;
-    top: 10px;
-    left: 50px;
+    &.with-icon {
+      position: absolute;
+      top: 10px;
+      left: 50px;
+    }
   }
 }
 
@@ -280,5 +282,87 @@ body {
   border-radius: 4px;
   &.player {
     background-color: red;
+  }
+}
+
+.summary {
+  position: absolute;
+  top: -140px;
+  left: 200px;
+  width: 600px;
+  height: 440px;
+  z-index: 100;
+  border-left: 1px solid #c6c6c6;
+  border-top: 1px solid #c6c6c6;
+  border-right: 1px solid black;
+  border-bottom: 2px solid black;
+  box-shadow: 0px 1px 1px black;
+  background-color: #c6c6c6;
+  color: black;
+  .summary__inner1 {
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-right: 1px solid #848484;
+    border-bottom: 1px solid #848484;
+    height: 438px;
+  }
+
+  .scores {
+    position: absolute;
+    width: 197px;
+    top: 50px;
+    left: 20px;
+    height: 330px;
+    .heading {
+      border-bottom: 1px solid black;
+    }
+    .total {
+      border-top: 1px solid black;
+    }
+    .red {
+      color: red;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style-position: inside;
+      margin-left: 10px;
+      .card-symbol {
+        margin-right: 10px;
+      }
+    }
+  }
+  .cards {
+    position: absolute;
+    width: 340px;
+    height: 330px;
+    top: 50px;
+    left: 240px;
+    img {
+      opacity: 0.5;
+    }
+  }
+  .inner3 {
+    background-color: white;
+    border-left: 1px solid #848484;
+    border-top: 1px solid #848484;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+  }
+  .inner4 {
+    padding: 8px;
+    height: 312px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid #c6c6c6;
+    border-bottom: 1px solid #c6c6c6;
+  }
+  .button {
+    position: absolute;
+    width: 100px;
+    right: 19px;
+    bottom: 15px;
   }
 }

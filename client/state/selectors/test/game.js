@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getDeck, isInitialized, getDealer, getCutCard } from '../game';
+import { getDeck, isInitialized, getDealer, getCutCard, getScore } from '../game';
 import { buildCard } from '../../../lib/deck';
 
 describe( 'Game Selector', () => {
@@ -28,9 +28,25 @@ describe( 'Game Selector', () => {
         })
     } );
     describe( 'getCutCard()', () => {
-        const expectedCard = buildCard( 'Ace', 'Spades' ),
-            cutCard = getCutCard( { game: { cutCard: expectedCard } } );
-        expect( cutCard ).to.deep.equal( expectedCard );
+        it( 'should get cut card', () => {
+            const expectedCard = buildCard( 'Ace', 'Spades' ),
+                cutCard = getCutCard( { game: { cutCard: expectedCard } } );
+            expect( cutCard ).to.deep.equal( expectedCard );
+        } );
+    } );
+    describe( 'getScore()', () => {
+        it( 'should get player score', () => {
+            const score = getScore( { game: { playersHandScore: 'playerScoreObject' } }, 'playersHandScore' );
+            expect( score ).to.equal( 'playerScoreObject' );
+        } );
+        it( 'should get opponent score', () => {
+            const score = getScore( { game: { opponentsHandScore: 'opponentScoreObject' } }, 'opponentsHandScore' );
+            expect( score ).to.equal( 'opponentScoreObject' );
+        } );
+        it( 'should get crib score', () => {
+            const score = getScore( { game: { cribScore: 'cribScoreObject' } }, 'cribScore' );
+            expect( score ).to.equal( 'cribScoreObject' );
+        } );
     } );
 } );
 

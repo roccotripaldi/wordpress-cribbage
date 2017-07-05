@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
+import Banner from 'components/ui/banner';
 import { isInitialized } from 'state/selectors/game';
 import { isPaused } from 'state/selectors/controller';
 import { resetGame, toggleTimer } from 'state/actions/controller';
@@ -39,9 +40,7 @@ class Menu extends Component {
         const iconSrc = imageDir + 'wp-cribbage-logo.png';
         return (
             <div>
-                <div className="banner">
-                    <img src={ iconSrc } /> <span>WordPress Cribbage</span>
-                </div>
+                <Banner label="WordPress Cribbage" icon={ iconSrc } />
                 <div className="menu">
                     { this.renderPauseButton() }
                     { this.renderResetButton() }
