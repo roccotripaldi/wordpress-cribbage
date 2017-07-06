@@ -21,7 +21,8 @@ import {
     PLAYER_ACCEPTS_CRIB_SCORE,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
-    CONTROLLER_SCORES_CRIB
+    CONTROLLER_SCORES_CRIB,
+    CONTROLLER_GAME_COMPLETE
 } from '../action-types';
 
 export const defaultState = {
@@ -33,6 +34,8 @@ export const defaultState = {
 const controller = ( state = defaultState, action ) => {
     let nextAppointment;
     switch (action.type) {
+        case CONTROLLER_GAME_COMPLETE:
+            return Object.assign( {}, state, { nextAppointment: 'gameComplete' } );
         case PLAYER_ACCEPTS_CRIB_SCORE:
             return Object.assign( {}, state, { nextAppointment: 'handComplete' } );
         case PLAYER_ACCEPTS_OPPONENTS_SCORE:

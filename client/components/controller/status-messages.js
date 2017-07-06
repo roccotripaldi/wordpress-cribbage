@@ -4,18 +4,26 @@ import {
     getOpponent,
     getPlayer
 } from 'state/selectors/players';
-import { getDealer, getCutCard } from 'state/selectors/game';
+import { getDealer, getCutCard, getWinner } from 'state/selectors/game';
 
 export const getStatusMessage = ( state, nextAppointment, paused ) => {
-    let card, dealer, person, cutCard, otherPerson;
+    let card, dealer, person, cutCard, otherPerson, winner, message;
     if ( paused ) {
         return 'Game is paused.';
     }
     switch( nextAppointment ) {
+        case 'gameComplete':
+            winner = getWinner( state );
+            message = ( 'Player' === winner ) ? 'You win!' : 'Your opponent wins!';
+            return 'Game over. ' + message + ' Hit \'Reset\' to play again.';
         case 'handComplete':
             return 'Hand is complete';
         case 'playerAcceptsOpponentsScore':
             return 'Review and accept your opponent\s score.';
+        case 'playerAcceptsOwsScore':
+            return 'Review and accept your score.';
+        case 'playerAcceptsCribScore':
+            return 'Review and accept crib score';
         case 'cribScores':
         case 'playerScores':
         case 'opponentScores':

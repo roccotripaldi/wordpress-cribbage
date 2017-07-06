@@ -18,7 +18,8 @@ import {
     CONTROLLER_HIS_HEALS,
     CONTROLLER_SCORES_OPPONENT,
     CONTROLLER_SCORES_PLAYER,
-    CONTROLLER_SCORES_CRIB
+    CONTROLLER_SCORES_CRIB,
+    CONTROLLER_GAME_COMPLETE
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
 import Intelligence from '../../lib/intelligence';
@@ -116,5 +117,12 @@ export const setScore = ( hand, cutCard, actionType ) => {
     return {
         type,
         score: intel.getScore()
+    }
+};
+
+export const gameComplete = ( winner ) => {
+    return {
+        type: CONTROLLER_GAME_COMPLETE,
+        winner
     }
 };

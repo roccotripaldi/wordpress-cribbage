@@ -21,7 +21,8 @@ import {
     dealComplete,
     selectRandomCutCard,
     awardHisHeels,
-    setScore
+    setScore,
+    gameComplete
 } from 'state/actions/controller';
 
 let appointmentTimer;
@@ -46,14 +47,21 @@ class Controller extends Component {
         }
     }
 
-    isGameOver() {
-        return this.props.player.score >= 120 ||
-            this.props.opponent.score >= 120;
+    calculateWinner() {
+        if ( this.props.player.score >= 116 ) {
+            return 'Player';
+        }
+
+        if ( this.props.opponent.score >= 116 ) {
+            return 'Opponent';
+        }
+
+        return null;
     }
 
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
-        let card, pegIndex, hand, person;
+        let card, pegIndex, hand, person, winner;
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -92,6 +100,11 @@ class Controller extends Component {
             case 'playerScores':
             case 'opponentScores':
             case 'cribScores':
+                winner = this.calculateWinner();
+                if ( winner ) {
+                    this.props.gameComplete( winner );
+                    return;
+                }
                 let hand = this.props.player.hand;
                 if ( 'opponentScores' === this.props.nextAppointment ) {
                     hand = this.props.opponent.hand;
@@ -102,6 +115,11 @@ class Controller extends Component {
                 this.props.setScore( hand, this.props.cutCard, this.props.nextAppointment );
                 break;
             case 'handComplete':
+                winner = this.calculateWinner();
+                if ( winner ) {
+                    this.props.gameComplete( winner );
+                    return;
+                }
                 person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
                 this.props.resetDeck( person );
                 break;
@@ -150,6 +168,7 @@ export default connect(
         opponentDiscards,
         selectRandomCutCard,
         awardHisHeels,
-        setScore
+        setScore,
+        gameComplete
     }
 )( Controller );

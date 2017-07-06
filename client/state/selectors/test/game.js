@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getDeck, isInitialized, getDealer, getCutCard, getScore } from '../game';
+import { getDeck, isInitialized, getDealer, getCutCard, getScore, getWinner } from '../game';
 import { buildCard } from '../../../lib/deck';
 
 describe( 'Game Selector', () => {
@@ -46,6 +46,13 @@ describe( 'Game Selector', () => {
         it( 'should get crib score', () => {
             const score = getScore( { game: { cribScore: 'cribScoreObject' } }, 'cribScore' );
             expect( score ).to.equal( 'cribScoreObject' );
+        } );
+    } );
+
+    describe( 'getWinner()', () => {
+        it( 'should get the winner', () => {
+            const winner = getWinner( { game: { winner: 'Player' } } );
+            expect( winner ).to.equal( 'Player' );
         } );
     } );
 } );

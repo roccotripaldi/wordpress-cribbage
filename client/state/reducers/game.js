@@ -13,7 +13,8 @@ import {
     CONTROLLER_CUT_CARD,
     CONTROLLER_SCORES_OPPONENT,
     CONTROLLER_SCORES_PLAYER,
-    CONTROLLER_SCORES_CRIB
+    CONTROLLER_SCORES_CRIB,
+    CONTROLLER_GAME_COMPLETE
 } from '../action-types';
 
 export const defaultState = {
@@ -29,6 +30,8 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case CONTROLLER_GAME_COMPLETE:
+            return Object.assign( {}, state, { winner: action.winner } );
         case CONTROLLER_SCORES_CRIB:
             return Object.assign( {}, state, { cribScore: action.score } );
         case CONTROLLER_SCORES_PLAYER:

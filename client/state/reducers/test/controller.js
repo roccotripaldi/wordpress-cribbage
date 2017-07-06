@@ -22,7 +22,8 @@ import {
     CONTROLLER_SCORES_CRIB,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
-    PLAYER_ACCEPTS_CRIB_SCORE
+    PLAYER_ACCEPTS_CRIB_SCORE,
+    CONTROLLER_GAME_COMPLETE
 } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -185,5 +186,10 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'playerAcceptsCribScore' },
             state = controller( initialState, { type: PLAYER_ACCEPTS_CRIB_SCORE } );
         expect( state.nextAppointment ).to.equal( 'handComplete' );
+    } );
+    it( 'should complete the game', () => {
+        const initialState = { nextAppointment: 'cribScores' },
+            state = controller( initialState, { type: CONTROLLER_GAME_COMPLETE } );
+        expect( state.nextAppointment ).to.equal( 'gameComplete' );
     } );
 } );

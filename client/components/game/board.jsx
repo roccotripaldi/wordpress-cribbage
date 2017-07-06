@@ -12,8 +12,13 @@ import { pegMatrix } from './peg-matrix';
 
 class Board extends Component {
     getPosition( player, peg ) {
-        const position = ( 'Opponent' === player ) ? this.props.positions.Opponent[ peg ] : this.props.positions.Player[ peg ],
-            style = { top: 0, left: 0 }
+        let position = ( 'Opponent' === player ) ? this.props.positions.Opponent[ peg ] : this.props.positions.Player[ peg ];
+        const style = { top: 0, left: 0 };
+
+        if ( position > 116 ) {
+            position = 116;
+        }
+
         if ( -1 === position ) {
             style.left = 34;
             style.top = ( 'Opponent' === player ) ? 3 : 24;

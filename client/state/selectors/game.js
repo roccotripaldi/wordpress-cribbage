@@ -23,3 +23,7 @@ export const getCutCard = ( state ) => {
 export const getScore = ( state, type ) => {
     return get( state, 'game.' + type );
 };
+
+export const getWinner = ( state ) => {
+    return get( state, 'game.winner' );
+}
