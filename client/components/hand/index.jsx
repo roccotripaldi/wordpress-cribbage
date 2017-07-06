@@ -30,15 +30,20 @@ class Hand extends Component {
         }
     }
 
+    isCribFaceDown() {
+        return (
+            this.props.nextAppointment !== 'gameComplete' &&
+            isEmpty( this.props.cribScores )
+        );
+    }
+
     isHandFaceDown() {
-        const { hand } = this.props.player;
-        if ( isEmpty( hand ) ) {
-            // We are showing the initial draw, which is always face up.
-            return false;
-        } else if ( 'Opponent' === this.props.type && isEmpty( this.props.playerScores ) ) {
-            return true;
-        }
-        return false;
+        return (
+            'Opponent' === this.props.type &&
+            isEmpty( this.props.playerScores ) &&
+            this.props.nextAppointment !== 'gameComplete' &&
+            ! isEmpty( this.props.player.hand )
+        );
     }
 
     handleClick = ( event ) => {
@@ -85,7 +90,7 @@ class Hand extends Component {
                             <Card
                                 key={ card.name + card.suit }
                                 card={ card }
-                                faceDown={ isEmpty( this.props.cribScores ) }
+                                faceDown={ this.isCribFaceDown() }
                                 index={ index }
                             />
                         )
