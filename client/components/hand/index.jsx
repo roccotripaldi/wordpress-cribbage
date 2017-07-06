@@ -15,7 +15,7 @@ import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDiscards } from 'state/actions/player';
-import { getDealer } from 'state/selectors/game';
+import { getDealer, getScore } from 'state/selectors/game';
 
 class Hand extends Component {
     constructor( props ) {
@@ -28,6 +28,17 @@ class Hand extends Component {
             // Fixes a bug that shows the discard button after game is reset.
             this.setState( { selectedCards: [] } );
         }
+    }
+
+    isHandFaceDown() {
+        const { hand } = this.props.player;
+        if ( isEmpty( hand ) ) {
+            // We are showing the initial draw, which is always face up.
+            return false;
+        } else if ( 'Opponent' === this.props.type && isEmpty( this.props.playerScores ) ) {
+            return true;
+        }
+        return false;
     }
 
     handleClick = ( event ) => {
@@ -74,7 +85,7 @@ class Hand extends Component {
                             <Card
                                 key={ card.name + card.suit }
                                 card={ card }
-                                faceDown={ true }
+                                faceDown={ isEmpty( this.props.cribScores ) }
                                 index={ index }
                             />
                         )
@@ -97,18 +108,12 @@ class Hand extends Component {
 
     renderCards() {
         const { hand, initialDraw } = this.props.player;
-        let cards, faceDown, onClick = null, selected = false;
+        let cards, onClick = null, selected = false;
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
         cards = isEmpty( hand ) ? initialDraw : hand;
-        if ( isEmpty( hand ) ) {
-            faceDown = false;
-        } else if ( 'Opponent' === this.props.type ) {
-            faceDown = true;
-        } else {
-            faceDown = false;
-        }
+
         if (
             'Player' === this.props.type &&
             'playerDiscards' === this.props.nextAppointment &&
@@ -124,7 +129,7 @@ class Hand extends Component {
                         <Card
                             key={ card.name + card.suit }
                             card={ card }
-                            faceDown={ faceDown }
+                            faceDown={ this.isHandFaceDown() }
                             onClick={ onClick }
                             index={ index }
                             selected={ selected }
@@ -166,7 +171,9 @@ export default connect(
             player: ( ownProps.type === "Opponent" ) ? getOpponent( state ) : getPlayer( state ),
             nextAppointment: getNextAppointment( state ),
             paused: isPaused( state ),
-            dealer: getDealer( state )
+            dealer: getDealer( state ),
+            playerScores: ( ownProps.type === "Opponent" ) ? getScore( state, 'opponentsHandScore' ) : getScore( state, 'playersHandScore' ),
+            cribScores: getScore( state, 'cribScore' )
         }
     },
     { playerDiscards }
