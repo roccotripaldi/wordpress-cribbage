@@ -10,7 +10,7 @@ import difference from 'lodash/difference';
 /**
  * Internal Dependecies
  */
-import Card from 'components/game/card';
+import Card from 'components/ui/card';
 import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';

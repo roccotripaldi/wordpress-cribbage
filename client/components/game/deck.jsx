@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 /**
  * Internal Dependencies
 */
-import Card from './card';
+import Card from 'components/ui/card';
 import { getDeck, getCutCard, getDealer } from 'state/selectors/game';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDraws } from 'state/actions/player';

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
-import Card from 'components/game/card';
+import Card from 'components/ui/card';
 import Banner from 'components/ui/banner';
 import Button from 'components/ui/button';
 import CardSymbol from 'components/ui/card-symbol';
