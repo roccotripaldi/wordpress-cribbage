@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Card from 'components/game/card';
 import Banner from 'components/ui/banner';
 import Button from 'components/ui/button';
+import CardSymbol from 'components/ui/card-symbol';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { getDealer, getCutCard, getScore } from 'state/selectors/game';
 import { getPlayer, getOpponent } from 'state/selectors/players';
@@ -54,50 +55,12 @@ class ScoreSummary extends Component {
         }
     }
 
-    getSuitSymbol( suit ) {
-        let symbol, color;
-        switch ( suit ) {
-            case 'Hearts':
-                color = 'red';
-                symbol = '♥';
-                break;
-            case 'Spades':
-                color = 'black';
-                symbol = '♠';
-                break;
-            case 'Clubs':
-                color = 'black';
-                symbol = '♣';
-                break;
-            case 'Diamonds':
-                color = 'red';
-                symbol = '♦';
-                break;
-        }
-        return <span className={ color }>{ symbol }</span>;
-    }
-
-    getNameSymbol( name ) {
-        switch ( name ) {
-            case 'Queen':
-            case 'King':
-            case 'Jack':
-            case 'Ace':
-                return name.substr( 0, 1 );
-            default:
-                return name;
-        }
-    }
-
     renderCardCombination = ( combination, index ) => {
         return (
             <li key={ index }><a>
                 { combination.map( ( card, cardIndex ) => {
                     return (
-                        <span className="card-symbol" key={ cardIndex }>
-                            { this.getNameSymbol( card.name ) }
-                            { this.getSuitSymbol( card.suit ) }
-                        </span>
+                        <CardSymbol card={ card } key={ cardIndex } />
                     );
                 })}
             </a></li>

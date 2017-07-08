@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
+import CardSymbol from 'components/ui/card-symbol';
 import { getWinner } from 'state/selectors/game';
 
 class StatusMessage extends Component {
@@ -26,7 +27,7 @@ class StatusMessage extends Component {
             case 'playerAcceptsOpponentsScore':
                 return <p>Review and accept your opponents score.</p>;
 
-            case 'playerAcceptsOwsScore':
+            case 'playerAcceptsOwnScore':
                 return <p>Review and accept your score.</p>;
 
             case 'playerAcceptsCribScore':
@@ -73,18 +74,18 @@ class StatusMessage extends Component {
                 return <p>Shuffling the deck...</p>;
 
             case 'awaitDraw':
-                return <p>Tap deck to pick a card. Lowest draw gets first crib!</p>;
+                return <p>Tap deck to pick a card.<br />Lowest draw gets first crib!</p>;
 
             case 'opponentDraw':
-                return (    
+                return (
                     <p>
-                        You drew the { playerInitialDraw.name } of { playerInitialDraw.suit }.<br />
+                        You drew the <CardSymbol card={ playerInitialDraw }/>.<br />
                         Waiting for opponent to draw...
                     </p>
                 );
 
             case 'assignFirstDealer':
-                return <p>Your opponent drew the { opponentInitialDraw.name } of { opponentInitialDraw.suit }.</p>;
+                return <p>Your opponent drew the <CardSymbol card={ opponentInitialDraw } />.</p>;
 
             case 'resetDeck':
                 person = ( 'Player' === dealer ) ? 'you' : 'your opponent';
