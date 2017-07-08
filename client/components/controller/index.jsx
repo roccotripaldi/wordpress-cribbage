@@ -1,12 +1,12 @@
 /**
  * External Dependencies
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 /**
  * Internal Dependencies
  */
-import { getStatusMessage } from './status-messages';
+import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
 import { opponentDraws, opponentDiscards } from 'state/actions/player';
 import { getDeck, getDealer, getCutCard } from 'state/selectors/game';
@@ -105,7 +105,7 @@ class Controller extends Component {
                     this.props.gameComplete( winner );
                     return;
                 }
-                let hand = this.props.player.hand;
+                hand = this.props.player.hand;
                 if ( 'opponentScores' === this.props.nextAppointment ) {
                     hand = this.props.opponent.hand;
                 }
@@ -130,7 +130,7 @@ class Controller extends Component {
         return (
             <div className="controller">
                 <div className="controller__inner1">
-                    <p>{ this.props.statusMessage }</p>
+                    <StatusMessage { ...this.props } />
                 </div>
             </div>
         );
@@ -144,7 +144,6 @@ export default connect(
         return {
             nextAppointment,
             paused,
-            statusMessage: getStatusMessage( state, nextAppointment, paused ),
             deck: getDeck( state ),
             playerInitialDraw: getPlayerInitialDraw( state ),
             opponentInitialDraw: getOpponentInitialDraw( state ),
