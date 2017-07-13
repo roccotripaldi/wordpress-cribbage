@@ -1,7 +1,13 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getPlayer, getOpponent, getPlayerInitialDraw, getOpponentInitialDraw } from '../players';
+import {
+    getPlayer,
+    getOpponent,
+    getPlayerInitialDraw,
+    getOpponentInitialDraw,
+    calculateWinner
+} from '../players';
 import { buildCard } from '../../../lib/deck';
 
 describe( 'Players Selector', () => {
@@ -39,6 +45,30 @@ describe( 'Players Selector', () => {
                 state = { opponent: { initialDraw: [ card ] } },
                 initialDraw = getOpponentInitialDraw( state );
             expect( initialDraw ).to.deep.equal( card );
+        } );
+    } );
+
+    describe( 'getWinningPerson()', () => {
+        it( 'should return null if there is no winner', () => {
+            const state = {
+                opponent: { score: 14 },
+                player: { score: 38 }
+            };
+            expect( calculateWinner( state ) ).to.be.null;
+        } );
+        it( 'should return "Player" if player is winner', () => {
+            const state = {
+                opponent: { score: 107 },
+                player: { score: 119 }
+            };
+            expect( calculateWinner( state ) ).to.equal( 'Player' );
+        } );
+        it( 'should return "Opponent" if opponent is winner', () => {
+            const state = {
+                opponent: { score: 123 },
+                player: { score: 114 }
+            };
+            expect( calculateWinner( state ) ).to.equal( 'Opponent' );
         } );
     } );
 } );

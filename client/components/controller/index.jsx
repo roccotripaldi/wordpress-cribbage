@@ -10,8 +10,14 @@ import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
 import { opponentDraws, opponentDiscards } from 'state/actions/player';
 import { getDeck, getDealer, getCutCard } from 'state/selectors/game';
-import { getPlayerInitialDraw, getOpponentInitialDraw, getPlayer, getOpponent } from 'state/selectors/players';
 import { getLowestPegForPerson } from 'state/selectors/board';
+import {
+    getPlayerInitialDraw,
+    getOpponentInitialDraw,
+    getPlayer,
+    getOpponent,
+    calculateWinner
+} from 'state/selectors/players';
 import {
     controllerBuildsDeck,
     assignFistDealer,
@@ -47,21 +53,9 @@ class Controller extends Component {
         }
     }
 
-    calculateWinner() {
-        if ( this.props.player.score >= 116 ) {
-            return 'Player';
-        }
-
-        if ( this.props.opponent.score >= 116 ) {
-            return 'Opponent';
-        }
-
-        return null;
-    }
-
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
-        let card, pegIndex, hand, person, winner;
+        let card, pegIndex, hand;
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -100,9 +94,8 @@ class Controller extends Component {
             case 'playerScores':
             case 'opponentScores':
             case 'cribScores':
-                winner = this.calculateWinner();
-                if ( winner ) {
-                    this.props.gameComplete( winner );
+                if ( this.props.winningPerson ) {
+                    this.props.gameComplete( this.props.winningPerson );
                     return;
                 }
                 hand = this.props.player.hand;
@@ -115,13 +108,10 @@ class Controller extends Component {
                 this.props.setScore( hand, this.props.cutCard, this.props.nextAppointment );
                 break;
             case 'handComplete':
-                winner = this.calculateWinner();
-                if ( winner ) {
-                    this.props.gameComplete( winner );
+                if ( this.props.winningPerson ) {
+                    this.props.gameComplete( this.props.winningPerson );
                     return;
                 }
-                person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
-                this.props.resetDeck( person );
                 break;
         }
     };
@@ -153,7 +143,8 @@ export default connect(
             timerSpeed: getTimerSpeed( state ),
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
             opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' ),
-            cutCard: getCutCard( state )
+            cutCard: getCutCard( state ),
+            winningPerson: calculateWinner( state )
         }
     },
     {

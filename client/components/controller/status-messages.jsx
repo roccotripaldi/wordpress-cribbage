@@ -7,9 +7,25 @@ import { connect } from 'react-redux';
  * Internal Dependencies
  */
 import CardSymbol from 'components/ui/card-symbol';
-import { getWinner } from 'state/selectors/game';
+import Button from 'components/ui/button';
+import { getWinner, getDealer } from 'state/selectors/game';
+import { calculateWinner } from 'state/selectors/players';
+import { resetDeck } from 'state/actions/controller';
 
 class StatusMessage extends Component {
+
+    dealNextHand = () => {
+        const person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
+        this.props.resetDeck( person );
+    };
+
+    renderNextHandButton() {
+        if ( this.props.hasWinner ) {
+            return null;
+        }
+        return <Button onClick={ this.dealNextHand }>Deal Next Hand</Button>
+    }
+
     render() {
         const { winner, nextAppointment, dealer, player, opponent, playerInitialDraw, opponentInitialDraw } = this.props;
         let person, otherPerson, status;
@@ -22,7 +38,12 @@ class StatusMessage extends Component {
                 return <p>Game over. { status } Hit Reset to play again.</p>;
 
             case 'handComplete':
-                return <p>Hand is complete</p>;
+                return (
+                    <div>
+                        <p>Hand is complete</p>
+                        { this.renderNextHandButton() }
+                    </div>
+                );
 
             case 'playerAcceptsOpponentsScore':
                 return <p>Review and accept your opponents score.</p>;
@@ -100,7 +121,10 @@ class StatusMessage extends Component {
 export default connect(
     state => {
         return {
-            winner: getWinner( state )
+            winner: getWinner( state ),
+            hasWinner: calculateWinner( state ),
+            dealer: getDealer( state )
         }
-    }
+    },
+    { resetDeck }
 )( StatusMessage );
