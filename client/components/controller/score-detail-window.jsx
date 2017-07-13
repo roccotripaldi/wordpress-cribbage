@@ -8,41 +8,13 @@ import { connect } from 'react-redux';
  */
 import Card from 'components/ui/card';
 import Banner from 'components/ui/banner';
-import Button from 'components/ui/button';
+import AcceptScoreButton from './accept-score-button';
 import CardSymbol from 'components/ui/card-symbol';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { getDealer, getCutCard, getScore } from 'state/selectors/game';
 import { getPlayer, getOpponent } from 'state/selectors/players';
-import { getLowestPegForPerson } from 'state/selectors/board';
-import { acceptScore } from 'state/actions/player';
 
-const summaryAppointments = [
-    'playerAcceptsOwnScore',
-    'playerAcceptsOpponentsScore',
-    'playerAcceptsCribScore'
-];
-
-class ScoreSummary extends Component {
-    approveScore = ( event ) => {
-        let pegIndex = this.props.playersLowestPeg;
-        event.preventDefault();
-        if ( this.props.paused ) {
-            return;
-        }
-        if (
-            'playerAcceptsOpponentsScore' === this.props.nextAppointment ||
-            ( 'playerAcceptsCribScore' === this.props.nextAppointment && this.props.dealer === 'Opponent' )
-        ) {
-            pegIndex = this.props.opponentsLowestPeg;
-        }
-        this.props.acceptScore(
-            this.props.scores.score,
-            this.props.nextAppointment,
-            this.props.dealer,
-            pegIndex
-        );
-    };
-
+class ScoreDetailWindow extends Component {
     getLabel() {
         switch ( this.props.nextAppointment ) {
             case 'playerAcceptsOwnScore':
@@ -145,9 +117,6 @@ class ScoreSummary extends Component {
     }
 
     render() {
-        if ( ! summaryAppointments.includes( this.props.nextAppointment ) ) {
-            return null;
-        }
         return (
             <div className="summary">
                 <div className="summary__inner1">
@@ -177,7 +146,7 @@ class ScoreSummary extends Component {
                             />
                         </div>
                     </div>
-                    <Button onClick={ this.approveScore }>Ok</Button>
+                    <AcceptScoreButton />
                 </div>
             </div>
         );
@@ -204,11 +173,8 @@ export default connect(
             cards,
             dealer,
             scores,
-            playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
-            opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' ),
             cutCard: getCutCard( state ),
             paused: isPaused( state )
         }
-    },
-    { acceptScore }
-)( ScoreSummary );
+    }
+)( ScoreDetailWindow );

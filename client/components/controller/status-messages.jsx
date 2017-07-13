@@ -8,17 +8,28 @@ import { connect } from 'react-redux';
  */
 import CardSymbol from 'components/ui/card-symbol';
 import Button from 'components/ui/button';
-import { getWinner, getDealer } from 'state/selectors/game';
-import { calculateWinner } from 'state/selectors/players';
+import ScoreDetailWindow from './score-detail-window';
+import AcceptScoreButton from './accept-score-button';
+import { getScore } from 'state/selectors/game';
 import { resetDeck, resetGame } from 'state/actions/controller';
-import { isPaused } from 'state/selectors/controller';
+import { acceptScore } from 'state/actions/player';
 
 class StatusMessage extends Component {
+    constructor( props ) {
+        super( props );
+        this.state = { showDetailWindow: false };
+    }
+
+    componentWillReceiveProps( nextProps ) {
+        if( this.props.nextAppointment !== nextProps.nextAppointment ) {
+            this.setState( { showDetailWindow: false } );
+        }
+    }
 
     handleNextHand = ( event ) => {
         event.preventDefault();
         if ( this.props.paused ) {
-            return null;
+            return;
         }
         const person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
         this.props.resetDeck( person );
@@ -27,13 +38,49 @@ class StatusMessage extends Component {
     handlePlayAgain = ( event ) => {
         event.preventDefault();
         if ( this.props.paused ) {
-            return null;
+            return;
         }
         this.props.resetGame();
     };
 
+    handleOpenDetailWindow = ( event ) => {
+        event.preventDefault();
+        if ( this.props.paused ) {
+            return;
+        }
+        this.setState( { showDetailWindow: true } );
+    };
+
+    renderScoreDetailWindow() {
+        if ( ! this.state.showDetailWindow ) {
+            return null;
+        }
+        return <ScoreDetailWindow />;
+    }
+
+    renderScoreSummary() {
+        if ( 'playerAcceptsOpponentsScore' === this.props.nextAppointment ) {
+            return <p>Your opponent scored { this.renderPoints( this.props.opponentsHandScores ) }.</p>
+        } else if ( 'playerAcceptsOwnScore' === this.props.nextAppointment ) {
+            return <p>You scored { this.renderPoints( this.props.playersHandScores ) }.</p>;
+        } else {
+            return <p>{ this.renderPoints( this.props.cribScores ) } in the crib.</p>;
+        }
+    }
+
+    renderPoints( scores ) {
+        const { score } = scores;
+        if ( 0 === score ) {
+            return <span>no points</span>;
+        } else if ( 1 === score ) {
+            return <span>1 point</span>;
+        } else {
+            return <span>{ score } points</span>;
+        }
+    }
+
     renderNextHandButton() {
-        if ( this.props.hasWinner ) {
+        if ( this.props.winningPerson ) {
             return null;
         }
         return <Button onClick={ this.handleNextHand }>Deal Next Hand</Button>
@@ -62,15 +109,17 @@ class StatusMessage extends Component {
                         { this.renderNextHandButton() }
                     </div>
                 );
-
             case 'playerAcceptsOpponentsScore':
-                return <p>Review and accept your opponents score.</p>;
-
             case 'playerAcceptsOwnScore':
-                return <p>Review and accept your score.</p>;
-
             case 'playerAcceptsCribScore':
-                return <p>Review and accept crib score</p>;
+                return (
+                    <div>
+                        { this.renderScoreDetailWindow() }
+                        { this.renderScoreSummary() }
+                        <p><a className="view-summary" onClick={ this.handleOpenDetailWindow }>View score summary...</a></p>
+                        <AcceptScoreButton />
+                    </div>
+                );
 
             case 'cribScores':
             case 'playerScores':
@@ -139,11 +188,10 @@ class StatusMessage extends Component {
 export default connect(
     state => {
         return {
-            winner: getWinner( state ),
-            hasWinner: calculateWinner( state ),
-            dealer: getDealer( state ),
-            paused: isPaused( state )
+            playersHandScores: getScore( state, 'playersHandScore' ),
+            cribScores: getScore( state, 'cribScore' ),
+            opponentsHandScores: getScore( state, 'opponentsHandScore' )
         }
     },
-    { resetDeck, resetGame }
+    { resetDeck, resetGame, acceptScore }
 )( StatusMessage );

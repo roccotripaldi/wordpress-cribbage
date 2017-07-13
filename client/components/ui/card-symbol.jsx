@@ -44,7 +44,7 @@ class CardSymbol extends Component {
     render() {
         const { card } = this.props;
         return (
-            <span { ...this.props } className="card-symbol">
+            <span className="card-symbol">
                 { this.getNameSymbol( card.name ) }
                 { this.getSuitSymbol( card.suit ) }
             </span>

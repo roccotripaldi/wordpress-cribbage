@@ -7,7 +7,6 @@ import React, { Component } from 'react';
  */
 import Board from './board';
 import Deck from "./deck";
-import ScoreSummary from './score-summary';
 
 class Game extends Component {
     render() {
@@ -15,7 +14,6 @@ class Game extends Component {
             <div className="game">
                 <Board />
                 <Deck />
-                <ScoreSummary />
             </div>
         )
     }
