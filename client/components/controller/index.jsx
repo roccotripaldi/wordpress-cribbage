@@ -129,11 +129,9 @@ class Controller extends Component {
 
 export default connect(
     state => {
-        const nextAppointment = getNextAppointment( state ),
-            paused = isPaused( state );
         return {
-            nextAppointment,
-            paused,
+            nextAppointment: getNextAppointment( state ),
+            paused: isPaused( state ),
             deck: getDeck( state ),
             playerInitialDraw: getPlayerInitialDraw( state ),
             opponentInitialDraw: getOpponentInitialDraw( state ),

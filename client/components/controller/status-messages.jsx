@@ -10,20 +10,33 @@ import CardSymbol from 'components/ui/card-symbol';
 import Button from 'components/ui/button';
 import { getWinner, getDealer } from 'state/selectors/game';
 import { calculateWinner } from 'state/selectors/players';
-import { resetDeck } from 'state/actions/controller';
+import { resetDeck, resetGame } from 'state/actions/controller';
+import { isPaused } from 'state/selectors/controller';
 
 class StatusMessage extends Component {
 
-    dealNextHand = () => {
+    handleNextHand = ( event ) => {
+        event.preventDefault();
+        if ( this.props.paused ) {
+            return null;
+        }
         const person = ( this.props.dealer === 'Player' ) ? 'Opponent' : 'Player';
         this.props.resetDeck( person );
+    };
+
+    handlePlayAgain = ( event ) => {
+        event.preventDefault();
+        if ( this.props.paused ) {
+            return null;
+        }
+        this.props.resetGame();
     };
 
     renderNextHandButton() {
         if ( this.props.hasWinner ) {
             return null;
         }
-        return <Button onClick={ this.dealNextHand }>Deal Next Hand</Button>
+        return <Button onClick={ this.handleNextHand }>Deal Next Hand</Button>
     }
 
     render() {
@@ -35,7 +48,12 @@ class StatusMessage extends Component {
         switch( nextAppointment ) {
             case 'gameComplete':
                 status = ( 'Player' === winner ) ? 'You win!' : 'Your opponent wins!';
-                return <p>Game over. { status } Hit Reset to play again.</p>;
+                return (
+                    <div>
+                        <p>{ status }</p>
+                        <Button onClick={ this.handlePlayAgain }>Play Again</Button>
+                    </div>
+                );
 
             case 'handComplete':
                 return (
@@ -123,8 +141,9 @@ export default connect(
         return {
             winner: getWinner( state ),
             hasWinner: calculateWinner( state ),
-            dealer: getDealer( state )
+            dealer: getDealer( state ),
+            paused: isPaused( state )
         }
     },
-    { resetDeck }
+    { resetDeck, resetGame }
 )( StatusMessage );
