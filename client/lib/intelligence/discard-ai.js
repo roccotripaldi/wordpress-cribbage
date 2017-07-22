@@ -9,7 +9,7 @@ const fourCardHandsFromSixCards = [
     [2,3,4,5]
 ];
 
-export default class Analyzer {
+export default class DiscardAI {
     constructor( hand ) {
         this.deck = buildDeck();
         this.potentialHands = [];

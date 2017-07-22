@@ -12,32 +12,33 @@ export const getPegScore = ( card, sequence ) => {
     let score = 0,
         runs = 0,
         pairs,
-        reason = '';
+        reason = '',
+        newSequence;
 
     if ( sequence.length === 0 ) {
         return { score, reason };
     }
 
-    sequence.unshift( card );
+    newSequence = [ card ].concat( sequence );
 
-    if ( ScoringRules.isSumFifteen( sequence ) ) {
+    if ( ScoringRules.isSumFifteen( newSequence ) ) {
         score = 2;
         reason = '2 points for 15. ';
     }
 
-    if ( isSumThirtyOne( sequence ) ) {
+    if ( isSumThirtyOne( newSequence ) ) {
         score = 2;
         reason = '2 points for 31. ';
     }
 
-    pairs = sequence.findIndex( cardDoesNotMatchFirstCardInSequence );
-    pairs = ( pairs === -1 ) ? sequence.length - 1 : pairs - 1;
+    pairs = newSequence.findIndex( cardDoesNotMatchFirstCardInSequence );
+    pairs = ( pairs === -1 ) ? newSequence.length - 1 : pairs - 1;
     pairs = ( pairs * pairs ) + pairs;
     score += pairs;
     reason += ( pairs === 0 ) ? '' : pairs.toString() + ' points for pairs.';
 
-    for ( let i = sequence.length; i > 2; i-- ) {
-        const slice = sequence.slice( 0, i );
+    for ( let i = newSequence.length; i > 2; i-- ) {
+        const slice = newSequence.slice( 0, i );
         if ( ScoringRules.isSequential( slice ) ) {
             runs = i;
             break;

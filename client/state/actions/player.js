@@ -14,7 +14,7 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE
 } from '../action-types';
-import Analyzer from '../../lib/intelligence/analyzer';
+import DiscardAI from '../../lib/intelligence/discard-ai';
 
 export const playerDraws = ( card ) => {
     return {
@@ -41,9 +41,9 @@ export const playerDiscards = ( cards, cardIndexes, dealer ) => {
 
 export const opponentDiscards = ( hand, dealer ) => {
     let keptCardIndexes, discards, discardIndexes;
-    const analyzer = new Analyzer( hand );
-        analyzer.analyze();
-        keptCardIndexes = analyzer.analysis.highestAverageHand.combination;
+    const ai = new DiscardAI( hand );
+        ai.analyze();
+        keptCardIndexes = ai.analysis.highestAverageHand.combination;
         discards = hand.filter( ( card, index ) => {
             return ! keptCardIndexes.includes( index );
         } );
