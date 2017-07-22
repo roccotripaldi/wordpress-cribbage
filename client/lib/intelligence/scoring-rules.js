@@ -19,7 +19,7 @@ const scoringCombinations = {
     }
 };
 
-export default class Intelligence {
+export default class ScoringRules {
     constructor( hand, cutCard ) {
         this.hand = hand;
         this.cutCard = cutCard;
@@ -51,13 +51,13 @@ export default class Intelligence {
         let combinations,
             fifteens = [];
 
-        if ( Intelligence.isSumFifteen( this.hand.concat( this.cutCard ) ) ) {
+        if ( ScoringRules.isSumFifteen( this.hand.concat( this.cutCard ) ) ) {
             fifteens.push( this.hand.concat( this.cutCard ) );
         }
 
         if ( isEmpty( fifteens ) ) {
             combinations = this.generateCardCombinations( scoringCombinations.fifteens );
-            fifteens = combinations.filter( Intelligence.isSumFifteen );
+            fifteens = combinations.filter( ScoringRules.isSumFifteen );
         }
 
         return {
@@ -83,17 +83,17 @@ export default class Intelligence {
         let fourCardCombos, threeCardCombos,
             runs = [];
 
-        if ( Intelligence.isSequential( this.hand.concat( this.cutCard ) ) ) {
+        if ( ScoringRules.isSequential( this.hand.concat( this.cutCard ) ) ) {
             runs.push( this.hand.concat( this.cutCard ) );
         }
 
         if ( isEmpty( runs ) ) {
             fourCardCombos = this.generateCardCombinations( scoringCombinations.runs.fourCards );
-            runs = fourCardCombos.filter( Intelligence.isSequential );
+            runs = fourCardCombos.filter( ScoringRules.isSequential );
 
             if ( isEmpty( runs ) ) {
                 threeCardCombos = this.generateCardCombinations( scoringCombinations.runs.threeCards );
-                runs = threeCardCombos.filter( Intelligence.isSequential );
+                runs = threeCardCombos.filter( ScoringRules.isSequential );
             }
         }
 

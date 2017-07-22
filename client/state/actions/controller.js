@@ -22,7 +22,7 @@ import {
     CONTROLLER_GAME_COMPLETE
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
-import Intelligence from '../../lib/intelligence';
+import ScoringRules from '../../lib/intelligence/scoring-rules';
 
 export const controllerBuildsDeck = () => {
     return {
@@ -106,7 +106,7 @@ export const awardHisHeels = ( person, pegIndex ) => {
 
 export const setScore = ( hand, cutCard, actionType ) => {
     let type;
-    const intel = new Intelligence( hand, cutCard );
+    const rules = new ScoringRules( hand, cutCard );
         if ( 'playerScores' === actionType ) {
             type = CONTROLLER_SCORES_PLAYER;
         } else if ( 'opponentScores' === actionType ) {
@@ -116,7 +116,7 @@ export const setScore = ( hand, cutCard, actionType ) => {
         }
     return {
         type,
-        score: intel.getScore()
+        score: rules.getScore()
     }
 };
 

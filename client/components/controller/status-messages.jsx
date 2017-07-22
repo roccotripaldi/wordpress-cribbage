@@ -12,7 +12,6 @@ import ScoreDetailWindow from './score-detail-window';
 import AcceptScoreButton from './accept-score-button';
 import { getScore } from 'state/selectors/game';
 import { resetDeck, resetGame } from 'state/actions/controller';
-import { acceptScore } from 'state/actions/player';
 
 class StatusMessage extends Component {
     constructor( props ) {
@@ -87,14 +86,14 @@ class StatusMessage extends Component {
     }
 
     render() {
-        const { winner, nextAppointment, dealer, player, opponent, playerInitialDraw, opponentInitialDraw } = this.props;
+        const { winningPerson, nextAppointment, dealer, player, opponent, playerInitialDraw, opponentInitialDraw } = this.props;
         let person, otherPerson, status;
         if ( this.props.paused ) {
             return <p>Game is paused.</p>;
         }
         switch( nextAppointment ) {
             case 'gameComplete':
-                status = ( 'Player' === winner ) ? 'You win!' : 'Your opponent wins!';
+                status = ( 'Player' === winningPerson ) ? 'You win!' : 'Your opponent wins!';
                 return (
                     <div>
                         <p>{ status }</p>
@@ -193,5 +192,5 @@ export default connect(
             opponentsHandScores: getScore( state, 'opponentsHandScore' )
         }
     },
-    { resetDeck, resetGame, acceptScore }
+    { resetDeck, resetGame }
 )( StatusMessage );

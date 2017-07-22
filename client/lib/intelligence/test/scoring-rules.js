@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import Intelligence from '../index';
+import ScoringRules from '../scoring-rules';
 import { buildCard } from '../../deck/index';
 
 const cutCard = buildCard( '3', 'Clubs' );
@@ -11,28 +11,28 @@ const defaultHand = [
     buildCard( 'Jack', 'Clubs' )
 ];
 
-describe( 'Intelligence', () => {
+describe( 'ScoringRules', () => {
 
    describe( 'constructor()', () => {
       it( 'should accept a hand and a cut card property', () => {
-         const intel = new Intelligence( defaultHand, cutCard );
-         expect( intel.cutCard ).to.deep.equal( cutCard );
-         expect( intel.hand ).to.deep.equal( defaultHand );
+         const rules = new ScoringRules( defaultHand, cutCard );
+         expect( rules.cutCard ).to.deep.equal( cutCard );
+         expect( rules.hand ).to.deep.equal( defaultHand );
       } );
    } );
    
    describe( 'generateCardCombination()', () => {
       it( 'should return cards from the hand', () => {
-         const intel = new Intelligence( defaultHand, cutCard ),
-             combo = intel.generateCardCombination( [ 0, 4 ] );
+         const rules = new ScoringRules( defaultHand, cutCard ),
+             combo = rules.generateCardCombination( [ 0, 4 ] );
          expect( combo ).to.deep.equal( [ buildCard( '5', 'Clubs' ), buildCard( '3', 'Clubs' ) ] );
       } );
    } );
 
    describe( 'generateCardCombinations()', () => {
       it( 'should return multiple combinations from the hand', () => {
-         const intel = new Intelligence( defaultHand, cutCard ),
-             combos = intel.generateCardCombinations( [ [0,1,2], [3,4] ] ),
+         const rules = new ScoringRules( defaultHand, cutCard ),
+             combos = rules.generateCardCombinations( [ [0,1,2], [3,4] ] ),
              expectedMatch = [
                 [ buildCard( '5', 'Clubs' ), buildCard( '4', 'Clubs' ), buildCard( '6', 'Clubs' ) ],
                 [ buildCard( 'Jack', 'Clubs' ), buildCard( '3', 'Clubs' ) ]
@@ -48,7 +48,7 @@ describe( 'Intelligence', () => {
             buildCard( '3', 'Clubs' ),
             buildCard( '4', 'Hearts' )
          ];
-         expect( Intelligence.isSequential( cards ) ).to.be.true;
+         expect( ScoringRules.isSequential( cards ) ).to.be.true;
       } );
 
       it( 'should return true for a group of sequential cards in descending order', () => {
@@ -57,7 +57,7 @@ describe( 'Intelligence', () => {
             buildCard( '8', 'Clubs' ),
             buildCard( '7', 'Hearts' )
          ];
-         expect( Intelligence.isSequential( cards ) ).to.be.true;
+         expect( ScoringRules.isSequential( cards ) ).to.be.true;
       } );
 
       it( 'should return true for a group of sequential cards in random order', () => {
@@ -68,7 +68,7 @@ describe( 'Intelligence', () => {
             buildCard( 'Jack', 'Hearts' ),
             buildCard( '10', 'Hearts' )
          ];
-         expect( Intelligence.isSequential( cards ) ).to.be.true;
+         expect( ScoringRules.isSequential( cards ) ).to.be.true;
       } );
       it( 'should return false for a group of non-sequential cards', () => {
          const cards = [
@@ -76,7 +76,7 @@ describe( 'Intelligence', () => {
             buildCard( '3', 'Clubs' ),
             buildCard( '8', 'Hearts' )
          ];
-         expect( Intelligence.isSequential( cards ) ).to.be.false;
+         expect( ScoringRules.isSequential( cards ) ).to.be.false;
       } );
    } );
    describe( 'isSumFifteen()', () => {
@@ -86,7 +86,7 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Clubs' ),
             buildCard( '4', 'Hearts' )
          ];
-         expect( Intelligence.isSumFifteen( cards ) ).to.be.true;
+         expect( ScoringRules.isSumFifteen( cards ) ).to.be.true;
       } );
 
       it( 'should return false for cards that do not add to exactly fifteen', () => {
@@ -95,7 +95,7 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Clubs' ),
             buildCard( '8', 'Hearts' )
          ];
-         expect( Intelligence.isSumFifteen( cards ) ).to.be.false;
+         expect( ScoringRules.isSumFifteen( cards ) ).to.be.false;
       } );
    } );
    describe( 'getFifteensScore()', () => {
@@ -106,15 +106,15 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             fifteensScore = intel.getFifteensScore();
+             rules = new ScoringRules( hand, cutCard ),
+             fifteensScore = rules.getFifteensScore();
 
          expect( fifteensScore.score ).to.equal( 2 );
          expect( fifteensScore.cards ).to.deep.equal( [ hand.concat( cutCard ) ] );
       } );
       it( 'should return a score of 4 for a hand with multiple fifteens', () => {
-         const intel = new Intelligence( defaultHand, cutCard ),
-             fifteensScore = intel.getFifteensScore(),
+         const rules = new ScoringRules( defaultHand, cutCard ),
+             fifteensScore = rules.getFifteensScore(),
              expectedMatch = [
                 [ buildCard( '5', 'Clubs' ), buildCard( 'Jack', 'Clubs' ) ],
                 [ buildCard( '5', 'Clubs' ), buildCard( '4', 'Clubs' ), buildCard( '6', 'Clubs' ) ]
@@ -129,16 +129,16 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             fifteensScore = intel.getFifteensScore();
+             rules = new ScoringRules( hand, cutCard ),
+             fifteensScore = rules.getFifteensScore();
          expect( fifteensScore.score ).to.equal( 0 );
          expect( fifteensScore.cards ).to.deep.equal( [] );
       } );
    } );
    describe( 'getRightJackScore()', () => {
       it( 'should return 1 if hand contains a jack of same suit as cut card', () => {
-         const intel = new Intelligence( defaultHand, cutCard );
-         expect( intel.getRightJackScore() ).to.equal( 1 );
+         const rules = new ScoringRules( defaultHand, cutCard );
+         expect( rules.getRightJackScore() ).to.equal( 1 );
       } );
       it( 'should return 0 if hand contains a jack of different suit as cut card', () => {
          const hand = [
@@ -147,8 +147,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard );
-         expect( intel.getRightJackScore() ).to.equal( 0  );
+             rules = new ScoringRules( hand, cutCard );
+         expect( rules.getRightJackScore() ).to.equal( 0  );
       } );
       it( 'should return 0 if hand contains no jacks', () => {
          const hand = [
@@ -157,8 +157,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard );
-         expect( intel.getRightJackScore() ).to.equal( 0  );
+             rules = new ScoringRules( hand, cutCard );
+         expect( rules.getRightJackScore() ).to.equal( 0  );
       } );
    } );
    describe( 'getPairsScore()', () => {
@@ -169,8 +169,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             pairScore = intel.getPairsScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             pairScore = rules.getPairsScore(),
              expectedMatch = [
                [ buildCard( '3', 'Hearts' ), cutCard ]
              ];
@@ -184,8 +184,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             pairScore = intel.getPairsScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             pairScore = rules.getPairsScore(),
              expectedMatch = [
                  [ buildCard( '3', 'Hearts' ), cutCard ],
                  [ buildCard( '2', 'Clubs' ), buildCard( '2', 'Hearts' ) ]
@@ -200,8 +200,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             pairScore = intel.getPairsScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             pairScore = rules.getPairsScore(),
              expectedMatch = [
                  [ buildCard( '3', 'Hearts' ), buildCard( '3', 'Diamonds' ) ],
                  [ buildCard( '3', 'Hearts' ), cutCard ],
@@ -217,8 +217,8 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '3', 'Spades' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             pairScore = intel.getPairsScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             pairScore = rules.getPairsScore(),
              expectedMatch = [
                 [ buildCard( '3', 'Hearts' ), buildCard( '3', 'Diamonds' ) ],
                 [ buildCard( '3', 'Hearts' ), buildCard( '3', 'Spades' ) ],
@@ -231,8 +231,8 @@ describe( 'Intelligence', () => {
          expect( pairScore.cards ).to.deep.equal( expectedMatch );
       } );
       it( 'should return 0 for a hand with no pairs', () => {
-         const intel = new Intelligence( defaultHand, cutCard ),
-             pairsScore = intel.getPairsScore();
+         const rules = new ScoringRules( defaultHand, cutCard ),
+             pairsScore = rules.getPairsScore();
          expect( pairsScore.score ).to.equal( 0 );
          expect( pairsScore.cards ).to.deep.equal( [] );
       } )
@@ -245,15 +245,15 @@ describe( 'Intelligence', () => {
             buildCard( 'Ace', 'Hearts' ),
             buildCard( '2', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [ hand.concat( cutCard ) ];
          expect( runScore.score ).to.equal( 5 );
          expect( runScore.cards ).to.deep.equal( expectedMatch );
       } );
       it( 'should return a score of 4, and matching cards for a hand with a four card run', () => {
-         const intel = new Intelligence( defaultHand, cutCard ),
-             runScore = intel.getRunScore(),
+         const rules = new ScoringRules( defaultHand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [
                  [ buildCard( '5', 'Clubs' ), buildCard( '4', 'Clubs' ), buildCard( '6', 'Clubs' ), cutCard ]
              ];
@@ -267,8 +267,8 @@ describe( 'Intelligence', () => {
             buildCard( '6', 'Hearts' ),
             buildCard( '3', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [
                 [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Clubs' ), buildCard( '6', 'Hearts' ), buildCard( '3', 'Hearts' ) ],
                 [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Clubs' ), buildCard( '6', 'Hearts' ), cutCard ]
@@ -283,8 +283,8 @@ describe( 'Intelligence', () => {
             buildCard( '4', 'Hearts' ),
             buildCard( 'Queen', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Clubs' ), cutCard ],
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ), cutCard ]
@@ -299,8 +299,8 @@ describe( 'Intelligence', () => {
             buildCard( '4', 'Hearts' ),
             buildCard( '4', 'Diamonds' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Clubs' ), cutCard ],
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ), cutCard ],
@@ -316,8 +316,8 @@ describe( 'Intelligence', () => {
             buildCard( '4', 'Hearts' ),
             buildCard( '4', 'Diamonds' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore(),
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore(),
              expectedMatch = [
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ), cutCard ],
                  [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Diamonds' ), cutCard ],
@@ -334,8 +334,8 @@ describe( 'Intelligence', () => {
             buildCard( '10', 'Hearts' ),
             buildCard( '10', 'Diamonds' )
          ],
-             intel = new Intelligence( hand, cutCard ),
-             runScore = intel.getRunScore();
+             rules = new ScoringRules( hand, cutCard ),
+             runScore = rules.getRunScore();
          expect( runScore.score ).to.equal( 0 );
          expect( runScore.cards ).to.deep.equal( [] );
       } );
@@ -348,8 +348,8 @@ describe( 'Intelligence', () => {
             buildCard( '5', 'Clubs' ),
             buildCard( '8', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard );
-         expect( intel.getFlushScore() ).to.equal( 0 );
+             rules = new ScoringRules( hand, cutCard );
+         expect( rules.getFlushScore() ).to.equal( 0 );
       } );
       it( 'should return 4 for a 4 card flush ', () => {
          const hand = [
@@ -358,12 +358,12 @@ describe( 'Intelligence', () => {
             buildCard( '5', 'Hearts' ),
             buildCard( '8', 'Hearts' )
          ],
-             intel = new Intelligence( hand, cutCard );
-         expect( intel.getFlushScore() ).to.equal( 4 );
+             rules = new ScoringRules( hand, cutCard );
+         expect( rules.getFlushScore() ).to.equal( 4 );
       } );
       it( 'should return 5 for a 4 card flush that matches the suit of the cut card', () => {
-         const intel = new Intelligence( defaultHand, cutCard );
-         expect( intel.getFlushScore() ).to.equal( 5 );
+         const rules = new ScoringRules( defaultHand, cutCard );
+         expect( rules.getFlushScore() ).to.equal( 5 );
       } );
    } );
    describe( 'getScore()', () => {
@@ -374,8 +374,8 @@ describe( 'Intelligence', () => {
             buildCard( '5', 'Hearts' ),
             buildCard( '5', 'Spades' )
          ],
-             intel = new Intelligence( hand, buildCard( '5', 'Diamonds' ) ),
-             score = intel.getScore();
+             rules = new ScoringRules( hand, buildCard( '5', 'Diamonds' ) ),
+             score = rules.getScore();
          expect( score.score ).to.equal( 29 );
          expect( score.fifteens.score ).to.equal( 16 );
          expect( score.rightJack ).to.equal( 1 );
@@ -390,8 +390,8 @@ describe( 'Intelligence', () => {
             buildCard( '3', 'Hearts' ),
             buildCard( '9', 'Spades' )
          ],
-             intel = new Intelligence( hand, buildCard( 'King', 'Hearts' ) );
-         expect( intel.getScore().score ).to.equal( 0 );
+             rules = new ScoringRules( hand, buildCard( 'King', 'Hearts' ) );
+         expect( rules.getScore().score ).to.equal( 0 );
       } );
    } );
 } );

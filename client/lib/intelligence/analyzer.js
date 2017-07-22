@@ -1,5 +1,5 @@
 import { buildDeck } from '../deck/index';
-import Intelligence from './index';
+import ScoringRules from './scoring-rules';
 
 const fourCardHandsFromSixCards = [
     [0,1,2,3],[0,1,2,4],[0,1,2,5],[0,1,3,4],[0,1,3,5],[0,1,4,5],
@@ -46,10 +46,10 @@ export default class Analyzer {
 
     addScoreToPotentialHand( card ) {
         this.potentialHands.forEach( ( potentialHand ) => {
-            const intel = new Intelligence( potentialHand.cards, card );
+            const rules = new ScoringRules( potentialHand.cards, card );
             potentialHand.scores.push( {
                 card,
-                score: intel.getScore().score
+                score: rules.getScore().score
             } );
         } );
     }
