@@ -3,11 +3,12 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 /**
  * Internal Dependencies
 */
 import Card from 'components/ui/card';
-import { getDeck, getCutCard, getDealer } from 'state/selectors/game';
+import { getDeck, getCutCard, getDealer, isPegging } from 'state/selectors/game';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDraws } from 'state/actions/player';
 import { selectRandomCutCard } from 'state/actions/controller';
@@ -16,8 +17,7 @@ class Deck extends Component {
     handleClick = ( event ) => {
         event.preventDefault();
 
-        if ( this.props.paused ) {
-            console.log( 'No action when game is paused.' );
+        if ( ! this.canClick() ) {
             return;
         }
 
@@ -30,6 +30,13 @@ class Deck extends Component {
             this.props.selectRandomCutCard( this.props.deck, this.props.dealer );
         }
     };
+
+    canClick() {
+        return (
+            ! this.props.paused &&
+            ( 'awaitDraw' === this.props.nextAppointment || 'playerCuts' === this.props.nextAppointment )
+        );
+    }
 
     renderCards() {
         let cutCard = null, deckIndex = 0;
@@ -46,8 +53,9 @@ class Deck extends Component {
     }
 
     render() {
+        const classes = classNames( { deck: true, 'is-pegging': this.props.pegging, clickable: this.canClick() } );
         return (
-            <div className="deck" onClick={ this.handleClick }>
+            <div className={ classes } onClick={ this.handleClick }>
                 { this.renderCards() }
             </div>
         );
@@ -61,7 +69,8 @@ export default connect(
             nextAppointment: getNextAppointment( state ),
             paused: isPaused( state ),
             cutCard: getCutCard( state ),
-            dealer: getDealer( state )
+            dealer: getDealer( state ),
+            pegging: isPegging( state )
         }
     },
     {

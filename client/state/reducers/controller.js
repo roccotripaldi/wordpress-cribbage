@@ -51,13 +51,13 @@ const controller = ( state = defaultState, action ) => {
         case CONTROLLER_SCORES_PLAYER:
             return Object.assign( {}, state, { nextAppointment: 'playerAcceptsOwnScore' } );
         case CONTROLLER_HIS_HEALS:
-            nextAppointment = ( action.person === 'Player' ) ? 'opponentScores' : 'playerScores';
+            nextAppointment = ( action.person === 'Player' ) ? 'opponentPlays' : 'playerPlays';
             return Object.assign( {}, state, { nextAppointment } );
         case CONTROLLER_CUT_CARD:
             if ( action.card.name === 'Jack' ) {
                 nextAppointment = 'awardHisHeels';
             } else {
-                nextAppointment = ( action.dealer === 'Player' ) ? 'opponentScores' : 'playerScores';
+                nextAppointment = ( action.dealer === 'Player' ) ? 'opponentPlays' : 'playerPlays';
             }
             return Object.assign( {}, state, { nextAppointment } );
         case OPPONENT_DISCARDS:

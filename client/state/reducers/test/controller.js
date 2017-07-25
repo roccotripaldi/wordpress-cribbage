@@ -125,27 +125,27 @@ describe( 'Controller Reducer', () => {
             state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Opponent', card } );
         expect( state.nextAppointment ).to.equal( 'awardHisHeels' );
     } );
-    it( 'should calculate players score if opponent is dealer and a jack is not drawn', () => {
+    it( 'should await play from player if opponent is dealer and a jack is not drawn', () => {
         const initialState = { nextAppointment: 'playerCuts' },
             card = buildCard( '10', 'Hearts' ),
             state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Opponent', card } );
-        expect( state.nextAppointment ).to.equal( 'playerScores' );
+        expect( state.nextAppointment ).to.equal( 'playerPlays' );
     } );
-    it( 'should calculate opponents score if player is dealer and a jack is not drawn', () => {
+    it( 'should await play from opponent if player is dealer and a jack is not drawn', () => {
         const initialState = { nextAppointment: 'playerCuts' },
             card = buildCard( '10', 'Hearts' ),
             state = controller( initialState, { type: CONTROLLER_CUT_CARD, dealer: 'Player', card } );
-        expect( state.nextAppointment ).to.equal( 'opponentScores' );
+        expect( state.nextAppointment ).to.equal( 'opponentPlays' );
     } );
-    it( 'should calculate opponents score after his heels if player is person', () => {
+    it( 'should await play from opponent score after his heels if player is person', () => {
         const initialState = { nextAppointment: 'awardHisHeels' },
             state = controller( initialState, { type: CONTROLLER_HIS_HEALS, person: 'Player' } );
-        expect( state.nextAppointment ).to.equal( 'opponentScores' );
+        expect( state.nextAppointment ).to.equal( 'opponentPlays' );
     } );
-    it( 'should calculate player score after his heels if opponent is person', () => {
+    it( 'should await play from player after his heels if opponent is person', () => {
         const initialState = { nextAppointment: 'awardHisHeels' },
             state = controller( initialState, { type: CONTROLLER_HIS_HEALS, person: 'Opponent' } );
-        expect( state.nextAppointment ).to.equal( 'playerScores' );
+        expect( state.nextAppointment ).to.equal( 'playerPlays' );
     } );
     it( 'should await acceptance after scoring player', () => {
         const initialState = { nextAppointment: 'playerScores' },

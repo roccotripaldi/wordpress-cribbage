@@ -88,6 +88,20 @@ body {
   }
 }
 
+.indentation {
+  border-left: 1px solid darkgreen;
+  border-top: 1px solid darkgreen;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  .indentation-inner {
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid green;
+    border-bottom: 1px solid green;
+    background: url( '../images/dark-green-pattern-bg.gif');
+  }
+}
+
 .hand {
   width: 480px;
   position: absolute;
@@ -137,10 +151,7 @@ body {
     left: 520px;
     width: 192px;
     height: 130px;
-    border-left: 1px solid darkgreen;
-    border-top: 1px solid darkgreen;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
+
     img {
       top: 14px;
       left: 10px;
@@ -160,11 +171,6 @@ body {
     .crib__cards {
       width: 190px;
       height: 128px;
-      border-left: 1px solid black;
-      border-top: 1px solid black;
-      border-right: 1px solid green;
-      border-bottom: 1px solid green;
-      background: url( '../images/dark-green-pattern-bg.gif');
     }
   }
   .button {
@@ -227,6 +233,9 @@ body {
     height: 106px;
     left: 70px;
     top: 21px;
+    -webkit-transition: left 0.5s, top 0.5s;
+    -moz-transition: left 0.5s, top 0.5s;
+    transition: left 0.5s, top 0.5s;
     img {
       -webkit-transition: left 0.5s;
       -moz-transition: left 0.5s;
@@ -240,6 +249,13 @@ body {
       &.card2 {
         left: 0;
       }
+    }
+    &.is-pegging {
+      top: 210px;
+      left: 0;
+    }
+    &.clickable {
+      cursor: pointer;
     }
   }
 }
@@ -371,4 +387,16 @@ body {
 
 .red {
   color: red;
+}
+
+.pegging-cards {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 150px;
+  .indentation-inner {
+    width: 278px;
+    height: 148px;
+  }
 }

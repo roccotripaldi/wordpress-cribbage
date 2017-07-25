@@ -2,6 +2,7 @@
  * Internal Dependencies
  */
 import {
+    CONTROLLER_CUT_CARD,
     CONTROLLER_RESET_GAME,
     OPPONENT_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
@@ -15,14 +16,18 @@ import {
 
 export const defaultState = {
     hand: [],
+    peggingHand: [],
     crib: [],
     score: 0,
+    pegScore: {},
     initialDraw: []
 };
 
 const opponent = ( state = defaultState, action ) => {
     let hand, newState, newCrib;
     switch ( action.type ) {
+        case CONTROLLER_CUT_CARD:
+            return Object.assign( {}, state, { peggingHand: state.hand.slice(0) } );
         case CONTROLLER_HIS_HEALS:
         case PLAYER_ACCEPTS_CRIB_SCORE:
             if ( action.person === 'Opponent' ) {

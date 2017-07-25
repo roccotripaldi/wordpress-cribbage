@@ -83,8 +83,8 @@ class Hand extends Component {
         }
 
         return (
-            <div className="crib">
-                <div className="crib__cards">
+            <div className="crib indentation">
+                <div className="crib__cards indentation-inner">
                     { crib.map( ( card, index ) => {
                         return (
                             <Card
@@ -112,12 +112,19 @@ class Hand extends Component {
     }
 
     renderCards() {
-        const { hand, initialDraw } = this.props.player;
+        const { hand, initialDraw, peggingHand } = this.props.player;
         let cards, onClick = null, selected = false;
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
-        cards = isEmpty( hand ) ? initialDraw : hand;
+
+        if( isEmpty( hand ) ) {
+            cards = initialDraw;
+        } else if ( isEmpty( peggingHand ) ) {
+            cards = hand;
+        } else {
+            cards = peggingHand;
+        }
 
         if (
             'Player' === this.props.type &&

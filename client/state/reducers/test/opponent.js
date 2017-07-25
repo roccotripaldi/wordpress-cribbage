@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { buildCard } from '../../../lib/deck';
 import opponent, { defaultState } from '../opponent';
 import {
+    CONTROLLER_CUT_CARD,
     CONTROLLER_RESET_GAME,
     OPPONENT_INITIAL_DRAW,
     CONNTROLLER_RESET_DECK,
@@ -130,5 +131,16 @@ describe( 'Opponent Reducer', () => {
         const initialState = { score: 10 },
             state = opponent( initialState, { type: CONTROLLER_HIS_HEALS, points: 2, person: 'Player' } );
         expect( state.score ).to.equal( 10 );
+    } );
+    it( 'should clone hand to pegging hand after cut card', () => {
+        const hand = [
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( '2', 'Diamonds' ),
+                buildCard( '5', 'Diamonds' ),
+                buildCard( '8', 'Clubs' )
+            ],
+            initialState = { hand },
+            state = opponent( initialState, { type: CONTROLLER_CUT_CARD } );
+        expect( state.peggingHand ).to.deep.equal( hand );
     } );
 } );

@@ -27,3 +27,15 @@ export const getScore = ( state, type ) => {
 export const getWinner = ( state ) => {
     return get( state, 'game.winner' );
 }
+
+export const getPeggingCards = ( state ) => {
+    return get( state, 'game.peggingCards' );
+};
+
+export const isPegging = ( state ) => {
+    return (
+        ! isEmpty( state.game.peggingCards ) ||
+        ! isEmpty( state.player.peggingHand ) ||
+        ! isEmpty( state.opponent.peggingHand )
+    );
+};

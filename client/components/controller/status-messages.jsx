@@ -132,6 +132,10 @@ class StatusMessage extends Component {
                 }
                 return <p>Calculating { person } score...</p>;
 
+            case 'opponentPlays':
+            case 'playerPlays':
+                return <p>Play round!</p>;
+
             case 'awardHisHeels':
                 person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';
                 otherPerson = ( 'Opponent' === dealer ) ? 'your opponent' : 'you';

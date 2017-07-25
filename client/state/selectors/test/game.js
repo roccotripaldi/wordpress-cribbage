@@ -1,7 +1,16 @@
 import { expect } from 'chai';
 
 import { defaultState as state } from './fixtures';
-import { getDeck, isInitialized, getDealer, getCutCard, getScore, getWinner } from '../game';
+import {
+    getDeck,
+    isInitialized,
+    getDealer,
+    getCutCard,
+    getScore,
+    getWinner,
+    getPeggingCards,
+    isPegging
+} from '../game';
 import { buildCard } from '../../../lib/deck';
 
 describe( 'Game Selector', () => {
@@ -53,6 +62,48 @@ describe( 'Game Selector', () => {
         it( 'should get the winner', () => {
             const winner = getWinner( { game: { winner: 'Player' } } );
             expect( winner ).to.equal( 'Player' );
+        } );
+    } );
+
+    describe( 'getPeggingCards()', () => {
+        it( 'should get pegging cards', () => {
+            const cards = getPeggingCards( { game: { peggingCards: [] } } );
+            expect( cards ).to.deep.equal( [] );
+        } );
+    } );
+
+    describe( 'isPegging()', () => {
+        it( 'should be true if pegging cards are not empty', () => {
+            const pegging = isPegging( {
+                player: { peggingHand: [] },
+                opponent: { peggingHand: [] },
+                game: { peggingCards: [ 1, 2 ] }
+            } );
+            expect( pegging ).to.be.true;
+        } );
+        it( 'should be true if opponent has pegging cards', () => {
+            const pegging = isPegging( {
+                player: { peggingHand: [] },
+                opponent: { peggingHand: [ 1, 2 ] },
+                game: { peggingCards: [] }
+            } );
+            expect( pegging ).to.be.true;
+        } );
+        it( 'should be true if player has pegging cards', () => {
+            const pegging = isPegging( {
+                player: { peggingHand: [ 1, 2 ] },
+                opponent: { peggingHand: [] },
+                game: { peggingCards: [] }
+            } );
+            expect( pegging ).to.be.true;
+        } );
+        it( 'should be false if all of the above are empty', () => {
+            const pegging = isPegging( {
+                player: { peggingHand: [] },
+                opponent: { peggingHand: [] },
+                game: { peggingCards: [] }
+            } );
+            expect( pegging ).to.be.false;
         } );
     } );
 } );
