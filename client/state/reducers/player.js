@@ -19,7 +19,6 @@ export const defaultState = {
     peggingHand: [],
     crib: [],
     score: 0,
-    pegScore: {},
     initialDraw: []
 };
 

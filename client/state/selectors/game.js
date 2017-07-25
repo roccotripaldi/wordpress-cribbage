@@ -39,3 +39,18 @@ export const isPegging = ( state ) => {
         ! isEmpty( state.opponent.peggingHand )
     );
 };
+
+export const getPlayValue = ( state ) => {
+    return getPeggingCards( state ).reduce( ( sum, card ) => {
+        if ( card ) {
+            return sum + card.value;
+        }
+        return sum;
+    }, 0 );
+};
+
+export const getPlaySequence = ( state ) => {
+    return getPeggingCards( state ).filter( ( card ) => {
+        return !!( card );
+    } );
+};

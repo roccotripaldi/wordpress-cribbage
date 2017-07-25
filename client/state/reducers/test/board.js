@@ -7,7 +7,8 @@ import {
     CONTROLLER_HIS_HEALS,
     PLAYER_ACCEPTS_CRIB_SCORE,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
-    PLAYER_ACCEPTS_OWN_SCORE
+    PLAYER_ACCEPTS_OWN_SCORE,
+    OPPONENT_PLAYS
 } from '../../action-types';
 
 describe( 'Board Reducer', () => {
@@ -63,5 +64,10 @@ describe( 'Board Reducer', () => {
         const initialState= { Player: [ 30, 42 ] },
             state = board( initialState, { type: PLAYER_ACCEPTS_CRIB_SCORE, points: 0, person: 'Player', pegIndex: 0 } );
         expect( state ).to.deep.equal( { Player: [ 30, 42 ] } );
+    } );
+    it( 'should award points when opponent scores during play', () => {
+        const initialState= { Opponent: [ 30, 42 ] },
+            state = board( initialState, { type: OPPONENT_PLAYS, points: 2, person: 'Opponent', pegIndex: 0 } );
+        expect( state ).to.deep.equal( { Opponent: [ 44, 42 ] } );
     } );
 } );

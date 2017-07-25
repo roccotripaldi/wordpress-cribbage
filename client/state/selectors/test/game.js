@@ -9,7 +9,9 @@ import {
     getScore,
     getWinner,
     getPeggingCards,
-    isPegging
+    isPegging,
+    getPlayValue,
+    getPlaySequence
 } from '../game';
 import { buildCard } from '../../../lib/deck';
 
@@ -104,6 +106,56 @@ describe( 'Game Selector', () => {
                 game: { peggingCards: [] }
             } );
             expect( pegging ).to.be.false;
+        } );
+    } );
+    describe( 'getPlayValue()', () => {
+        it( 'should return the accumulative value of pegging cards', () => {
+            const value = getPlayValue( {
+                game: { peggingCards: [
+                    buildCard( '5', 'Diamonds' ),
+                    buildCard( '6', 'Spades' )
+                ] }
+            } );
+            expect( value ).to.equal( 11 );
+        } );
+        it( 'should not skip null values', () => {
+            const value = getPlayValue( {
+                game: { peggingCards: [
+                    null,
+                    null,
+                    buildCard( 'Jack', 'Spades' ),
+                    buildCard( 'Queen', 'Diamonds' ),
+                    buildCard( '4', 'Hearts' )
+                ] }
+            } );
+            expect( value ).to.equal( 24 );
+        } );
+    } );
+    describe( 'getPlaySequence()', () => {
+        it( 'should return the pegging cards', () => {
+            const peggingCards = [
+                buildCard( 'Jack', 'Spades' ),
+                buildCard( 'Queen', 'Diamonds' ),
+                buildCard( '4', 'Hearts' )
+            ],
+                sequence = getPlaySequence( { game: { peggingCards } } );
+            expect( sequence ).to.deep.equal( peggingCards );
+        } );
+        it( 'should return ignore null values', () => {
+            const expected = [
+                    buildCard( 'Jack', 'Spades' ),
+                    buildCard( 'Queen', 'Diamonds' ),
+                    buildCard( '4', 'Hearts' )
+                ],
+                peggingCards = [
+                    null,
+                    null,
+                    buildCard( 'Jack', 'Spades' ),
+                    buildCard( 'Queen', 'Diamonds' ),
+                    buildCard( '4', 'Hearts' )
+                ],
+                sequence = getPlaySequence( { game: { peggingCards } } );
+            expect( sequence ).to.deep.equal( expected );
         } );
     } );
 } );

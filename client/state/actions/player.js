@@ -12,9 +12,12 @@ import {
     OPPONENT_DISCARDS,
     PLAYER_ACCEPTS_CRIB_SCORE,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
-    PLAYER_ACCEPTS_OWN_SCORE
+    PLAYER_ACCEPTS_OWN_SCORE,
+    OPPONENT_PLAYS
 } from '../action-types';
 import DiscardAI from '../../lib/intelligence/discard-ai';
+import PeggingAI from '../../lib/intelligence/pegging-ai';
+import { getPegScore } from '../../lib/intelligence/pegging-rules';
 
 export const playerDraws = ( card ) => {
     return {
@@ -56,6 +59,25 @@ export const opponentDiscards = ( hand, dealer ) => {
         dealer,
         cardIndexes: discardIndexes
     }
+};
+
+export const opponentPlays = ( playValue, sequence, hand, pegIndex ) => {
+    const ai = new PeggingAI( hand, sequence );
+    let card, currentPlay;
+    if ( playValue === 0 ) {
+        card = ai.playFirstCard();
+    } else {
+        card = ai.playCard();
+    }
+    currentPlay = getPegScore( card, sequence );
+    return {
+        type: OPPONENT_PLAYS,
+        card,
+        currentPlay,
+        points: currentPlay.score,
+        person: 'Opponent',
+        pegIndex
+    };
 };
 
 export const acceptScore = ( points, actionType, dealer, pegIndex ) => {

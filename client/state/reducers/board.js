@@ -6,7 +6,8 @@ import {
     CONTROLLER_HIS_HEALS,
     PLAYER_ACCEPTS_CRIB_SCORE,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
-    PLAYER_ACCEPTS_OWN_SCORE
+    PLAYER_ACCEPTS_OWN_SCORE,
+    OPPONENT_PLAYS
 } from '../action-types';
 
 export const defaultState = {
@@ -17,6 +18,7 @@ export const defaultState = {
 const board = (state = defaultState, action) => {
     let newArray, score;
     switch (action.type) {
+        case OPPONENT_PLAYS:
         case PLAYER_ACCEPTS_CRIB_SCORE:
         case PLAYER_ACCEPTS_OWN_SCORE:
         case PLAYER_ACCEPTS_OPPONENTS_SCORE:

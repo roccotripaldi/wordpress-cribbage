@@ -10,7 +10,7 @@ import CardSymbol from 'components/ui/card-symbol';
 import Button from 'components/ui/button';
 import ScoreDetailWindow from './score-detail-window';
 import AcceptScoreButton from './accept-score-button';
-import { getScore } from 'state/selectors/game';
+import { getScore, getPlayValue } from 'state/selectors/game';
 import { resetDeck, resetGame } from 'state/actions/controller';
 
 class StatusMessage extends Component {
@@ -85,6 +85,21 @@ class StatusMessage extends Component {
         return <Button onClick={ this.handleNextHand }>Deal Next Hand</Button>
     }
 
+    renderPlayValue() {
+        return <p>Play Value: { this.props.playValue }</p>
+    }
+
+    renderLastPlay() {
+        return null;
+    }
+
+    renderNextPlay( nextAppointment ) {
+        const message = ( 'playerPlays' === nextAppointment ) ?
+            'Select a card to play.' :
+            'Waiting for opponent to play.';
+        return <p>{ message }</p>;
+    }
+
     render() {
         const { winningPerson, nextAppointment, dealer, player, opponent, playerInitialDraw, opponentInitialDraw } = this.props;
         let person, otherPerson, status;
@@ -134,7 +149,13 @@ class StatusMessage extends Component {
 
             case 'opponentPlays':
             case 'playerPlays':
-                return <p>Play round!</p>;
+                return (
+                    <div>
+                        { this.renderPlayValue() }
+                        { this.renderLastPlay() }
+                        { this.renderNextPlay( nextAppointment ) }
+                    </div>
+                );
 
             case 'awardHisHeels':
                 person = ( 'Opponent' === dealer ) ? 'You' : 'Your opponent';
@@ -193,7 +214,8 @@ export default connect(
         return {
             playersHandScores: getScore( state, 'playersHandScore' ),
             cribScores: getScore( state, 'cribScore' ),
-            opponentsHandScores: getScore( state, 'opponentsHandScore' )
+            opponentsHandScores: getScore( state, 'opponentsHandScore' ),
+            playValue: getPlayValue( state )
         }
     },
     { resetDeck, resetGame }

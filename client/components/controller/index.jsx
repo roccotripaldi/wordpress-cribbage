@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
  */
 import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
-import { opponentDraws, opponentDiscards } from 'state/actions/player';
-import { getDeck, getDealer, getCutCard } from 'state/selectors/game';
+import { opponentDraws, opponentDiscards, opponentPlays } from 'state/actions/player';
+import { getDeck, getDealer, getCutCard, getPlayValue, getPlaySequence } from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
 import {
     getPlayerInitialDraw,
@@ -91,6 +91,14 @@ class Controller extends Component {
                 pegIndex = ( this.props.dealer === 'Player' ) ? this.props.playersLowestPeg : this.props.opponentsLowestPeg;
                 this.props.awardHisHeels( this.props.dealer, pegIndex );
                 break;
+            case 'opponentPlays':
+                this.props.opponentPlays(
+                    this.props.playValue,
+                    this.props.sequence,
+                    this.props.opponent.peggingHand,
+                    this.props.opponentsLowestPeg
+                );
+                break;
             case 'playerScores':
             case 'opponentScores':
             case 'cribScores':
@@ -142,7 +150,9 @@ export default connect(
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
             opponentsLowestPeg: getLowestPegForPerson( state, 'Opponent' ),
             cutCard: getCutCard( state ),
-            winningPerson: calculateWinner( state )
+            winningPerson: calculateWinner( state ),
+            playValue: getPlayValue( state ),
+            sequence: getPlaySequence( state )
         }
     },
     {
@@ -157,6 +167,7 @@ export default connect(
         selectRandomCutCard,
         awardHisHeels,
         setScore,
-        gameComplete
+        gameComplete,
+        opponentPlays
     }
 )( Controller );

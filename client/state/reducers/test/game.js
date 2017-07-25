@@ -16,7 +16,8 @@ import {
     CONTROLLER_SCORES_OPPONENT,
     CONTROLLER_SCORES_PLAYER,
     CONTROLLER_SCORES_CRIB,
-    CONTROLLER_GAME_COMPLETE
+    CONTROLLER_GAME_COMPLETE,
+    OPPONENT_PLAYS
 } from '../../action-types';
 
 describe( 'Game Reducer', () => {
@@ -93,5 +94,17 @@ describe( 'Game Reducer', () => {
     it ( 'should set the winner', () => {
         const state = game( {}, { type: CONTROLLER_GAME_COMPLETE, winner: 'Player' } );
         expect( state.winner ).to.equal( 'Player' );
+    } );
+    it( 'should set current play after opponent plays', () => {
+        const initialState = { currentPlay: {}, peggingCards: [] },
+            action = { type: OPPONENT_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            state = game( initialState, action );
+        expect( state.currentPlay ).to.deep.equal( { score: 0, 'reason': '' } );
+    } );
+    it( 'should update pegging cards after opponent plays', () => {
+        const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ) ] },
+            action = { type: OPPONENT_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            state = game( initialState, action );
+        expect( state.peggingCards ).to.deep.equal( [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ) ] );
     } );
 } );

@@ -22,7 +22,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
     CONTROLLER_SCORES_CRIB,
-    CONTROLLER_GAME_COMPLETE
+    CONTROLLER_GAME_COMPLETE,
+    OPPONENT_PLAYS
 } from '../action-types';
 
 export const defaultState = {
@@ -65,6 +66,8 @@ const controller = ( state = defaultState, action ) => {
             return Object.assign( {}, state, { nextAppointment } );
         case PLAYER_DISCARDS:
             return Object.assign( {}, state, { nextAppointment: 'opponentDiscards' } );
+        case OPPONENT_PLAYS:
+            return Object.assign( {}, state, { nextAppointment: 'playerPlays' } );
         case CONTROLLER_DEAL_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'playerDiscards', timerSpeed: defaultState.timerSpeed } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:

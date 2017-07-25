@@ -14,7 +14,8 @@ import {
     CONTROLLER_SCORES_OPPONENT,
     CONTROLLER_SCORES_PLAYER,
     CONTROLLER_SCORES_CRIB,
-    CONTROLLER_GAME_COMPLETE
+    CONTROLLER_GAME_COMPLETE,
+    OPPONENT_PLAYS
 } from '../action-types';
 
 export const defaultState = {
@@ -23,6 +24,7 @@ export const defaultState = {
     winner: null,
     cutCard: null,
     peggingCards: [],
+    currentPlay: {},
     opponentsHandScore: null,
     playersHandScore: null,
     cribScore: null
@@ -30,6 +32,11 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case OPPONENT_PLAYS:
+            return Object.assign( {}, state, {
+                currentPlay: action.currentPlay,
+                peggingCards: [ action.card ].concat( state.peggingCards )
+            } );
         case CONTROLLER_GAME_COMPLETE:
             return Object.assign( {}, state, { winner: action.winner } );
         case CONTROLLER_SCORES_CRIB:
