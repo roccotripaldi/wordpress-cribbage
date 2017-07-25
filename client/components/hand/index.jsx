@@ -20,13 +20,13 @@ import { getDealer, getScore } from 'state/selectors/game';
 class Hand extends Component {
     constructor( props ) {
         super( props );
-        this.state = { selectedCards: [] };
+        this.state = { selectedCards: [], selectedPlayCard: null };
     }
 
     componentDidUpdate() {
         if ( this.props.player.hand.length === 0 && this.state.selectedCards.length === 2 ) {
             // Fixes a bug that shows the discard button after game is reset.
-            this.setState( { selectedCards: [] } );
+            this.setState( { selectedCards: [], selectedPlayCard: null } );
         }
     }
 
@@ -46,7 +46,7 @@ class Hand extends Component {
         );
     }
 
-    handleClick = ( event ) => {
+    handleDiscardClick = ( event ) => {
         const index = parseInt( event.target.getAttribute( 'data-index' ) ),
             { selectedCards } = this.state;
         event.preventDefault();
@@ -57,6 +57,17 @@ class Hand extends Component {
             const newArray = selectedCards.slice();
             newArray.push( index );
             this.setState( { selectedCards: newArray } );
+        }
+    };
+
+    handlePlayClick = ( event ) => {
+        const index = parseInt( event.target.getAttribute( 'data-index' ) ),
+            { selectedPlayCard } = this.state;
+        event.preventDefault();
+        if ( selectedPlayCard === index ) {
+            this.setState( { selectedPlayCard: null } );
+        } else {
+            this.setState( { selectedPlayCard: index } );
         }
     };
 
@@ -74,6 +85,32 @@ class Hand extends Component {
             this.setState( { selectedCards: [] } );
         }
     };
+
+    handlePlay = ( event ) => {
+        event.preventDefault();
+        console.log( 'lets play!' );
+    };
+
+    cardIsClickable( selected ) {
+        if ( this.props.paused ) {
+            return false;
+        } else if ( selected ) {
+            return true;
+        } else if (
+            'Player' === this.props.type &&
+            'playerPlays' === this.props.nextAppointment &&
+            ! this.state.selectedPlayCard
+        ) {
+            return true;
+        } else if (
+            'Player' === this.props.type &&
+            'playerDiscards' === this.props.nextAppointment &&
+            this.state.selectedCards.length < 2
+        ) {
+            return true;
+        }
+        return false;
+    }
 
     renderCrib() {
         const { crib } = this.props.player;
@@ -131,12 +168,19 @@ class Hand extends Component {
             'playerDiscards' === this.props.nextAppointment &&
             ! this.props.paused
         ) {
-            onClick = this.handleClick;
+            onClick = this.handleDiscardClick;
+        } else if (
+            'Player' === this.props.type &&
+            'playerPlays' === this.props.nextAppointment &&
+            ! this.props.paused
+        ) {
+            onClick = this.handlePlayClick;
         }
         return (
             <div className="cards">
                 { cards.map( ( card, index ) => {
-                    const selected = this.state.selectedCards.includes( index );
+                    const selected = this.state.selectedCards.includes( index ) ||
+                        this.state.selectedPlayCard === index;
                     return (
                         <Card
                             key={ card.name + card.suit }
@@ -145,6 +189,7 @@ class Hand extends Component {
                             onClick={ onClick }
                             index={ index }
                             selected={ selected }
+                            clickable={ this.cardIsClickable( selected ) }
                         />
                     )
                 } ) }
@@ -156,7 +201,14 @@ class Hand extends Component {
         if ( this.state.selectedCards.length < 2 || this.props.type === 'Opponent' ) {
             return null;
         }
-        return <Button onClick={ this.handleDiscard }>Send Cards To Crib</Button>;
+        return( <Button onClick={ this.handleDiscard } id="discard-button">Send Cards To Crib</Button> );
+    }
+
+    renderPlayButton() {
+        if ( ! this.state.selectedPlayCard || this.props.type === 'Opponent' ) {
+            return null;
+        }
+        return( <Button onClick={ this.handlePlay } id="play-button">Play Card</Button> );
     }
 
     render() {
@@ -168,6 +220,7 @@ class Hand extends Component {
                 { this.renderCards() }
                 { this.renderCrib() }
                 { this.renderDiscardButton() }
+                { this.renderPlayButton() }
             </div>
         );
     }

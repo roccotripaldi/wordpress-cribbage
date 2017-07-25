@@ -34,7 +34,7 @@ class AcceptScoreButton extends Component {
         );
     };
     render() {
-        return <Button onClick={ this.handleClick }>Ok</Button>;
+        return <Button onClick={ this.handleClick } id="accept-score-button">Ok</Button>;
     }
 }
 

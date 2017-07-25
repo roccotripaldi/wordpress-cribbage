@@ -82,7 +82,7 @@ class StatusMessage extends Component {
         if ( this.props.winningPerson ) {
             return null;
         }
-        return <Button onClick={ this.handleNextHand }>Deal Next Hand</Button>
+        return <Button onClick={ this.handleNextHand } id="next-hand-button">Deal Next Hand</Button>
     }
 
     renderPlayValue() {
@@ -112,7 +112,7 @@ class StatusMessage extends Component {
                 return (
                     <div>
                         <p>{ status }</p>
-                        <Button onClick={ this.handlePlayAgain }>Play Again</Button>
+                        <Button onClick={ this.handlePlayAgain } id="play-again-button">Play Again</Button>
                     </div>
                 );
 

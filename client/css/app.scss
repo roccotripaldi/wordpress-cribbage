@@ -173,11 +173,16 @@ body {
       height: 128px;
     }
   }
-  .button {
+  #discard-button {
     position: absolute;
     width: 146px;
     top: 80px;
     left: -195px;
+  }
+  #play-button {
+    position: absolute;
+    top: 80px;
+    right: 26px;
   }
 }
 
@@ -185,7 +190,6 @@ body {
   background-color: #c6c6c6;
   color: black;
   text-align: center;
-  cursor: pointer;
   display: block;
   border-left: 1px solid white;
   border-top: 1px solid white;
@@ -199,20 +203,27 @@ body {
     border-right: 1px solid #848484;
     border-bottom: 1px solid #848484;
   }
-  &:hover {
-    text-decoration: underline;
-  }
-  &:active {
-    border-left: 1px solid #848484;
-    border-top: 1px solid #848484;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
-    .button__inner {
-      border-left: 1px solid black;
-      border-top: 1px solid black;
-      border-right: 1px solid #c6c6c6;
-      border-bottom: 1px solid #c6c6c6;
+  &.clickable {
+    &:hover {
+      text-decoration: underline;
     }
+  }
+  &.clickable {
+    &:active {
+      border-left: 1px solid #848484;
+      border-top: 1px solid #848484;
+      border-right: 1px solid white;
+      border-bottom: 1px solid white;
+      .button__inner {
+        border-left: 1px solid black;
+        border-top: 1px solid black;
+        border-right: 1px solid #c6c6c6;
+        border-bottom: 1px solid #c6c6c6;
+      }
+    }
+  }
+  &.deactivated {
+    color: #999;
   }
 }
 
@@ -253,9 +264,6 @@ body {
     &.is-pegging {
       top: 210px;
       left: 0;
-    }
-    &.clickable {
-      cursor: pointer;
     }
   }
 }
@@ -399,4 +407,8 @@ body {
     width: 278px;
     height: 148px;
   }
+}
+
+.clickable {
+  cursor: pointer;
 }

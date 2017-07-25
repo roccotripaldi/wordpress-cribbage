@@ -17,7 +17,11 @@ class Card extends Component {
             src = ( faceDown ) ?
                 imageDir + 'card-back.png' :
                 imageDir + card.name + '-' + card.suit + '.gif',
-            classes = classNames( { selected: this.props.selected, [ 'card' + this.props.index ]: true } );
+            classes = classNames( {
+                selected: this.props.selected,
+                [ 'card' + this.props.index ]: true,
+                clickable: this.props.clickable
+            } );
 
 
         return <img
