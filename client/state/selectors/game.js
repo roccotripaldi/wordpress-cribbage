@@ -54,3 +54,7 @@ export const getPlaySequence = ( state ) => {
         return !!( card );
     } );
 };
+
+export const getPreviousPlayer = ( state ) => {
+    return get( state, 'game.previousPlayer' );
+};

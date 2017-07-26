@@ -19,10 +19,11 @@ class PeggingCards extends Component {
     };
 
     render() {
+        const cards = this.props.peggingCards.slice( 0 ).reverse();
         return (
             <div className="pegging-cards indentation">
                 <div className="indentation-inner">
-                    { this.props.peggingCards.reverse().map( this.renderCard ) }
+                    { cards.map( this.renderCard ) }
                 </div>
             </div>
         );

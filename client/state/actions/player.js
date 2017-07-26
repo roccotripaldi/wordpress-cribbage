@@ -64,30 +64,30 @@ export const opponentDiscards = ( hand, dealer ) => {
 
 export const opponentPlays = ( playValue, sequence, hand, pegIndex ) => {
     const ai = new PeggingAI( hand, sequence );
-    let card, currentPlay;
+    let card, play;
     if ( playValue === 0 ) {
         card = ai.playFirstCard();
     } else {
         card = ai.playCard();
     }
-    currentPlay = getPegScore( card, sequence );
+    play = getPegScore( card, sequence );
     return {
         type: OPPONENT_PLAYS,
         card,
-        currentPlay,
-        points: currentPlay.score,
+        play,
+        points: play.score,
         person: 'Opponent',
         pegIndex
     };
 };
 
 export const playerPlays = ( sequence, card, pegIndex ) => {
-    const currentPlay = getPegScore( card, sequence );
+    const play = getPegScore( card, sequence );
     return {
         type: PLAYER_PLAYS,
         card,
-        currentPlay,
-        points: currentPlay.score,
+        play,
+        points: play.score,
         person: 'Player',
         pegIndex
     };

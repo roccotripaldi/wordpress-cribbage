@@ -15,19 +15,22 @@ import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDiscards, playerPlays } from 'state/actions/player';
-import { getDealer, getScore, getPlaySequence } from 'state/selectors/game';
+import { getDealer, getScore, getPlaySequence, getPeggingCards } from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
 
 class Hand extends Component {
     constructor( props ) {
         super( props );
-        this.state = { selectedCards: [], selectedPlayCard: null };
+        this.state = { selectedCards: [], selectedPlayCard: -1 };
     }
 
     componentDidUpdate() {
-        if ( this.props.player.hand.length === 0 && this.state.selectedCards.length === 2 ) {
-            // Fixes a bug that shows the discard button after game is reset.
-            this.setState( { selectedCards: [], selectedPlayCard: null } );
+        if (
+            this.props.player.hand.length === 0 &&
+            ( this.state.selectedCards.length === 2 || this.state.selectedPlayCard > -1 )
+        ) {
+            // Fixes a bug that shows play buttons after game is reset.
+            this.setState( { selectedCards: [], selectedPlayCard: -1 } );
         }
     }
 
@@ -66,8 +69,8 @@ class Hand extends Component {
             { selectedPlayCard } = this.state;
         event.preventDefault();
         if ( selectedPlayCard === index ) {
-            this.setState( { selectedPlayCard: null } );
-        } else {
+            this.setState( { selectedPlayCard: -1 } );
+        } else if ( selectedPlayCard === -1 ) {
             this.setState( { selectedPlayCard: index } );
         }
     };
@@ -90,7 +93,7 @@ class Hand extends Component {
     handlePlay = ( event ) => {
         const card = this.props.player.peggingHand[ this.state.selectedPlayCard ];
         event.preventDefault();
-        this.setState( { selectedPlayCard: null } );
+        this.setState( { selectedPlayCard: -1 } );
         this.props.playerPlays(
             this.props.sequence,
             card,
@@ -106,7 +109,7 @@ class Hand extends Component {
         } else if (
             'Player' === this.props.type &&
             'playerPlays' === this.props.nextAppointment &&
-            ! this.state.selectedPlayCard
+            this.state.selectedPlayCard === -1
         ) {
             return true;
         } else if (
@@ -164,10 +167,10 @@ class Hand extends Component {
 
         if( isEmpty( hand ) ) {
             cards = initialDraw;
-        } else if ( isEmpty( peggingHand ) ) {
-            cards = hand;
-        } else {
+        } else if ( ! isEmpty( peggingHand ) || ! isEmpty( this.props.peggingCards ) ) {
             cards = peggingHand;
+        } else {
+            cards = hand;
         }
 
         if (
@@ -212,7 +215,7 @@ class Hand extends Component {
     }
 
     renderPlayButton() {
-        if ( ! this.state.selectedPlayCard || this.props.type === 'Opponent' ) {
+        if ( this.state.selectedPlayCard === -1 || this.props.type === 'Opponent' ) {
             return null;
         }
         return( <Button onClick={ this.handlePlay } id="play-button">Play Card</Button> );
@@ -247,7 +250,8 @@ export default connect(
             playerScores: ( ownProps.type === "Opponent" ) ? getScore( state, 'opponentsHandScore' ) : getScore( state, 'playersHandScore' ),
             cribScores: getScore( state, 'cribScore' ),
             sequence: getPlaySequence( state ),
-            playersLowestPeg: getLowestPegForPerson( state, 'Player' )
+            playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
+            peggingCards: getPeggingCards( state )
         }
     },
     { playerDiscards, playerPlays }

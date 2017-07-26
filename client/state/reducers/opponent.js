@@ -28,8 +28,12 @@ const opponent = ( state = defaultState, action ) => {
     switch ( action.type ) {
         case OPPONENT_PLAYS:
             newPeggingHand = state.peggingHand.filter( ( card ) => {
-                return action.card.name !== card.name && action.card.suit !== card.suit;
+                if ( card.name === action.card.name && card.suit === action.card.suit ) {
+                    return false;
+                }
+                return true;
             } );
+            console.log( state.peggingHand, action.card, newPeggingHand );
             return Object.assign( {}, state, { peggingHand: newPeggingHand } );
         case CONTROLLER_CUT_CARD:
             return Object.assign( {}, state, { peggingHand: state.hand.slice(0) } );

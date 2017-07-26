@@ -25,7 +25,8 @@ export const defaultState = {
     winner: null,
     cutCard: null,
     peggingCards: [],
-    currentPlay: {},
+    previousPlay: {},
+    previousPlayer: '',
     opponentsHandScore: null,
     playersHandScore: null,
     cribScore: null
@@ -36,8 +37,9 @@ const game = ( state = defaultState, action ) => {
         case PLAYER_PLAYS:
         case OPPONENT_PLAYS:
             return Object.assign( {}, state, {
-                currentPlay: action.currentPlay,
-                peggingCards: [ action.card ].concat( state.peggingCards )
+                previousPlay: action.play,
+                peggingCards: [ action.card ].concat( state.peggingCards ),
+                previousPlayer: action.person
             } );
         case CONTROLLER_GAME_COMPLETE:
             return Object.assign( {}, state, { winner: action.winner } );

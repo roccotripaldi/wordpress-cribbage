@@ -154,10 +154,20 @@ describe( 'Controller Reducer', () => {
             state = controller( initialState, { type: OPPONENT_PLAYS } );
         expect( state.nextAppointment ).to.equal( 'playerPlays' );
     } );
+    it( 'should restore game timer after player plays', () => {
+        const initialState = { nextAppointment: 'playerPlays' },
+            state = controller( initialState, { type: OPPONENT_PLAYS } );
+        expect( state.timerSpeed ).to.equal( 2000 );
+    } );
     it( 'should await play from opponent after player plays', () => {
         const initialState = { nextAppointment: 'playerPlays' },
             state = controller( initialState, { type: PLAYER_PLAYS } );
         expect( state.nextAppointment ).to.equal( 'opponentPlays' );
+    } );
+    it( 'should slow down game timer after player plays', () => {
+        const initialState = { nextAppointment: 'playerPlays' },
+            state = controller( initialState, { type: PLAYER_PLAYS } );
+        expect( state.timerSpeed ).to.equal( 5000 );
     } );
     it( 'should await acceptance after scoring player', () => {
         const initialState = { nextAppointment: 'playerScores' },

@@ -98,26 +98,57 @@ describe( 'Game Reducer', () => {
     } );
     it( 'should set current play after opponent plays', () => {
         const initialState = { currentPlay: {}, peggingCards: [] },
-            action = { type: OPPONENT_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            action = {
+                type: OPPONENT_PLAYS,
+                card: buildCard( '5', 'Hearts' ),
+                play: { score: 0, reason: '' },
+                person: 'Opponent'
+            },
             state = game( initialState, action );
-        expect( state.currentPlay ).to.deep.equal( { score: 0, 'reason': '' } );
+        expect( state.previousPlay ).to.deep.equal( { score: 0, 'reason': '' } );
     } );
     it( 'should update pegging cards after opponent plays', () => {
         const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ) ] },
-            action = { type: OPPONENT_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            action = {
+                type: OPPONENT_PLAYS,
+                card: buildCard( '5', 'Hearts' ),
+                play: { score: 0, reason: '' },
+                person: 'Opponent'
+            },
             state = game( initialState, action );
         expect( state.peggingCards ).to.deep.equal( [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ) ] );
     } );
     it( 'should set current play after player plays', () => {
         const initialState = { currentPlay: {}, peggingCards: [] },
-            action = { type: PLAYER_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            action = {
+                type: PLAYER_PLAYS,
+                card: buildCard( '5', 'Hearts' ),
+                play: { score: 0, reason: '' },
+                person: 'Player'
+            },
             state = game( initialState, action );
-        expect( state.currentPlay ).to.deep.equal( { score: 0, 'reason': '' } );
+        expect( state.previousPlay ).to.deep.equal( { score: 0, 'reason': '' } );
     } );
     it( 'should update pegging cards after player plays', () => {
         const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ) ] },
-            action = { type: PLAYER_PLAYS, card: buildCard( '5', 'Hearts' ), currentPlay: { score: 0, reason: '' } },
+            action = {
+                type: PLAYER_PLAYS,
+                card: buildCard( '5', 'Hearts' ),
+                play: { score: 0, reason: '' },
+                person: 'Player'
+            },
             state = game( initialState, action );
         expect( state.peggingCards ).to.deep.equal( [ buildCard( '5', 'Hearts' ), buildCard( '4', 'Hearts' ) ] );
+    } );
+    it( 'should update previous player after a play', () => {
+        const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ) ] },
+            action = {
+                type: PLAYER_PLAYS,
+                card: buildCard( '5', 'Hearts' ),
+                play: { score: 0, reason: '' },
+                person: 'Player'
+            },
+            state = game( initialState, action );
+        expect( state.previousPlayer ).to.equal( 'Player' );
     } );
 } );

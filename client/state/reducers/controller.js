@@ -68,9 +68,9 @@ const controller = ( state = defaultState, action ) => {
         case PLAYER_DISCARDS:
             return Object.assign( {}, state, { nextAppointment: 'opponentDiscards' } );
         case OPPONENT_PLAYS:
-            return Object.assign( {}, state, { nextAppointment: 'playerPlays' } );
+            return Object.assign( {}, state, { nextAppointment: 'playerPlays', timerSpeed: defaultState.timerSpeed } );
         case PLAYER_PLAYS:
-            return Object.assign( {}, state, { nextAppointment: 'opponentPlays' } );
+            return Object.assign( {}, state, { nextAppointment: 'opponentPlays', timerSpeed: 5000 } );
         case CONTROLLER_DEAL_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'playerDiscards', timerSpeed: defaultState.timerSpeed } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:
