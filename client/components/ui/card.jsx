@@ -20,7 +20,8 @@ class Card extends Component {
             classes = classNames( {
                 selected: this.props.selected,
                 [ 'card' + this.props.index ]: true,
-                clickable: this.props.clickable
+                clickable: this.props.clickable,
+                faceDown: this.props.faceDown
             } );
 
 

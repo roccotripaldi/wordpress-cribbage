@@ -24,7 +24,8 @@ import {
     PLAYER_ACCEPTS_OWN_SCORE,
     PLAYER_ACCEPTS_CRIB_SCORE,
     CONTROLLER_GAME_COMPLETE,
-    OPPONENT_PLAYS
+    OPPONENT_PLAYS,
+    PLAYER_PLAYS
 } from '../../action-types';
 import { buildCard } from '../../../lib/deck';
 
@@ -152,6 +153,11 @@ describe( 'Controller Reducer', () => {
         const initialState = { nextAppointment: 'opponentPlays' },
             state = controller( initialState, { type: OPPONENT_PLAYS } );
         expect( state.nextAppointment ).to.equal( 'playerPlays' );
+    } );
+    it( 'should await play from opponent after player plays', () => {
+        const initialState = { nextAppointment: 'playerPlays' },
+            state = controller( initialState, { type: PLAYER_PLAYS } );
+        expect( state.nextAppointment ).to.equal( 'opponentPlays' );
     } );
     it( 'should await acceptance after scoring player', () => {
         const initialState = { nextAppointment: 'playerScores' },

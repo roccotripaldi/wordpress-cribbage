@@ -12,7 +12,8 @@ import {
     OPPONENT_DISCARDS,
     PLAYER_ACCEPTS_OWN_SCORE,
     CONTROLLER_HIS_HEALS,
-    PLAYER_ACCEPTS_CRIB_SCORE
+    PLAYER_ACCEPTS_CRIB_SCORE,
+    PLAYER_PLAYS
 } from '../../action-types';
 
 
@@ -140,5 +141,21 @@ describe( 'Player Reducer', () => {
             initialState = { hand },
             state = player( initialState, { type: CONTROLLER_CUT_CARD } );
         expect( state.peggingHand ).to.deep.equal( hand );
+    } );
+    it( 'should remove card from pegging hand after player plays', () => {
+        const peggingHand = [
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( '2', 'Diamonds' ),
+                buildCard( '5', 'Diamonds' ),
+                buildCard( '8', 'Clubs' )
+            ],
+            initialState = { peggingHand },
+            expected = [
+                buildCard( 'Ace', 'Hearts' ),
+                buildCard( '2', 'Diamonds' ),
+                buildCard( '5', 'Diamonds' )
+            ],
+            state = player( initialState, { type: PLAYER_PLAYS, card: buildCard( '8', 'Clubs' ) } );
+        expect( state.peggingHand ).to.deep.equal( expected );
     } );
 } );

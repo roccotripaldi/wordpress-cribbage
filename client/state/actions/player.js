@@ -13,7 +13,8 @@ import {
     PLAYER_ACCEPTS_CRIB_SCORE,
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
-    OPPONENT_PLAYS
+    OPPONENT_PLAYS,
+    PLAYER_PLAYS
 } from '../action-types';
 import DiscardAI from '../../lib/intelligence/discard-ai';
 import PeggingAI from '../../lib/intelligence/pegging-ai';
@@ -76,6 +77,18 @@ export const opponentPlays = ( playValue, sequence, hand, pegIndex ) => {
         currentPlay,
         points: currentPlay.score,
         person: 'Opponent',
+        pegIndex
+    };
+};
+
+export const playerPlays = ( sequence, card, pegIndex ) => {
+    const currentPlay = getPegScore( card, sequence );
+    return {
+        type: PLAYER_PLAYS,
+        card,
+        currentPlay,
+        points: currentPlay.score,
+        person: 'Player',
         pegIndex
     };
 };

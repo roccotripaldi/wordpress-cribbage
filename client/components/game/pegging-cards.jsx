@@ -22,7 +22,7 @@ class PeggingCards extends Component {
         return (
             <div className="pegging-cards indentation">
                 <div className="indentation-inner">
-                    { this.props.peggingCards.map( this.renderCard ) }
+                    { this.props.peggingCards.reverse().map( this.renderCard ) }
                 </div>
             </div>
         );

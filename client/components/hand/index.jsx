@@ -14,8 +14,9 @@ import Card from 'components/ui/card';
 import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
-import { playerDiscards } from 'state/actions/player';
-import { getDealer, getScore } from 'state/selectors/game';
+import { playerDiscards, playerPlays } from 'state/actions/player';
+import { getDealer, getScore, getPlaySequence } from 'state/selectors/game';
+import { getLowestPegForPerson } from 'state/selectors/board';
 
 class Hand extends Component {
     constructor( props ) {
@@ -87,8 +88,14 @@ class Hand extends Component {
     };
 
     handlePlay = ( event ) => {
+        const card = this.props.player.peggingHand[ this.state.selectedPlayCard ];
         event.preventDefault();
-        console.log( 'lets play!' );
+        this.setState( { selectedPlayCard: null } );
+        this.props.playerPlays(
+            this.props.sequence,
+            card,
+            this.props.playersLowestPeg
+        );
     };
 
     cardIsClickable( selected ) {
@@ -238,8 +245,10 @@ export default connect(
             paused: isPaused( state ),
             dealer: getDealer( state ),
             playerScores: ( ownProps.type === "Opponent" ) ? getScore( state, 'opponentsHandScore' ) : getScore( state, 'playersHandScore' ),
-            cribScores: getScore( state, 'cribScore' )
+            cribScores: getScore( state, 'cribScore' ),
+            sequence: getPlaySequence( state ),
+            playersLowestPeg: getLowestPegForPerson( state, 'Player' )
         }
     },
-    { playerDiscards }
+    { playerDiscards, playerPlays }
 )( Hand );

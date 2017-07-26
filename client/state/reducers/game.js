@@ -15,7 +15,8 @@ import {
     CONTROLLER_SCORES_PLAYER,
     CONTROLLER_SCORES_CRIB,
     CONTROLLER_GAME_COMPLETE,
-    OPPONENT_PLAYS
+    OPPONENT_PLAYS,
+    PLAYER_PLAYS
 } from '../action-types';
 
 export const defaultState = {
@@ -32,6 +33,7 @@ export const defaultState = {
 
 const game = ( state = defaultState, action ) => {
     switch ( action.type ) {
+        case PLAYER_PLAYS:
         case OPPONENT_PLAYS:
             return Object.assign( {}, state, {
                 currentPlay: action.currentPlay,
