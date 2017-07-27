@@ -14,7 +14,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
     OPPONENT_PLAYS,
-    PLAYER_PLAYS
+    PLAYER_PLAYS,
+    OPPONENT_GO
 } from '../action-types';
 import DiscardAI from '../../lib/intelligence/discard-ai';
 import PeggingAI from '../../lib/intelligence/pegging-ai';
@@ -78,6 +79,22 @@ export const opponentPlays = ( playValue, sequence, hand, pegIndex ) => {
         points: play.score,
         person: 'Opponent',
         pegIndex
+    };
+};
+
+export const opponentGo = ( points, pegIndex, dealer, isFinalGo ) => {
+    const play = {
+        score: points,
+        reason: ( points === 1 ) ? '1 point for last card' : 'Opponent cannot play.'
+    };
+    return {
+        type: OPPONENT_GO,
+        person: 'Opponent',
+        points,
+        pegIndex,
+        isFinalGo,
+        play,
+        dealer
     };
 };
 

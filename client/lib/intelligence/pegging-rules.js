@@ -1,5 +1,9 @@
 import ScoringRules from './scoring-rules';
 
+const excedesThirtyOne = ( cards ) => {
+    return ( cards.reduce( ( sum, card ) => { return sum + card.value }, 0 ) > 31 );
+};
+
 const isSumThirtyOne = ( cards ) => {
     return ( cards.reduce( ( sum, card ) => { return sum + card.value }, 0 ) === 31 );
 };
@@ -20,6 +24,10 @@ export const getPegScore = ( card, sequence ) => {
     }
 
     newSequence = [ card ].concat( sequence );
+
+    if ( excedesThirtyOne( newSequence ) ) {
+        return false;
+    }
 
     if ( ScoringRules.isSumFifteen( newSequence ) ) {
         score = 2;

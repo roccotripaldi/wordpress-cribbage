@@ -9,7 +9,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
     OPPONENT_PLAYS,
-    PLAYER_PLAYS
+    PLAYER_PLAYS,
+    OPPONENT_GO
 } from '../../action-types';
 
 describe( 'Board Reducer', () => {
@@ -75,5 +76,10 @@ describe( 'Board Reducer', () => {
         const initialState= { Player: [ -1, 0 ] },
             state = board( initialState, { type: PLAYER_PLAYS, points: 6, person: 'Player', pegIndex: 0 } );
         expect( state ).to.deep.equal( { Player: [ 6, 0 ] } );
+    } );
+    it( 'should award points to opponent when an opponent scores a point on a go', () => {
+        const initialState= { Opponent: [ 60, 49 ] },
+            state = board( initialState, { type: OPPONENT_GO, points: 1, person: 'Opponent', pegIndex: 1 } );
+        expect( state ).to.deep.equal( { Opponent: [ 60, 61 ] } );
     } );
 } );

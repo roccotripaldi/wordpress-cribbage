@@ -8,7 +8,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     PLAYER_ACCEPTS_OWN_SCORE,
     OPPONENT_PLAYS,
-    PLAYER_PLAYS
+    PLAYER_PLAYS,
+    OPPONENT_GO
 } from '../action-types';
 
 export const defaultState = {
@@ -19,6 +20,7 @@ export const defaultState = {
 const board = (state = defaultState, action) => {
     let newArray, score;
     switch (action.type) {
+        case OPPONENT_GO:
         case PLAYER_PLAYS:
         case OPPONENT_PLAYS:
         case PLAYER_ACCEPTS_CRIB_SCORE:

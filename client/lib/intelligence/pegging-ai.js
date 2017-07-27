@@ -5,7 +5,7 @@ export default class PeggingAI {
     constructor( hand, sequence ) {
         this.hand = sortBy( hand, [ 'value', 'suitValue' ] ).reverse();
         this.sequence = sequence;
-        this.highestScoringIndex = 0;
+        this.highestScoringIndex = -1;
         this.highestScore = 0;
     }
 
@@ -22,8 +22,13 @@ export default class PeggingAI {
         }
         this.hand.forEach( ( card, index ) => {
             const pegScore = getPegScore( card, this.sequence );
+            if ( pegScore === false ) {
+                return;
+            }
             if ( pegScore.score > this.highestScore ) {
                 this.highestScore = pegScore.score;
+                this.highestScoringIndex = index;
+            } else if ( this.highestScoringIndex === -1 ) {
                 this.highestScoringIndex = index;
             }
         } );

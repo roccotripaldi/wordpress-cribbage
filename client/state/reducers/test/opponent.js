@@ -13,7 +13,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     CONTROLLER_HIS_HEALS,
     PLAYER_ACCEPTS_CRIB_SCORE,
-    OPPONENT_PLAYS
+    OPPONENT_PLAYS,
+    OPPONENT_GO
 } from '../../action-types';
 
 
@@ -159,5 +160,10 @@ describe( 'Opponent Reducer', () => {
             ],
             state = opponent( initialState, { type: OPPONENT_PLAYS, card: buildCard( '8', 'Clubs' ) } );
         expect( state.peggingHand ).to.deep.equal( expected );
+    } );
+    it( 'should update score on opponents go', () => {
+        const initialState = { score: 12 },
+            state = opponent( initialState, { type: OPPONENT_GO, points: 1 } );
+        expect( state.score ).to.equal( 13 );
     } );
 } );

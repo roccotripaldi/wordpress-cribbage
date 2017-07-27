@@ -33,8 +33,7 @@ const player = ( state = defaultState, action ) => {
                 }
                 return true;
             } );
-            console.log( state.peggingHand, action.card, newPeggingHand );
-            return Object.assign( {}, state, { peggingHand: newPeggingHand } );
+            return Object.assign( {}, state, { peggingHand: newPeggingHand, score: state.score + action.points } );
         case CONTROLLER_CUT_CARD:
             return Object.assign( {}, state, { peggingHand: state.hand.slice(0) } );
         case CONTROLLER_HIS_HEALS:

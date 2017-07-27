@@ -16,7 +16,8 @@ import {
     CONTROLLER_SCORES_CRIB,
     CONTROLLER_GAME_COMPLETE,
     OPPONENT_PLAYS,
-    PLAYER_PLAYS
+    PLAYER_PLAYS,
+    OPPONENT_GO
 } from '../action-types';
 
 export const defaultState = {
@@ -33,7 +34,17 @@ export const defaultState = {
 };
 
 const game = ( state = defaultState, action ) => {
+    let peggingCards, previousPlay;
     switch ( action.type ) {
+        case OPPONENT_GO:
+            if ( action.points === 1 && ! action.isFinalGo ) {
+                peggingCards = state.peggingCards.map( () => { return null; } );
+            } else if ( action.isFinalGo ) {
+                peggingCards = [];
+            } else {
+                peggingCards = state.peggingCards;
+            }
+            return Object.assign( {}, state, { peggingCards, previousPlay: action.play } );
         case PLAYER_PLAYS:
         case OPPONENT_PLAYS:
             return Object.assign( {}, state, {

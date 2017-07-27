@@ -3,13 +3,22 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash/isEmpty';
 /**
  * Internal Dependencies
  */
 import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
-import { opponentDraws, opponentDiscards, opponentPlays } from 'state/actions/player';
-import { getDeck, getDealer, getCutCard, getPlayValue, getPlaySequence } from 'state/selectors/game';
+import { opponentDraws, opponentDiscards, opponentPlays, opponentGo } from 'state/actions/player';
+import {
+    getDeck,
+    getDealer,
+    getCutCard,
+    getPlayValue,
+    getPlaySequence,
+    canPersonPlay,
+    getPreviousPlayer
+} from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
 import {
     getPlayerInitialDraw,
@@ -55,7 +64,7 @@ class Controller extends Component {
 
     checkAppointments = () => {
         console.log( 'checking next appointment', this.props.nextAppointment );
-        let card, pegIndex, hand;
+        let card, pegIndex, hand, points, isFinalGo;
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -92,12 +101,23 @@ class Controller extends Component {
                 this.props.awardHisHeels( this.props.dealer, pegIndex );
                 break;
             case 'opponentPlays':
-                this.props.opponentPlays(
-                    this.props.playValue,
-                    this.props.sequence,
-                    this.props.opponent.peggingHand,
-                    this.props.opponentsLowestPeg
-                );
+                if ( ! this.props.opponentCanPlay ) {
+                    points = ( 'Opponent' === this.props.previousPlayer ) ? 1 : 0;
+                    isFinalGo = isEmpty( this.props.opponent.peggingHand );
+                    this.props.opponentGo(
+                        points,
+                        this.props.opponentsLowestPeg,
+                        this.props.dealer,
+                        isFinalGo
+                    );
+                } else {
+                    this.props.opponentPlays(
+                        this.props.playValue,
+                        this.props.sequence,
+                        this.props.opponent.peggingHand,
+                        this.props.opponentsLowestPeg
+                    );
+                }
                 break;
             case 'playerScores':
             case 'opponentScores':
@@ -152,7 +172,9 @@ export default connect(
             cutCard: getCutCard( state ),
             winningPerson: calculateWinner( state ),
             playValue: getPlayValue( state ),
-            sequence: getPlaySequence( state )
+            sequence: getPlaySequence( state ),
+            opponentCanPlay: canPersonPlay( state, 'opponent' ),
+            previousPlayer: getPreviousPlayer( state )
         }
     },
     {
@@ -168,6 +190,7 @@ export default connect(
         awardHisHeels,
         setScore,
         gameComplete,
-        opponentPlays
+        opponentPlays,
+        opponentGo
     }
 )( Controller );

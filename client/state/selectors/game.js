@@ -58,3 +58,14 @@ export const getPlaySequence = ( state ) => {
 export const getPreviousPlayer = ( state ) => {
     return get( state, 'game.previousPlayer' );
 };
+
+export const canPersonPlay = ( state, person ) => {
+    const peggingCards = get( state, person + '.peggingHand' ),
+        playValue = getPlayValue( state );
+    if ( isEmpty( peggingCards ) ) {
+        return false;
+    }
+    return peggingCards.some( ( card ) => {
+        return card.value + playValue <= 31;
+    } );
+};

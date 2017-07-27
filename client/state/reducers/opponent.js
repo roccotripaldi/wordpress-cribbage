@@ -12,7 +12,8 @@ import {
     PLAYER_ACCEPTS_OPPONENTS_SCORE,
     CONTROLLER_HIS_HEALS,
     PLAYER_ACCEPTS_CRIB_SCORE,
-    OPPONENT_PLAYS
+    OPPONENT_PLAYS,
+    OPPONENT_GO
 } from '../action-types';
 
 export const defaultState = {
@@ -26,6 +27,8 @@ export const defaultState = {
 const opponent = ( state = defaultState, action ) => {
     let hand, newState, newCrib, newPeggingHand;
     switch ( action.type ) {
+        case OPPONENT_GO:
+            return Object.assign( {}, state, { score: state.score + action.points } );
         case OPPONENT_PLAYS:
             newPeggingHand = state.peggingHand.filter( ( card ) => {
                 if ( card.name === action.card.name && card.suit === action.card.suit ) {
@@ -33,8 +36,7 @@ const opponent = ( state = defaultState, action ) => {
                 }
                 return true;
             } );
-            console.log( state.peggingHand, action.card, newPeggingHand );
-            return Object.assign( {}, state, { peggingHand: newPeggingHand } );
+            return Object.assign( {}, state, { peggingHand: newPeggingHand, score: state.score + action.points } );
         case CONTROLLER_CUT_CARD:
             return Object.assign( {}, state, { peggingHand: state.hand.slice(0) } );
         case CONTROLLER_HIS_HEALS:
