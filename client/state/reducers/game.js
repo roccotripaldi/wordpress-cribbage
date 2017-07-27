@@ -17,7 +17,8 @@ import {
     CONTROLLER_GAME_COMPLETE,
     OPPONENT_PLAYS,
     PLAYER_PLAYS,
-    OPPONENT_GO
+    OPPONENT_GO,
+    PLAYER_GO
 } from '../action-types';
 
 export const defaultState = {
@@ -36,6 +37,7 @@ export const defaultState = {
 const game = ( state = defaultState, action ) => {
     let peggingCards, previousPlay;
     switch ( action.type ) {
+        case PLAYER_GO:
         case OPPONENT_GO:
             if ( action.points === 1 && ! action.isFinalGo ) {
                 peggingCards = state.peggingCards.map( () => { return null; } );

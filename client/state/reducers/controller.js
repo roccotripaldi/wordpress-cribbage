@@ -25,7 +25,8 @@ import {
     CONTROLLER_GAME_COMPLETE,
     OPPONENT_PLAYS,
     PLAYER_PLAYS,
-    OPPONENT_GO
+    OPPONENT_GO,
+    PLAYER_GO
 } from '../action-types';
 
 export const defaultState = {
@@ -35,7 +36,7 @@ export const defaultState = {
 };
 
 const controller = ( state = defaultState, action ) => {
-    let nextAppointment;
+    let nextAppointment, timerSpeed
     switch (action.type) {
         case CONTROLLER_GAME_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'gameComplete' } );
@@ -72,13 +73,16 @@ const controller = ( state = defaultState, action ) => {
             return Object.assign( {}, state, { nextAppointment: 'playerPlays', timerSpeed: defaultState.timerSpeed } );
         case PLAYER_PLAYS:
             return Object.assign( {}, state, { nextAppointment: 'opponentPlays', timerSpeed: 5000 } );
+        case PLAYER_GO:
         case OPPONENT_GO:
             if ( action.isFinalGo ) {
                 nextAppointment = ( action.dealer === 'Player' ) ? 'playerAcceptsOpponentsScore' : 'playerAcceptsOwnScore';
+                timerSpeed = defaultState.timerSpeed;
             } else {
-                nextAppointment = 'playerPlays';
+                nextAppointment = ( action.type === OPPONENT_GO ) ? 'playerPlays' : 'opponentPlays';
+                timerSpeed = ( action.type === OPPONENT_GO ) ? defaultState.timerSpeed : 5000;
             }
-            return Object.assign( {}, state, { nextAppointment, timerSpeed: defaultState.timerSpeed } );
+            return Object.assign( {}, state, { nextAppointment, timerSpeed } );
         case CONTROLLER_DEAL_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'playerDiscards', timerSpeed: defaultState.timerSpeed } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:

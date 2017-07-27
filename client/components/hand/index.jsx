@@ -15,7 +15,7 @@ import Button from 'components/ui/button';
 import { getPlayer, getOpponent } from 'state/selectors/players';
 import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDiscards, playerPlays } from 'state/actions/player';
-import { getDealer, getScore, getPlaySequence, getPeggingCards } from 'state/selectors/game';
+import { getDealer, getScore, getPlaySequence, getPeggingCards, canPersonPlay } from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
 
 class Hand extends Component {
@@ -109,7 +109,8 @@ class Hand extends Component {
         } else if (
             'Player' === this.props.type &&
             'playerPlays' === this.props.nextAppointment &&
-            this.state.selectedPlayCard === -1
+            this.state.selectedPlayCard === -1 &&
+            this.props.playerCanPlay
         ) {
             return true;
         } else if (
@@ -182,7 +183,8 @@ class Hand extends Component {
         } else if (
             'Player' === this.props.type &&
             'playerPlays' === this.props.nextAppointment &&
-            ! this.props.paused
+            ! this.props.paused &&
+            this.props.playerCanPlay
         ) {
             onClick = this.handlePlayClick;
         }
@@ -251,7 +253,8 @@ export default connect(
             cribScores: getScore( state, 'cribScore' ),
             sequence: getPlaySequence( state ),
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
-            peggingCards: getPeggingCards( state )
+            peggingCards: getPeggingCards( state ),
+            playerCanPlay: canPersonPlay( state, 'player' )
         }
     },
     { playerDiscards, playerPlays }

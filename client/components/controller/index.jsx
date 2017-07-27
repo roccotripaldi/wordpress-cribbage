@@ -9,7 +9,7 @@ import isEmpty from 'lodash/isEmpty';
  */
 import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
-import { opponentDraws, opponentDiscards, opponentPlays, opponentGo } from 'state/actions/player';
+import { opponentDraws, opponentDiscards, opponentPlays, opponentGo, playerGo } from 'state/actions/player';
 import {
     getDeck,
     getDealer,
@@ -100,6 +100,19 @@ class Controller extends Component {
                 pegIndex = ( this.props.dealer === 'Player' ) ? this.props.playersLowestPeg : this.props.opponentsLowestPeg;
                 this.props.awardHisHeels( this.props.dealer, pegIndex );
                 break;
+            case 'playerPlays':
+                console.log()
+                if ( ! this.props.playerCanPlay ) {
+                    points = ( 'Player' === this.props.previousPlayer ) ? 1 : 0;
+                    isFinalGo = isEmpty( this.props.player.peggingHand );
+                    this.props.playerGo(
+                        points,
+                        this.props.playersLowestPeg,
+                        this.props.dealer,
+                        isFinalGo
+                    );
+                }
+                break;
             case 'opponentPlays':
                 if ( ! this.props.opponentCanPlay ) {
                     points = ( 'Opponent' === this.props.previousPlayer ) ? 1 : 0;
@@ -174,6 +187,7 @@ export default connect(
             playValue: getPlayValue( state ),
             sequence: getPlaySequence( state ),
             opponentCanPlay: canPersonPlay( state, 'opponent' ),
+            playerCanPlay: canPersonPlay( state, 'player' ),
             previousPlayer: getPreviousPlayer( state )
         }
     },
@@ -191,6 +205,7 @@ export default connect(
         setScore,
         gameComplete,
         opponentPlays,
-        opponentGo
+        opponentGo,
+        playerGo
     }
 )( Controller );

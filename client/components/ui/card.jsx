@@ -21,7 +21,7 @@ class Card extends Component {
                 selected: this.props.selected,
                 [ 'card' + this.props.index ]: true,
                 clickable: this.props.clickable,
-                faceDown: this.props.faceDown
+                'facedown': this.props.faceDown
             } );
 
 
