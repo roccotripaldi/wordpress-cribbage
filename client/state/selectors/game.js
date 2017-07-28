@@ -55,8 +55,20 @@ export const getPlaySequence = ( state ) => {
     } );
 };
 
+export const getLastCardPlayed = ( state ) => {
+    const sequence = getPlaySequence( state );
+    if ( sequence.length === 0 ) {
+        return null;
+    }
+    return sequence[ 0 ];
+};
+
 export const getPreviousPlayer = ( state ) => {
     return get( state, 'game.previousPlayer' );
+};
+
+export const getPreviousPlay = ( state ) => {
+    return get( state, 'game.previousPlay' );
 };
 
 export const canPersonPlay = ( state, person ) => {
@@ -68,4 +80,8 @@ export const canPersonPlay = ( state, person ) => {
     return peggingCards.some( ( card ) => {
         return card.value + playValue <= 31;
     } );
+};
+
+export const isPlayComplete = ( state ) => {
+    return ( getPeggingCards( state ).length === 8 );
 };

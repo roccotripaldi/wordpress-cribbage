@@ -10,7 +10,7 @@ import CardSymbol from 'components/ui/card-symbol';
 import Button from 'components/ui/button';
 import ScoreDetailWindow from './score-detail-window';
 import AcceptScoreButton from './accept-score-button';
-import { getScore, getPlayValue } from 'state/selectors/game';
+import { getScore, getPreviousPlay, getLastCardPlayed } from 'state/selectors/game';
 import { resetDeck, resetGame } from 'state/actions/controller';
 
 class StatusMessage extends Component {
@@ -85,12 +85,26 @@ class StatusMessage extends Component {
         return <Button onClick={ this.handleNextHand } id="next-hand-button">Deal Next Hand</Button>
     }
 
-    renderPlayValue() {
-        return <p>Play Value: { this.props.playValue }</p>
+    renderPlayValue( playValue ) {
+        return <p>Play Value: { playValue }</p>
     }
 
-    renderLastPlay() {
-        return null;
+    renderLastCardPlayed( previousPlayer ) {
+        const lastCard = ( this.props.lastCardPlayed ) ? <CardSymbol card={ this.props.lastCardPlayed }/> : null,
+            person = ( previousPlayer === 'Opponent' ) ? 'Opponent' : 'You';
+        if ( ! lastCard ) {
+            return null;
+        }
+        return <p>{ person } played { lastCard }.</p>;
+    }
+
+    renderLastScore() {
+        const { previousPlay } = this.props,
+            { reason } = previousPlay;
+        if ( reason === '' ) {
+            return null;
+        }
+        return <p>{ reason }</p>;
     }
 
     renderNextPlay( nextAppointment ) {
@@ -101,7 +115,17 @@ class StatusMessage extends Component {
     }
 
     render() {
-        const { winningPerson, nextAppointment, dealer, player, opponent, playerInitialDraw, opponentInitialDraw } = this.props;
+        const {
+            winningPerson,
+            nextAppointment,
+            dealer,
+            player,
+            opponent,
+            playerInitialDraw,
+            opponentInitialDraw,
+            playValue,
+            previousPlayer
+        } = this.props;
         let person, otherPerson, status;
         if ( this.props.paused ) {
             return <p>Game is paused.</p>;
@@ -151,8 +175,9 @@ class StatusMessage extends Component {
             case 'playerPlays':
                 return (
                     <div>
-                        { this.renderPlayValue() }
-                        { this.renderLastPlay() }
+                        { this.renderPlayValue( playValue ) }
+                        { this.renderLastCardPlayed( previousPlayer ) }
+                        { this.renderLastScore() }
                         { this.renderNextPlay( nextAppointment ) }
                     </div>
                 );
@@ -215,7 +240,8 @@ export default connect(
             playersHandScores: getScore( state, 'playersHandScore' ),
             cribScores: getScore( state, 'cribScore' ),
             opponentsHandScores: getScore( state, 'opponentsHandScore' ),
-            playValue: getPlayValue( state )
+            previousPlay: getPreviousPlay( state ),
+            lastCardPlayed: getLastCardPlayed( state )
         }
     },
     { resetDeck, resetGame }

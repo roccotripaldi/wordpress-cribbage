@@ -155,35 +155,15 @@ describe( 'Controller Reducer', () => {
             state = controller( initialState, { type: OPPONENT_PLAYS } );
         expect( state.nextAppointment ).to.equal( 'playerPlays' );
     } );
-    it( 'should restore game timer after player plays', () => {
-        const initialState = { nextAppointment: 'playerPlays' },
-            state = controller( initialState, { type: OPPONENT_PLAYS } );
-        expect( state.timerSpeed ).to.equal( 2000 );
-    } );
     it( 'should await play from opponent after player plays', () => {
         const initialState = { nextAppointment: 'playerPlays' },
             state = controller( initialState, { type: PLAYER_PLAYS } );
         expect( state.nextAppointment ).to.equal( 'opponentPlays' );
     } );
-    it( 'should slow down game timer after player plays', () => {
-        const initialState = { nextAppointment: 'playerPlays' },
-            state = controller( initialState, { type: PLAYER_PLAYS } );
-        expect( state.timerSpeed ).to.equal( 5000 );
-    } );
     it( 'should await players play after opponent go', () => {
         const initialState = { nextAppointment: 'opponentPlays' },
             state = controller( initialState, { type: OPPONENT_GO } );
         expect( state.nextAppointment ).to.equal( 'playerPlays' );
-    } );
-    it( 'should score player after opponent go if this is final go and opponent is dealer', () => {
-        const initialState = { nextAppointment: 'opponentPlays' },
-            state = controller( initialState, { type: OPPONENT_GO, dealer: 'Opponent', isFinalGo: true } );
-        expect( state.nextAppointment ).to.equal( 'playerAcceptsOwnScore' );
-    } );
-    it( 'should score opponent after opponent go if this is final go and player is dealer', () => {
-        const initialState = { nextAppointment: 'opponentPlays' },
-            state = controller( initialState, { type: OPPONENT_GO, dealer: 'Player', isFinalGo: true } );
-        expect( state.nextAppointment ).to.equal( 'playerAcceptsOpponentsScore' );
     } );
     it( 'should await acceptance after scoring player', () => {
         const initialState = { nextAppointment: 'playerScores' },

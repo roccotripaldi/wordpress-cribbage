@@ -19,7 +19,9 @@ import {
     CONTROLLER_SCORES_OPPONENT,
     CONTROLLER_SCORES_PLAYER,
     CONTROLLER_SCORES_CRIB,
-    CONTROLLER_GAME_COMPLETE
+    CONTROLLER_GAME_COMPLETE,
+    CONTROLLER_COMPLETE_PLAY,
+    CONTROLLER_RESET_PLAY
 } from '../action-types';
 import { buildDeck } from '../../lib/deck';
 import ScoringRules from '../../lib/intelligence/scoring-rules';
@@ -80,7 +82,7 @@ export const dealCardToOpponent = ( card ) => {
     }
 };
 
-export const dealComplete = ( card ) => {
+export const dealComplete = () => {
     return {
         type: CONTROLLER_DEAL_COMPLETE
     }
@@ -120,9 +122,31 @@ export const setScore = ( hand, cutCard, actionType ) => {
     }
 };
 
+export const resetPlay = ( previousPlayer ) => {
+    const nextPlayer = ( previousPlayer === 'Opponent' ) ? 'Player' : 'Opponent';
+    return {
+        type: CONTROLLER_RESET_PLAY,
+        nextPlayer
+    };
+};
+
+export const completePlay = ( lastPlayer, pegIndex, dealer ) => {
+    return {
+        type: CONTROLLER_COMPLETE_PLAY,
+        points: 1,
+        person: lastPlayer,
+        play: {
+            score: 1,
+            reason: ( lastPlayer === 'Opponent' ) ? '1 point for opponent\'s last card.' : '1 point for your last card'
+        },
+        pegIndex,
+        dealer
+    };
+};
+
 export const gameComplete = ( winner ) => {
     return {
         type: CONTROLLER_GAME_COMPLETE,
         winner
-    }
+    };
 };

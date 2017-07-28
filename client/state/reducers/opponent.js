@@ -13,7 +13,8 @@ import {
     CONTROLLER_HIS_HEALS,
     PLAYER_ACCEPTS_CRIB_SCORE,
     OPPONENT_PLAYS,
-    OPPONENT_GO
+    OPPONENT_GO,
+    CONTROLLER_COMPLETE_PLAY
 } from '../action-types';
 
 export const defaultState = {
@@ -27,6 +28,11 @@ export const defaultState = {
 const opponent = ( state = defaultState, action ) => {
     let hand, newState, newCrib, newPeggingHand;
     switch ( action.type ) {
+        case CONTROLLER_COMPLETE_PLAY:
+            if ( action.person === 'Opponent' ) {
+                return Object.assign( {}, state, { score: state.score + action.points } );
+            }
+            return state;
         case OPPONENT_GO:
             return Object.assign( {}, state, { score: state.score + action.points } );
         case OPPONENT_PLAYS:

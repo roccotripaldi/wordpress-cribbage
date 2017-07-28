@@ -9,7 +9,7 @@ import isEmpty from 'lodash/isEmpty';
  */
 import StatusMessage from './status-messages';
 import { getNextAppointment, isPaused, getTimerSpeed } from 'state/selectors/controller';
-import { opponentDraws, opponentDiscards, opponentPlays, opponentGo, playerGo } from 'state/actions/player';
+import { opponentDraws, opponentDiscards, opponentPlays, opponentGo, playerGo, skipPlay } from 'state/actions/player';
 import {
     getDeck,
     getDealer,
@@ -17,7 +17,8 @@ import {
     getPlayValue,
     getPlaySequence,
     canPersonPlay,
-    getPreviousPlayer
+    getPreviousPlayer,
+    isPlayComplete
 } from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
 import {
@@ -37,7 +38,9 @@ import {
     selectRandomCutCard,
     awardHisHeels,
     setScore,
-    gameComplete
+    gameComplete,
+    completePlay,
+    resetPlay
 } from 'state/actions/controller';
 
 let appointmentTimer;
@@ -45,26 +48,36 @@ let appointmentTimer;
 class Controller extends Component {
     componentDidMount() {
         if ( ! this.props.paused ) {
-            console.log( 'Setting timer on mount' );
             appointmentTimer = setInterval( this.checkAppointments, this.props.timerSpeed );
         } else {
             clearInterval( appointmentTimer );
-            console.log( 'timer is paused on mount' );
-        }
-    }
-    componentWillReceiveProps( nextProps ) {
-        clearInterval( appointmentTimer );
-        if ( ! nextProps.paused ) {
-            console.log( 'resetting timer on received props' );
-            appointmentTimer = setInterval( this.checkAppointments, nextProps.timerSpeed );
-        } else {
-            console.log( 'timer is paused on received props' );
         }
     }
 
+    componentWillReceiveProps( nextProps ) {
+        clearInterval( appointmentTimer );
+        if ( ! nextProps.paused ) {
+            appointmentTimer = setInterval( this.checkAppointments, nextProps.timerSpeed );
+        }
+    }
+
+    handlePlayComplete() {
+        const pegIndex = ( this.props.previousPlayer === 'Opponent' ) ?
+            this.props.opponentsLowestPeg :
+            this.props.playersLowestPeg;
+        this.props.completePlay(
+            this.props.previousPlayer,
+            pegIndex,
+            this.props.dealer
+        );
+    }
+
     checkAppointments = () => {
-        console.log( 'checking next appointment', this.props.nextAppointment );
-        let card, pegIndex, hand, points, isFinalGo;
+        let card, pegIndex, hand, points;
+        if ( this.props.winningPerson ) {
+            this.props.gameComplete( this.props.winningPerson );
+            return;
+        }
         switch ( this.props.nextAppointment ) {
             case 'buildDeck':
                 this.props.controllerBuildsDeck();
@@ -101,28 +114,35 @@ class Controller extends Component {
                 this.props.awardHisHeels( this.props.dealer, pegIndex );
                 break;
             case 'playerPlays':
-                console.log()
-                if ( ! this.props.playerCanPlay ) {
+                if ( this.props.playComplete ) {
+                    this.handlePlayComplete();
+                } else if ( this.props.playValue === 31 ) {
+                    this.props.resetPlay( this.props.previousPlayer );
+                } else if ( ! this.props.playerCanPlay ) {
                     points = ( 'Player' === this.props.previousPlayer ) ? 1 : 0;
-                    isFinalGo = isEmpty( this.props.player.peggingHand );
                     this.props.playerGo(
                         points,
                         this.props.playersLowestPeg,
-                        this.props.dealer,
-                        isFinalGo
+                        this.props.dealer
                     );
+                } else if ( isEmpty( this.props.player.peggingHand ) ) {
+                    this.props.skipPlay( 'Opponent' );
                 }
                 break;
             case 'opponentPlays':
-                if ( ! this.props.opponentCanPlay ) {
+                if ( this.props.playComplete ) {
+                    this.handlePlayComplete();
+                } else if ( this.props.playValue === 31 ) {
+                    this.props.resetPlay( this.props.previousPlayer );
+                } else if ( ! this.props.opponentCanPlay ) {
                     points = ( 'Opponent' === this.props.previousPlayer ) ? 1 : 0;
-                    isFinalGo = isEmpty( this.props.opponent.peggingHand );
                     this.props.opponentGo(
                         points,
                         this.props.opponentsLowestPeg,
-                        this.props.dealer,
-                        isFinalGo
+                        this.props.dealer
                     );
+                } else if ( isEmpty( this.props.opponent.peggingHand ) ) {
+                    this.props.skipPlay( 'Player' );
                 } else {
                     this.props.opponentPlays(
                         this.props.playValue,
@@ -135,10 +155,6 @@ class Controller extends Component {
             case 'playerScores':
             case 'opponentScores':
             case 'cribScores':
-                if ( this.props.winningPerson ) {
-                    this.props.gameComplete( this.props.winningPerson );
-                    return;
-                }
                 hand = this.props.player.hand;
                 if ( 'opponentScores' === this.props.nextAppointment ) {
                     hand = this.props.opponent.hand;
@@ -147,12 +163,6 @@ class Controller extends Component {
                     hand = ( this.props.dealer === 'Player' ) ? this.props.player.crib : this.props.opponent.crib;
                 }
                 this.props.setScore( hand, this.props.cutCard, this.props.nextAppointment );
-                break;
-            case 'handComplete':
-                if ( this.props.winningPerson ) {
-                    this.props.gameComplete( this.props.winningPerson );
-                    return;
-                }
                 break;
         }
     };
@@ -188,7 +198,8 @@ export default connect(
             sequence: getPlaySequence( state ),
             opponentCanPlay: canPersonPlay( state, 'opponent' ),
             playerCanPlay: canPersonPlay( state, 'player' ),
-            previousPlayer: getPreviousPlayer( state )
+            previousPlayer: getPreviousPlayer( state ),
+            playComplete: isPlayComplete( state )
         }
     },
     {
@@ -206,6 +217,9 @@ export default connect(
         gameComplete,
         opponentPlays,
         opponentGo,
-        playerGo
+        playerGo,
+        completePlay,
+        skipPlay,
+        resetPlay
     }
 )( Controller );

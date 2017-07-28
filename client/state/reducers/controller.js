@@ -26,7 +26,10 @@ import {
     OPPONENT_PLAYS,
     PLAYER_PLAYS,
     OPPONENT_GO,
-    PLAYER_GO
+    PLAYER_GO,
+    SKIP_PLAYER,
+    CONTROLLER_COMPLETE_PLAY,
+    CONTROLLER_RESET_PLAY
 } from '../action-types';
 
 export const defaultState = {
@@ -36,8 +39,17 @@ export const defaultState = {
 };
 
 const controller = ( state = defaultState, action ) => {
-    let nextAppointment, timerSpeed
+    let nextAppointment, timerSpeed;
     switch (action.type) {
+        case CONTROLLER_RESET_PLAY:
+            nextAppointment = ( action.nextPlayer === 'Opponent' ) ? 'opponentPlays' : 'playerPlays';
+            return Object.assign( {}, state, { nextAppointment } );
+        case CONTROLLER_COMPLETE_PLAY:
+            nextAppointment = ( action.dealer === 'Player' ) ? 'opponentScores' : 'playerScores';
+            return Object.assign( {}, state, { nextAppointment } );
+        case SKIP_PLAYER:
+            nextAppointment = ( action.nextPlayer === 'Opponent' ) ? 'opponentPlays' : 'playerPlays';
+            return Object.assign( {}, state, { nextAppointment } );
         case CONTROLLER_GAME_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'gameComplete' } );
         case PLAYER_ACCEPTS_CRIB_SCORE:
@@ -70,19 +82,13 @@ const controller = ( state = defaultState, action ) => {
         case PLAYER_DISCARDS:
             return Object.assign( {}, state, { nextAppointment: 'opponentDiscards' } );
         case OPPONENT_PLAYS:
-            return Object.assign( {}, state, { nextAppointment: 'playerPlays', timerSpeed: defaultState.timerSpeed } );
+            return Object.assign( {}, state, { nextAppointment: 'playerPlays' } );
         case PLAYER_PLAYS:
-            return Object.assign( {}, state, { nextAppointment: 'opponentPlays', timerSpeed: 5000 } );
+            return Object.assign( {}, state, { nextAppointment: 'opponentPlays' } );
         case PLAYER_GO:
         case OPPONENT_GO:
-            if ( action.isFinalGo ) {
-                nextAppointment = ( action.dealer === 'Player' ) ? 'playerAcceptsOpponentsScore' : 'playerAcceptsOwnScore';
-                timerSpeed = defaultState.timerSpeed;
-            } else {
-                nextAppointment = ( action.type === OPPONENT_GO ) ? 'playerPlays' : 'opponentPlays';
-                timerSpeed = ( action.type === OPPONENT_GO ) ? defaultState.timerSpeed : 5000;
-            }
-            return Object.assign( {}, state, { nextAppointment, timerSpeed } );
+            nextAppointment = ( action.type === OPPONENT_GO ) ? 'playerPlays' : 'opponentPlays';
+            return Object.assign( {}, state, { nextAppointment } );
         case CONTROLLER_DEAL_COMPLETE:
             return Object.assign( {}, state, { nextAppointment: 'playerDiscards', timerSpeed: defaultState.timerSpeed } );
         case CONTROLLER_DEALS_CARD_TO_PLAYER:

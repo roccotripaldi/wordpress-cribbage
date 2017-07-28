@@ -16,7 +16,8 @@ import {
     OPPONENT_PLAYS,
     PLAYER_PLAYS,
     OPPONENT_GO,
-    PLAYER_GO
+    PLAYER_GO,
+    SKIP_PLAYER
 } from '../action-types';
 import DiscardAI from '../../lib/intelligence/discard-ai';
 import PeggingAI from '../../lib/intelligence/pegging-ai';
@@ -83,33 +84,31 @@ export const opponentPlays = ( playValue, sequence, hand, pegIndex ) => {
     };
 };
 
-export const opponentGo = ( points, pegIndex, dealer, isFinalGo ) => {
+export const opponentGo = ( points, pegIndex, dealer ) => {
     const play = {
         score: points,
-        reason: ( points === 1 ) ? '1 point for last card' : 'Opponent cannot play.'
+        reason: ( points === 1 ) ? '1 point for opponent\'s last card.' : 'Opponent cannot play.'
     };
     return {
         type: OPPONENT_GO,
         person: 'Opponent',
         points,
         pegIndex,
-        isFinalGo,
         play,
         dealer
     };
 };
 
-export const playerGo = ( points, pegIndex, dealer, isFinalGo ) => {
+export const playerGo = ( points, pegIndex, dealer ) => {
     const play = {
         score: points,
-        reason: ( points === 1 ) ? '1 point for last card' : 'You cannot play.'
+        reason: ( points === 1 ) ? '1 point for your last card.' : 'You cannot play.'
     };
     return {
         type: PLAYER_GO,
         person: 'Player',
         points,
         pegIndex,
-        isFinalGo,
         play,
         dealer
     };
@@ -124,6 +123,13 @@ export const playerPlays = ( sequence, card, pegIndex ) => {
         points: play.score,
         person: 'Player',
         pegIndex
+    };
+};
+
+export const skipPlay = ( nextPlayer ) => {
+    return {
+        type: SKIP_PLAYER,
+        nextPlayer
     };
 };
 

@@ -152,24 +152,13 @@ describe( 'Game Reducer', () => {
             state = game( initialState, action );
         expect( state.previousPlayer ).to.equal( 'Player' );
     } );
-    it ( 'should nullify all pegging cards if a point is scored and not the final go', () => {
+    it ( 'should nullify all pegging cards if a point is scored', () => {
         const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ), buildCard( '5', 'Diamonds') ] },
             action = {
                 type: OPPONENT_GO,
-                points: 1,
-                isFinalGo: false
+                points: 1
             },
             state = game( initialState, action );
         expect( state.peggingCards ).to.deep.equal( [ null, null ] );
-    } );
-    it ( 'should reset pegging cards on the final go', () => {
-        const initialState = { currentPlay: {}, peggingCards: [ buildCard( '4', 'Hearts' ), buildCard( '5', 'Diamonds') ] },
-            action = {
-                type: OPPONENT_GO,
-                points: 1,
-                isFinalGo: true
-            },
-            state = game( initialState, action );
-        expect( state.peggingCards ).to.deep.equal( [] );
     } );
 } );

@@ -18,7 +18,9 @@ import {
     OPPONENT_PLAYS,
     PLAYER_PLAYS,
     OPPONENT_GO,
-    PLAYER_GO
+    PLAYER_GO,
+    CONTROLLER_COMPLETE_PLAY,
+    CONTROLLER_RESET_PLAY
 } from '../action-types';
 
 export const defaultState = {
@@ -35,14 +37,17 @@ export const defaultState = {
 };
 
 const game = ( state = defaultState, action ) => {
-    let peggingCards, previousPlay;
+    let peggingCards;
     switch ( action.type ) {
+        case CONTROLLER_RESET_PLAY:
+            peggingCards = state.peggingCards.map( () => { return null; } );
+            return Object.assign( {}, state, { peggingCards } );
+        case CONTROLLER_COMPLETE_PLAY:
+            return Object.assign( {}, state, { peggingCards: [], previousPlay: action.play } );
         case PLAYER_GO:
         case OPPONENT_GO:
-            if ( action.points === 1 && ! action.isFinalGo ) {
+            if ( action.points === 1 ) {
                 peggingCards = state.peggingCards.map( () => { return null; } );
-            } else if ( action.isFinalGo ) {
-                peggingCards = [];
             } else {
                 peggingCards = state.peggingCards;
             }
