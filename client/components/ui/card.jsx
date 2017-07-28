@@ -30,6 +30,7 @@ class Card extends Component {
             onClick={ this.props.onClick }
             data-index={ this.props.index }
             className={ classes }
+            style={ this.props.style }
         />;
     }
 }
