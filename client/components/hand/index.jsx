@@ -17,6 +17,7 @@ import { getNextAppointment, isPaused } from 'state/selectors/controller';
 import { playerDiscards, playerPlays } from 'state/actions/player';
 import { getDealer, getScore, getPlaySequence, getPeggingCards, canPersonPlay } from 'state/selectors/game';
 import { getLowestPegForPerson } from 'state/selectors/board';
+import { getPlayValue } from "../../state/selectors/game";
 
 class Hand extends Component {
     constructor( props ) {
@@ -91,8 +92,8 @@ class Hand extends Component {
     };
 
     handlePlay = ( event ) => {
-        const card = this.props.player.peggingHand[ this.state.selectedPlayCard ];
         event.preventDefault();
+        const card = this.props.player.peggingHand[ this.state.selectedPlayCard ];
         this.setState( { selectedPlayCard: -1 } );
         this.props.playerPlays(
             this.props.sequence,
@@ -101,7 +102,7 @@ class Hand extends Component {
         );
     };
 
-    cardIsClickable( selected ) {
+    cardIsClickable( selected, card ) {
         if ( this.props.paused ) {
             return false;
         } else if ( selected ) {
@@ -110,7 +111,8 @@ class Hand extends Component {
             'Player' === this.props.type &&
             'playerPlays' === this.props.nextAppointment &&
             this.state.selectedPlayCard === -1 &&
-            this.props.playerCanPlay
+            this.props.playerCanPlay &&
+            ( card.value + this.props.playValue <= 31 )
         ) {
             return true;
         } else if (
@@ -121,6 +123,27 @@ class Hand extends Component {
             return true;
         }
         return false;
+    }
+
+    getOnClick( clickable ) {
+        if ( ! clickable ) {
+            return null;
+        }
+        if (
+            'Player' === this.props.type &&
+            'playerDiscards' === this.props.nextAppointment &&
+            ! this.props.paused
+        ) {
+            return this.handleDiscardClick;
+        } else if (
+            'Player' === this.props.type &&
+            'playerPlays' === this.props.nextAppointment &&
+            ! this.props.paused &&
+            this.props.playerCanPlay
+        ) {
+            return this.handlePlayClick;
+        }
+        return null;
     }
 
     renderCrib() {
@@ -154,14 +177,15 @@ class Hand extends Component {
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
-        person = ( this.props.type === 'Player' ) ? 'Your' : "Opponent's"
+        person = ( this.props.type === 'Player' ) ? 'Your' : "Opponent's";
         label = isEmpty( hand ) ? 'Initial Draw' : person + ' hand:';
         return <p>{ label }</p>;
     }
 
     renderCards() {
         const { hand, initialDraw, peggingHand } = this.props.player;
-        let cards, onClick = null, selected = false;
+        let cards;
+        
         if( isEmpty( hand ) && isEmpty( initialDraw ) ) {
             return null;
         }
@@ -174,25 +198,13 @@ class Hand extends Component {
             cards = hand;
         }
 
-        if (
-            'Player' === this.props.type &&
-            'playerDiscards' === this.props.nextAppointment &&
-            ! this.props.paused
-        ) {
-            onClick = this.handleDiscardClick;
-        } else if (
-            'Player' === this.props.type &&
-            'playerPlays' === this.props.nextAppointment &&
-            ! this.props.paused &&
-            this.props.playerCanPlay
-        ) {
-            onClick = this.handlePlayClick;
-        }
         return (
             <div className="cards">
                 { cards.map( ( card, index ) => {
                     const selected = this.state.selectedCards.includes( index ) ||
-                        this.state.selectedPlayCard === index;
+                        this.state.selectedPlayCard === index,
+                        clickable = this.cardIsClickable( selected, card ),
+                        onClick = this.getOnClick( clickable );
                     return (
                         <Card
                             key={ card.name + card.suit }
@@ -201,7 +213,7 @@ class Hand extends Component {
                             onClick={ onClick }
                             index={ index }
                             selected={ selected }
-                            clickable={ this.cardIsClickable( selected ) }
+                            clickable={ clickable }
                         />
                     )
                 } ) }
@@ -254,7 +266,8 @@ export default connect(
             sequence: getPlaySequence( state ),
             playersLowestPeg: getLowestPegForPerson( state, 'Player' ),
             peggingCards: getPeggingCards( state ),
-            playerCanPlay: canPersonPlay( state, 'player' )
+            playerCanPlay: canPersonPlay( state, 'player' ),
+            playValue: getPlayValue( state )
         }
     },
     { playerDiscards, playerPlays }
