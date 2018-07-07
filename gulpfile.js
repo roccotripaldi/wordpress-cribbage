@@ -49,7 +49,7 @@ function getWebpackConfig() {
     return config;
 }
 
-function doSass() {
+function doSass( done ) {
     if ( arguments.length ) {
         console.log( 'Sass file ' + arguments[0].path + ' changed.' );
     }
@@ -62,6 +62,7 @@ function doSass() {
         .pipe( gulp.dest( './client/css' ) )
         .on( 'end', function() {
             console.log( 'Dashboard CSS finished.' );
+            done();
         } );
 }
 
@@ -85,8 +86,8 @@ gulp.task( 'react:build', function( done ) {
     webpack( config ).run( onBuild( done ) );
 } );
 
-gulp.task( 'sass:build', function() {
-    doSass();
+gulp.task( 'sass:build', function( done ) {
+    doSass( done );
 } );
 
 gulp.task( 'react:watch', function() {
@@ -101,5 +102,5 @@ gulp.task( 'sass:watch', function() {
 } );
 
 // Default task
-gulp.task( 'default', ['react:build', 'sass:build'] );
-gulp.task( 'watch',   ['react:watch', 'sass:watch'] );
+gulp.task( 'default', gulp.series( 'react:build', 'sass:build' ) );
+gulp.task( 'watch',  gulp.series( 'react:watch', 'sass:watch' ) );
