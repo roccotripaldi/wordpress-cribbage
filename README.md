@@ -9,4 +9,4 @@ Then you too can play cribbage by adding `?cribbage=true` to your site's address
 
 ## v2.0
 
-I'm starting on a v2, in which I use socet.io to allow to people to play each other.
+I'm starting on a v2, in which I use socket.io to allow to people to play each other.
