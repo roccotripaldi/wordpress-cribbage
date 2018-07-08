@@ -1,8 +1,14 @@
 # wordpress-cribbage
 
-_For funsies and in progress._ 
+This is a for-funnsies project I made with the goals of learning React and Test Driven Development on my own terms, and teaching my computer to play me in cribbage.
 
-I'm applying the skills I've developed over the years to teach my
-computer to play one of my favorite card games: Cribbage.
+## Try It Out
 
-The end product will be a WordPress plugin that allows you to play cribbage on your site!
+Install this plugin on a WordPress site, prefferabley one that you use for testing, and activate it!
+Then you too can play cribbage by adding `?cribbage=true` to your site's address.
+
+## v2.0
+
+I'm starting on a v2, in which I use socet.io to allow to people to play each other.
+
+Enjoy!
